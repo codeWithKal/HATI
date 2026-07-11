@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "icon": "Users",
+    "value": "6",
+    "label": {
+      "en": "Team Members",
+      "am": "የቡድን አባላት",
+      "om": "Miseensota Garee"
+    }
+  },
+  {
+    "id": "2",
+    "icon": "Briefcase",
+    "value": "4",
+    "label": {
+      "en": "Departments",
+      "am": "ክፍሎች",
+      "om": "Kutaa"
+    }
+  },
+  {
+    "id": "3",
+    "icon": "Clock",
+    "value": "100+",
+    "label": {
+      "en": "Years Experience",
+      "am": "የልምድ ዓመታት",
+      "om": "Waggaa Muuxannoo"
+    }
+  },
+  {
+    "id": "4",
+    "icon": "Award",
+    "value": "500+",
+    "label": {
+      "en": "Projects Delivered",
+      "am": "የተላኩ ፕሮጀክቶች",
+      "om": "Porjeektota Galchaman"
+    }
+  }
+]

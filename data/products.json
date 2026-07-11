@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "name": {
+      "en": "Fino Sand (00)",
+      "am": "ፊኖ አሸዋ (00)",
+      "om": "Cirracha Fiinoo (00)"
+    },
+    "description": {
+      "en": "High-quality, clean '00' (fino) aggregate suitable for construction and various other uses.",
+      "am": "ከፍከፍተኛ ጥራት ያለው ለግንባታና ለተለያዩ አገልግሎቶች የሚውል ንጹህ 00 (ፊኖ) ጠጠር",
+      "om": "Qulqullina olaanaa, cacii '00' (fiinoo) ijaarsaa fi itti fayyadama adda addaa biroof mijatu."
+    },
+    "category": "materials",
+    "image": "/images/products/00.jpg"
+  },
+  {
+    "id": "2",
+    "name": {
+      "en": "01 Sand",
+      "am": "01 አሸዋ",
+      "om": "Cirracha 01"
+    },
+    "description": {
+      "en": "High-quality, clean '01' aggregate suitable for construction and various other uses.",
+      "am": "ከፍከፍተኛ ጥራት ያለው ለግንባታና ለተለያዩ አገልግሎቶች የሚውል ንጹህ 01 ጠጠር",
+      "om": "Qulqullina olaanaa, cacii 01 ijaarsaa fi itti fayyadama adda addaa biroof mijatu."
+    },
+    "category": "materials",
+    "image": "/images/products/01.jpg"
+  },
+  {
+    "id": "3",
+    "name": {
+      "en": "02 Sand",
+      "am": "02 አሸዋ",
+      "om": "Cirracha 02"
+    },
+    "description": {
+      "en": "High-quality, clean '02' aggregate suitable for construction and various other uses.",
+      "am": "ከፍከፍተኛ ጥራት ያለው ለግንባታና ለተለያዩ አገልግሎቶች የሚውል ንጹህ 02 ጠጠር",
+      "om": "Qulqullina olaanaa, cacii '02' ijaarsaa fi itti fayyadama adda addaa biroof mijatu."
+    },
+    "category": "materials",
+    "image": "/images/products/02.jpg"
+  }
+]

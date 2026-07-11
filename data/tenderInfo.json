@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "About Our Tenders",
+      "am": "ስለ ጨረታችን",
+      "om": "Waa'ee Tanzii Keenyaa"
+    },
+    "paragraphs": [
+      {
+        "en": "HATI Construction regularly publishes tender opportunities for suppliers, contractors, and consultants. All tenders are open and transparent, following international procurement standards.",
+        "am": "HATI ግንባታ ለአቅራቢዎች፣ ለኮንትራክተሮች እና ለአማካሪዎች የጨረታ እድሎችን በየጊዜው ያሳትማል። ሁሉም ጨረታዎች ክፍት እና ግልጽ ናቸው፣ ዓለም አቀፍ የግዥ ደረጃዎችን ይከተላሉ።",
+        "om": "HATI Ijaarsa yeroo hundaaf tanziiwwan daldaltoota, kontiraaktoota, fi gorsitootaaf babal'isa. Tanziiwwan hunduu banaa fi ifa dha, sadarkaa karaa barbaachisaa idil-addunyaa ta'e fufu."
+      },
+      {
+        "en": "For more information about our tender process or to register as a potential vendor, please contact our procurement department.",
+        "am": "ስለ ጨረታ ሂደታችን ተጨማሪ መረጃ ለማግኘት ወይም እንደ አቅራቢ ለመመዝገብ፣ እባክዎን የግዥ ክፍላችንን ያግኙ።",
+        "om": "Odeeffannoo dabalaa waa'ee adeemsa tanzii keenyaa argachuuf ykn akka daldaltootti galmaa'uuf, maaloo kutaa barbaachisaa keenya quunnamaa."
+      }
+    ]
+  }
+]

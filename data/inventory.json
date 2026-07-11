@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "materialName": {
+      "en": "Fino Sand (00)",
+      "am": "ፊኖ አሸዋ (00)",
+      "om": "Cirracha Fiinoo (00)"
+    },
+    "price_in_m3": {
+      "en": "2,500 ETB",
+      "am": "2,500 ብር",
+      "om": "Qarshii 2,500"
+    },
+    "stokeRemaining_in_m3": {
+      "en": "450 m³",
+      "am": "450 ሜ³",
+      "om": "450 m³"
+    }
+  },
+  {
+    "id": 2,
+    "materialName": {
+      "en": "01 Sand",
+      "am": "01 አሸዋ",
+      "om": "Cirracha 01"
+    },
+    "price_in_m3": {
+      "en": "1,240 ETB",
+      "am": "1,240 ብር",
+      "om": "Qarshii 1,240"
+    },
+    "stokeRemaining_in_m3": {
+      "en": "380 m³",
+      "am": "380 ሜ³",
+      "om": "380 m³"
+    }
+  },
+  {
+    "id": 3,
+    "materialName": {
+      "en": "02 Sand",
+      "am": "02 አሸዋ",
+      "om": "Cirracha 02"
+    },
+    "price_in_m3": {
+      "en": "900 ETB",
+      "am": "900 ብር",
+      "om": "Qarshii 900"
+    },
+    "stokeRemaining_in_m3": {
+      "en": "520 m³",
+      "am": "520 ሜ³",
+      "om": "520 m³"
+    }
+  }
+]

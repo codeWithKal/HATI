@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "icon": "Briefcase",
+    "value": "4",
+    "label": {
+      "en": "Total Projects",
+      "am": "ጠቅላላ ፕሮጀክቶች",
+      "om": "Porjeektota Guutuu"
+    }
+  },
+  {
+    "id": "2",
+    "icon": "CheckCircle2",
+    "value": "1",
+    "label": {
+      "en": "Completed",
+      "am": "ተጠናቀቁ",
+      "om": "Xumuramani"
+    }
+  },
+  {
+    "id": "3",
+    "icon": "Clock",
+    "value": "3",
+    "label": {
+      "en": "Ongoing",
+      "am": "በመቀጠል ላይ",
+      "om": "Itti Fufaa"
+    }
+  },
+  {
+    "id": "4",
+    "icon": "MapPin",
+    "value": "4",
+    "label": {
+      "en": "Countries",
+      "am": "ሀገራት",
+      "om": "Birootawwan"
+    }
+  }
+]

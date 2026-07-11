@@ -1,0 +1,44 @@
+[
+  {
+    "id": "1",
+    "icon": "Award",
+    "title": {
+      "en": "Expertise",
+      "am": "እውቀት",
+      "om": "Ogummaa"
+    },
+    "description": {
+      "en": "Decades of experience in construction and engineering",
+      "am": "በግንባታ እና በምህንድስና ውስጥ አስርተ ዓመታት ልምድ",
+      "om": "Waggaa kudhanii ijaarsaa fi injineerii keessatti muuxannoo"
+    }
+  },
+  {
+    "id": "2",
+    "icon": "Shield",
+    "title": {
+      "en": "Quality",
+      "am": "ጥራት",
+      "om": "Qulqullina"
+    },
+    "description": {
+      "en": "Commitment to superior craftsmanship and materials",
+      "am": "ለላቀ የእደ ጥበብ ስራ እና ቁሳቁሶች ቁርጠኝነት",
+      "om": "Hoji harkaa fi meeshaalee qulqullina olaanaaf kennuu"
+    }
+  },
+  {
+    "id": "3",
+    "icon": "Clock",
+    "title": {
+      "en": "Reliability",
+      "am": "አስተማማኝነት",
+      "om": "Amanamummaa"
+    },
+    "description": {
+      "en": "On-time delivery and professional project management",
+      "am": "በጊዜው ማቅረብ እና ሙያዊ የፕሮጀክት አስተዳደር",
+      "om": "Gahee yeroof fi bulchiinsa porjeektii ogummaa"
+    }
+  }
+]

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "Producing the best construction materials in Ethiopia",
+      "am": "በኢትዮጵያ ምርጥ የግንባታ ቁሳቁሶችን ማምረት",
+      "om": "meeshaalee ijaarsaa Itiyoophiyaa keessaa isa gaarii ta’e oomishuu"
+    },
+    "subtitle": {
+      "en": "Premium construction and engineering materials transforming industry",
+      "am": "ማህበረሰቦችን የሚቀይሩ የላቁ የግንባታ እና የምህንድስና ቁሳቁሶች",
+      "om": "Meeshaalee ijaarsaa fi injinariingii sadarkaa olaanaa qaban industirii jijjiiru"
+    },
+    "badge": {
+      "en": "Building the Future",
+      "am": "የወደፊቱን እየገነባን",
+      "om": "Fuuldura Ijaaruu"
+    },
+    "cta": {
+      "en": "Get Started",
+      "am": "ይጀምሩ",
+      "om": "Jalqabi"
+    },
+    "secondaryCta": {
+      "en": "See Our Work",
+      "am": "ስራችንን ይመልከቱ",
+      "om": "Hojii Keenyaa Ilaali"
+    }
+  }
+]

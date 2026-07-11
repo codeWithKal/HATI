@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "icon": "Images",
+    "value": "24+",
+    "label": {
+      "en": "Images",
+      "am": "ምስሎች",
+      "om": "Fotowwan"
+    }
+  },
+  {
+    "id": "2",
+    "icon": "Building2",
+    "value": "12",
+    "label": {
+      "en": "Projects",
+      "am": "ፕሮጀክቶች",
+      "om": "Porjeektota"
+    }
+  },
+  {
+    "id": "3",
+    "icon": "LayoutGrid",
+    "value": "3",
+    "label": {
+      "en": "Categories",
+      "am": "ምድቦች",
+      "om": "Ramaddii"
+    }
+  }
+]

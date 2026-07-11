@@ -1,0 +1,94 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "Addis Ababa Business Complex",
+      "am": "አዲስ አበባ የንግድ ሕንጻ",
+      "om": "Kompleeksii Daldalaa Addis Ababaa"
+    },
+    "description": {
+      "en": "Modern commercial and residential complex with state-of-the-art facilities",
+      "am": "ዘመናዊ የንግድ እና የመኖሪያ ሕንጻ ከዘመናዊ መገልገያዎች ጋር",
+      "om": "Kompleeksii daldalaa fi jireenyaa haaraa kan meeshaalee teeknoolojii olaanaa qabu"
+    },
+    "location": {
+      "en": "Addis Ababa, Ethiopia",
+      "am": "አዲስ አበባ፣ ኢትዮጵያ",
+      "om": "Addis Ababaa, Itoophiyaa"
+    },
+    "startDate": "2022-01-15",
+    "endDate": null,
+    "status": "ongoing",
+    "image": "🏗️",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "title": {
+      "en": "Dar es Salaam Bridge Project",
+      "am": "ዳር ኤስ ሰላም ድልድይ ፕሮጀክት",
+      "om": "Porjeektii Riqichaa Daar es Salaam"
+    },
+    "description": {
+      "en": "Major infrastructure project connecting city zones",
+      "am": "የከተማ ክፍሎችን የሚያገናኝ ዋና የመሠረተ ልማት ፕሮጀክት",
+      "om": "Porjeektii bu'uuraa guddaa naannoo magaalaa walitti qabu"
+    },
+    "location": {
+      "en": "Dar es Salaam, Tanzania",
+      "am": "ዳር ኤስ ሰላም፣ ታንዛኒያ",
+      "om": "Daar es Salaam, Tanzaaniyaa"
+    },
+    "startDate": "2021-06-10",
+    "endDate": "2023-12-20",
+    "status": "completed",
+    "image": "🌉",
+    "isActive": true
+  },
+  {
+    "id": "3",
+    "title": {
+      "en": "Nairobi Tech Hub",
+      "am": "ናይሮቢ ቴክ ማዕከል",
+      "om": "Buufata Teeknoolojii Nayiroobii"
+    },
+    "description": {
+      "en": "Innovation center featuring advanced construction techniques",
+      "am": "የፈጠራ ማዕከል ዘመናዊ የግንባታ ቴክኒኮችን ያካተተ",
+      "om": "Iddoo uumama kan mala ijaarsaa haaraa qabu"
+    },
+    "location": {
+      "en": "Nairobi, Kenya",
+      "am": "ናይሮቢ፣ ኬንያ",
+      "om": "Nayiroobii, Keenyaa"
+    },
+    "startDate": "2023-03-01",
+    "endDate": null,
+    "status": "ongoing",
+    "image": "💻",
+    "isActive": true
+  },
+  {
+    "id": "4",
+    "title": {
+      "en": "Kampala Water Infrastructure",
+      "am": "ካምፓላ የውሃ መሠረተ ልማት",
+      "om": "Bu'uura Bishaan Kaampaalaa"
+    },
+    "description": {
+      "en": "Critical water distribution and treatment facility",
+      "am": "ወሳኝ የውሃ ስርጭት እና ማጣሪያ ተቋም",
+      "om": "Iddoo raabsa bishaanii fi qulqulleessaa barbaachisaa"
+    },
+    "location": {
+      "en": "Kampala, Uganda",
+      "am": "ካምፓላ፣ ዩጋንዳ",
+      "om": "Kaampaalaa, Yugaandaa"
+    },
+    "startDate": "2023-06-15",
+    "endDate": null,
+    "status": "ongoing",
+    "image": "💧",
+    "isActive": true
+  }
+]

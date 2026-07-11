@@ -1,0 +1,68 @@
+[
+  {
+    "id": "1",
+    "type": "address",
+    "icon": "MapPin",
+    "title": {
+      "en": "Office Address",
+      "am": "የቢሮ አድራሻ",
+      "om": "Teessoo Waajjira"
+    },
+    "details": {
+      "en": "Addis Ababa, Ethiopia\nP.O. Box 12345",
+      "am": "አዲስ አበባ፣ ኢትዮጵያ\nፖ.ሳ.ቁ. 12345",
+      "om": "Addis Ababaa, Itoophiyaa\nPa. Ba. 12345"
+    },
+    "badge": {
+      "en": "Visit Us",
+      "am": "ይጎብኙን",
+      "om": "Nu Daawwadhaa"
+    },
+    "badgeIcon": "Globe",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "type": "phone",
+    "icon": "Phone",
+    "title": {
+      "en": "Phone",
+      "am": "ስልክ",
+      "om": "Bilbila"
+    },
+    "details": {
+      "en": "+251 91 123 4567\n+251 11 678 9012",
+      "am": "+251 91 123 4567\n+251 11 678 9012",
+      "om": "+251 91 123 4567\n+251 11 678 9012"
+    },
+    "badge": {
+      "en": "Available 24/7 for urgent inquiries",
+      "am": "አስቸኳይ ጥያቄዎች 24/7 ይገኛል",
+      "om": "Gaaffii hatattamaa 24/7 argama"
+    },
+    "badgeIcon": "Clock",
+    "isActive": true
+  },
+  {
+    "id": "3",
+    "type": "email",
+    "icon": "Mail",
+    "title": {
+      "en": "Email",
+      "am": "ኢሜይል",
+      "om": "Imeliiti"
+    },
+    "details": {
+      "en": "info@haticonst.com\nprojects@haticonst.com",
+      "am": "info@haticonst.com\nprojects@haticonst.com",
+      "om": "info@haticonst.com\nprojects@haticonst.com"
+    },
+    "badge": {
+      "en": "Quick Response",
+      "am": "ፈጣን ምላሽ",
+      "om": "Deebii Dafaa"
+    },
+    "badgeIcon": "Send",
+    "isActive": true
+  }
+]

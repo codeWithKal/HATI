@@ -1,0 +1,278 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "Project 01",
+      "am": "ፕሮጀክት 01",
+      "om": "Porjeektii 01"
+    },
+    "category": "building",
+    "categoryLabel": {
+      "en": "Buildings",
+      "am": "ህንጻዎች",
+      "om": "Manneen"
+    },
+    "location": {
+      "en": "Addis Ababa",
+      "am": "አዲስ አበባ",
+      "om": "Addis Ababa"
+    },
+    "status": "completed",
+    "image": "/images/gallery/IMG_20201121_113347.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "title": {
+      "en": "Project 02",
+      "am": "ፕሮጀክት 02",
+      "om": "Porjeektii 02"
+    },
+    "category": "infrastructure",
+    "categoryLabel": {
+      "en": "Infrastructure",
+      "am": "መሠረተ ልማት",
+      "om": "Midhaa"
+    },
+    "location": {
+      "en": "Nairobi",
+      "am": "ናይሮቢ",
+      "om": "Nairobi"
+    },
+    "status": "ongoing",
+    "image": "/images/gallery/IMG_20201121_113355.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "3",
+    "title": {
+      "en": "Project 03",
+      "am": "ፕሮጀክት 03",
+      "om": "Porjeektii 03"
+    },
+    "category": "development",
+    "categoryLabel": {
+      "en": "Development",
+      "am": "ልማት",
+      "om": "Ijaarsa"
+    },
+    "location": {
+      "en": "Kampala",
+      "am": "ካምፓላ",
+      "om": "Kampala"
+    },
+    "status": "completed",
+    "image": "/images/gallery/IMG_20201130_102959.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "4",
+    "title": {
+      "en": "Project 04",
+      "am": "ፕሮጀክት 04",
+      "om": "Porjeektii 04"
+    },
+    "category": "building",
+    "categoryLabel": {
+      "en": "Buildings",
+      "am": "ህንጻዎች",
+      "om": "Manneen"
+    },
+    "location": {
+      "en": "Dar es Salaam",
+      "am": "ዳር ኢስ ሰላም",
+      "om": "Dar es Salaam"
+    },
+    "status": "ongoing",
+    "image": "/images/gallery/IMG_20201130_103454.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "5",
+    "title": {
+      "en": "Project 05",
+      "am": "ፕሮጀክት 05",
+      "om": "Porjeektii 05"
+    },
+    "category": "infrastructure",
+    "categoryLabel": {
+      "en": "Infrastructure",
+      "am": "መሠረተ ልማት",
+      "om": "Midhaa"
+    },
+    "location": {
+      "en": "Kigali",
+      "am": "ኪጋሊ",
+      "om": "Kigali"
+    },
+    "status": "completed",
+    "image": "/images/gallery/IMG_20201130_103841.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "6",
+    "title": {
+      "en": "Project 06",
+      "am": "ፕሮጀክት 06",
+      "om": "Porjeektii 06"
+    },
+    "category": "development",
+    "categoryLabel": {
+      "en": "Development",
+      "am": "ልማት",
+      "om": "Ijaarsa"
+    },
+    "location": {
+      "en": "Dodoma",
+      "am": "ዶዶማ",
+      "om": "Dodoma"
+    },
+    "status": "ongoing",
+    "image": "/images/gallery/IMG_20201130_103916.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "7",
+    "title": {
+      "en": "Project 07",
+      "am": "ፕሮጀክት 07",
+      "om": "Porjeektii 07"
+    },
+    "category": "building",
+    "categoryLabel": {
+      "en": "Buildings",
+      "am": "ህንጻዎች",
+      "om": "Manneen"
+    },
+    "location": {
+      "en": "Addis Ababa",
+      "am": "አዲስ አበባ",
+      "om": "Addis Ababa"
+    },
+    "status": "completed",
+    "image": "/images/gallery/02old.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "8",
+    "title": {
+      "en": "Project 08",
+      "am": "ፕሮጀክት 08",
+      "om": "Porjeektii 08"
+    },
+    "category": "infrastructure",
+    "categoryLabel": {
+      "en": "Infrastructure",
+      "am": "መሠረተ ልማት",
+      "om": "Midhaa"
+    },
+    "location": {
+      "en": "Nairobi",
+      "am": "ናይሮቢ",
+      "om": "Nairobi"
+    },
+    "status": "ongoing",
+    "image": "/images/gallery/IMG_20201121_113347.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "9",
+    "title": {
+      "en": "Project 09",
+      "am": "ፕሮጀክት 09",
+      "om": "Porjeektii 09"
+    },
+    "category": "development",
+    "categoryLabel": {
+      "en": "Development",
+      "am": "ልማት",
+      "om": "Ijaarsa"
+    },
+    "location": {
+      "en": "Kampala",
+      "am": "ካምፓላ",
+      "om": "Kampala"
+    },
+    "status": "completed",
+    "image": "/images/gallery/IMG_20201121_113355.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "10",
+    "title": {
+      "en": "Project 10",
+      "am": "ፕሮጀክት 10",
+      "om": "Porjeektii 10"
+    },
+    "category": "building",
+    "categoryLabel": {
+      "en": "Buildings",
+      "am": "ህንጻዎች",
+      "om": "Manneen"
+    },
+    "location": {
+      "en": "Dar es Salaam",
+      "am": "ዳር ኢስ ሰላም",
+      "om": "Dar es Salaam"
+    },
+    "status": "ongoing",
+    "image": "/images/gallery/IMG_20201130_102959.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "11",
+    "title": {
+      "en": "Project 11",
+      "am": "ፕሮጀክት 11",
+      "om": "Porjeektii 11"
+    },
+    "category": "infrastructure",
+    "categoryLabel": {
+      "en": "Infrastructure",
+      "am": "መሠረተ ልማት",
+      "om": "Midhaa"
+    },
+    "location": {
+      "en": "Kigali",
+      "am": "ኪጋሊ",
+      "om": "Kigali"
+    },
+    "status": "completed",
+    "image": "/images/gallery/IMG_20201130_103454.jpg",
+    "year": "2024",
+    "isActive": true
+  },
+  {
+    "id": "12",
+    "title": {
+      "en": "Project 12",
+      "am": "ፕሮጀክት 12",
+      "om": "Porjeektii 12"
+    },
+    "category": "development",
+    "categoryLabel": {
+      "en": "Development",
+      "am": "ልማት",
+      "om": "Ijaarsa"
+    },
+    "location": {
+      "en": "Dodoma",
+      "am": "ዶዶማ",
+      "om": "Dodoma"
+    },
+    "status": "ongoing",
+    "image": "/images/gallery/IMG_20201130_103841.jpg",
+    "year": "2024",
+    "isActive": true
+  }
+]

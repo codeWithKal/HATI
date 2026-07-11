@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "day": {
+      "en": "Monday - Friday",
+      "am": "ሰኞ - አርብ",
+      "om": "Wiixata - Jimaata"
+    },
+    "hours": "8:00 AM - 5:00 PM",
+    "isOpen": true
+  },
+  {
+    "id": "2",
+    "day": {
+      "en": "Saturday - Sunday",
+      "am": "ቅዳሜ - እሁድ",
+      "om": "Sanbata - Dilbata"
+    },
+    "hours": {
+      "en": "Closed",
+      "am": "ዝግ ነው",
+      "om": "Cufamaa"
+    },
+    "isOpen": false
+  }
+]

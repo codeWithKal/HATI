@@ -1,0 +1,122 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "Senior Civil Engineer",
+      "am": "ከፍተኛ የሲቪል ምህንድስና ባለሙያ",
+      "om": "Injineerii Sivilii Angafaa"
+    },
+    "location": {
+      "en": "Addis Ababa, Ethiopia",
+      "am": "አዲስ አበባ፣ ኢትዮጵያ",
+      "om": "Addis Ababaa, Itoophiyaa"
+    },
+    "type": {
+      "en": "Full-time",
+      "am": "ሙሉ ጊዜ",
+      "om": "Yeroo Guutuu"
+    },
+    "department": {
+      "en": "Engineering",
+      "am": "ምህንድስና",
+      "om": "Injineerii"
+    },
+    "experience": {
+      "en": "5+ years",
+      "am": "5+ ዓመታት",
+      "om": "Waggaa 5+"
+    },
+    "posted": "2024-01-15",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "title": {
+      "en": "Project Manager",
+      "am": "ፕሮጀክት አስተዳዳሪ",
+      "om": "Bulchii Porjeektii"
+    },
+    "location": {
+      "en": "Nairobi, Kenya",
+      "am": "ናይሮቢ፣ ኬንያ",
+      "om": "Nayiroobii, Keenyaa"
+    },
+    "type": {
+      "en": "Full-time",
+      "am": "ሙሉ ጊዜ",
+      "om": "Yeroo Guutuu"
+    },
+    "department": {
+      "en": "Operations",
+      "am": "ኦፕሬሽን",
+      "om": "Hojiirraa"
+    },
+    "experience": {
+      "en": "7+ years",
+      "am": "7+ ዓመታት",
+      "om": "Waggaa 7+"
+    },
+    "posted": "2024-01-12",
+    "isActive": true
+  },
+  {
+    "id": "3",
+    "title": {
+      "en": "Site Supervisor",
+      "am": "የጣቢያ ተቆጣጣሪ",
+      "om": "To'ataa Iddoo"
+    },
+    "location": {
+      "en": "Dar es Salaam, Tanzania",
+      "am": "ዳር ኤስ ሰላም፣ ታንዛኒያ",
+      "om": "Daar es Salaam, Tanzaaniyaa"
+    },
+    "type": {
+      "en": "Full-time",
+      "am": "ሙሉ ጊዜ",
+      "om": "Yeroo Guutuu"
+    },
+    "department": {
+      "en": "Construction",
+      "am": "ግንባታ",
+      "om": "Ijaarsa"
+    },
+    "experience": {
+      "en": "3+ years",
+      "am": "3+ ዓመታት",
+      "om": "Waggaa 3+"
+    },
+    "posted": "2024-01-10",
+    "isActive": true
+  },
+  {
+    "id": "4",
+    "title": {
+      "en": "Structural Engineer",
+      "am": "መዋቅራዊ ምህንድስና ባለሙያ",
+      "om": "Injineerii Caasaa"
+    },
+    "location": {
+      "en": "Kampala, Uganda",
+      "am": "ካምፓላ፣ ዩጋንዳ",
+      "om": "Kaampaalaa, Yugaandaa"
+    },
+    "type": {
+      "en": "Full-time",
+      "am": "ሙሉ ጊዜ",
+      "om": "Yeroo Guutuu"
+    },
+    "department": {
+      "en": "Engineering",
+      "am": "ምህንድስና",
+      "om": "Injineerii"
+    },
+    "experience": {
+      "en": "4+ years",
+      "am": "4+ ዓመታት",
+      "om": "Waggaa 4+"
+    },
+    "posted": "2024-01-08",
+    "isActive": true
+  }
+]

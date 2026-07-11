@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "icon": "Newspaper",
+    "value": "3",
+    "label": {
+      "en": "Articles",
+      "am": "ጽሁፎች",
+      "om": "Barreeffamoota"
+    }
+  },
+  {
+    "id": "2",
+    "icon": "Tag",
+    "value": "3",
+    "label": {
+      "en": "Categories",
+      "am": "ምድቦች",
+      "om": "Ramaddii"
+    }
+  },
+  {
+    "id": "3",
+    "icon": "Users",
+    "value": "3",
+    "label": {
+      "en": "Authors",
+      "am": "ደራሲያን",
+      "om": "Barreessitoota"
+    }
+  }
+]

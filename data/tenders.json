@@ -1,0 +1,70 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "Construction of Office Building",
+      "am": "የቢሮ ህንጻ ግንባታ",
+      "om": "Ijaarsa Gamoo Waajjiraa"
+    },
+    "description": {
+      "en": "Modern office complex with 10 floors in Addis Ababa",
+      "am": "10 ፎቅ ያለው ዘመናዊ የቢሮ ሕንጻ በአዲስ አበባ",
+      "om": "Kompleeksii waajjiraa ammayyaa 10 darbee qabu Addis Ababa keessatti"
+    },
+    "budget": 5000000,
+    "deadline": "2024-02-28",
+    "status": "open",
+    "isActive": true
+  },
+  {
+    "id": "2",
+    "title": {
+      "en": "Road Rehabilitation Project",
+      "am": "የመንገድ ተሃድሶ ፕሮጀክት",
+      "om": "Porjeektii Suulessaa Karaa"
+    },
+    "description": {
+      "en": "Rehabilitation of 50km highway in Northern region",
+      "am": "በሰሜን ክልል 50 ኪ.ሜ አውራ ጎዳና ተሃድሶ",
+      "om": "Suulessaa karaa 50 km naannoo Kaabaatti"
+    },
+    "budget": 15000000,
+    "deadline": "2024-03-15",
+    "status": "open",
+    "isActive": true
+  },
+  {
+    "id": "3",
+    "title": {
+      "en": "Water Supply System Installation",
+      "am": "የውሃ አቅርቦት ስርዓት መጫኛ",
+      "om": "Ijaarsa Sistimii Bishaanii"
+    },
+    "description": {
+      "en": "Installation of water supply system for rural communities",
+      "am": "ለገጠር ማህበረሰቦች የውሃ አቅርቦት ስርዓት መጫኛ",
+      "om": "Ijaarsa sistimii bishaanii hawaasota baadiyyaatiif"
+    },
+    "budget": 3500000,
+    "deadline": "2024-02-15",
+    "status": "closed",
+    "isActive": true
+  },
+  {
+    "id": "4",
+    "title": {
+      "en": "Hospital Construction",
+      "am": "የሆስፒታል ግንባታ",
+      "om": "Ijaarsa Hospitaalaa"
+    },
+    "description": {
+      "en": "Comprehensive hospital facility with 200 beds",
+      "am": "200 አልጋ ያለው ሙሉ የሆስፒታል ተቋም",
+      "om": "Bu'uura hospitaalaa guutuu 200 siree qabu"
+    },
+    "budget": 25000000,
+    "deadline": "2024-04-30",
+    "status": "open",
+    "isActive": true
+  }
+]

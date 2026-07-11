@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "HATI Wins Major Infrastructure Contract",
+      "am": "HATI ዋና የመሠረተ ልማት ውል አሸነፈ",
+      "om": "HATI Kontiraakta Ijaarsa Bu'uuraa Guddatu Argatte"
+    },
+    "excerpt": {
+      "en": "HATI Construction has secured a major contract for the East African Highway Project, marking a significant milestone in regional infrastructure development.",
+      "am": "HATI ግንባታ ለምስራቅ አፍሪካ አውራ ጎዳና ፕሮጀክት ዋና ውል አግኝቷል፣ ይህም በክልል መሠረተ ልማት ልማት ውስጥ ጉልህ ምዕራፍ ነው።",
+      "om": "HATI Ijaarsa dhaabbanni porjeektii daandii Bahaa Afriikaaf kontiraakta guddaa argate, kun immoo guddina bu'uuraa naannoo keessatti sadarkaa guddaa agarsiisa."
+    },
+    "date": "2024-01-15",
+    "author": "John Smith",
+    "category": "projects",
+    "readTime": "5 min read",
+    "image": "🏗️",
+    "isActive": true,
+    "featured": true
+  },
+  {
+    "id": "2",
+    "title": {
+      "en": "New Innovation Center Opens in Nairobi",
+      "am": "አዲስ የፈጠራ ማዕከል በናይሮቢ ተከፈተ",
+      "om": "Iddoo Uumama Haaraa Nayiroobii Keessatti Baname"
+    },
+    "excerpt": {
+      "en": "HATI announces the opening of its state-of-the-art innovation center in Nairobi, dedicated to advancing construction technology and sustainable practices.",
+      "am": "HATI በናይሮቢ ዘመናዊ የፈጠራ ማዕከል መከፈቱን አስታወቀ፣ ይህም የግንባታ ቴክኖሎጂን እና ዘላቂ ተግባራትን ለማሳደግ የተዘጋጀ ነው።",
+      "om": "HATI iddoo uumama haaraa teeknoolojii olaanaa qabu Nayiroobii keessatti banuu isaanii beeksise, kan teknolojii ijaarsaa fi hojii dhaabaa fooyyessuuf qophaa'e."
+    },
+    "date": "2024-01-10",
+    "author": "Jane Doe",
+    "category": "innovation",
+    "readTime": "4 min read",
+    "image": "💡",
+    "isActive": true,
+    "featured": true
+  },
+  {
+    "id": "3",
+    "title": {
+      "en": "Sustainability Initiative Launched",
+      "am": "ዘላቂ ልማት ፕሮግራም ተጀመረ",
+      "om": "Tarkaanfi Dhaabummaa Eegumsaa Jalqabame"
+    },
+    "excerpt": {
+      "en": "HATI commits to sustainable construction practices across all projects, implementing green building standards and reducing environmental impact.",
+      "am": "HATI በሁሉም ፕሮጀክቶች ላይ ዘላቂ የግንባታ ልምዶችን ለመተግበር፣ አረንጓዴ የግንባታ ደረጃዎችን በማስፈን እና የአካባቢ ተጽኖን ለመቀነስ ቃል ገብቷል።",
+      "om": "HATI sadarkaa ijaarsa magaalaa fi dhiibbaa naannoo hir'isuuf, porjeektota hunda keessatti hojii ijaarsaa dhaabaa eegumsa qabu hojiirra oolchuuf waadaa gale."
+    },
+    "date": "2024-01-05",
+    "author": "Mike Johnson",
+    "category": "company",
+    "readTime": "3 min read",
+    "image": "🌿",
+    "isActive": true,
+    "featured": false
+  }
+]

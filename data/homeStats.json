@@ -1,0 +1,29 @@
+[
+  {
+    "id": "1",
+    "value": "7+",
+    "label": {
+      "en": "Years Experience",
+      "am": "የልምድ ዓመታት",
+      "om": "Waggaa Muuxannoo"
+    }
+  },
+  {
+    "id": "2",
+    "value": "200+",
+    "label": {
+      "en": "Happy Clients",
+      "am": "ደስተኛ ደንበኞች",
+      "om": "Maamiltoota Gammachuu"
+    }
+  },
+  {
+    "id": "3",
+    "value": "50+",
+    "label": {
+      "en": "Expert Team",
+      "am": "የባለሙያዎች ቡድን",
+      "om": "Garee Ogummaa"
+    }
+  }
+]

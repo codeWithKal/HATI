@@ -1,0 +1,54 @@
+[
+  {
+    "id": "1",
+    "name": {
+      "en": "Civil Engineering",
+      "am": "ሲቪል ምህንድስና",
+      "om": "Injineerii Sivilii"
+    },
+    "description": {
+      "en": "Expert civil engineering services for infrastructure projects including roads, bridges, and utilities",
+      "am": "ለመሠረተ ልማት ፕሮጀክቶች የባለሙያ ሲቪል ምህንድስና አገልግሎቶች መንገዶችን፣ ድልድዮችን እና መገልገያዎችን ጨምሮ",
+      "om": "Tajaajila injineerii sivilii ogummaa qabu porjeektota bu'uuraa kanneen karaa, riqichaa, fi meeshaalee fayyadamaa harkisan"
+    }
+  },
+  {
+    "id": "2",
+    "name": {
+      "en": "Building Construction",
+      "am": "ህንጻ ግንባታ",
+      "om": "Ijaarsa Gamoo"
+    },
+    "description": {
+      "en": "Residential and commercial building construction with modern architectural design",
+      "am": "የመኖሪያ እና የንግድ ህንጻ ግንባታ ከዘመናዊ የስነ-ህንጻ ዲዛይን ጋር",
+      "om": "Ijaarsa gamoo jireenyaa fi daldalaa kan akkamitti ijaarsaa ammayyaa wajjin"
+    }
+  },
+  {
+    "id": "3",
+    "name": {
+      "en": "Project Management",
+      "am": "ፕሮጀክት አስተዳደር",
+      "om": "Bulchiinsa Porjeektii"
+    },
+    "description": {
+      "en": "Professional project management with quality assurance and timely delivery",
+      "am": "ሙያዊ የፕሮጀክት አስተዳደር ከጥራት ማረጋገጫ እና በጊዜው ማቅረብ ጋር",
+      "om": "Bulchiinsa porjeektii ogummaa qabu kan mirkaneessa qulqullinaa fi gahee yeroof wajjin"
+    }
+  },
+  {
+    "id": "4",
+    "name": {
+      "en": "Engineering Consultation",
+      "am": "የምህንድስና ምክር",
+      "om": "Gorsa Injineerii"
+    },
+    "description": {
+      "en": "Expert technical consultation and feasibility studies for construction projects",
+      "am": "የባለሙያ ቴክኒካል ምክር እና የአዋጭነት ጥናት ለግንባታ ፕሮጀክቶች",
+      "om": "Gorsa teekniikaa ogummaa fi qorannoo danda'amaa porjeektota ijaarsaaf"
+    }
+  }
+]

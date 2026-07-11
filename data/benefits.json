@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1",
+    "icon": "TrendingUp",
+    "title": {
+      "en": "Growth & Development",
+      "am": "እድገት እና ልማት",
+      "om": "Guddina fi Misooma"
+    },
+    "description": {
+      "en": "Continuous learning opportunities and career advancement programs",
+      "am": "ቀጣይ የመማር እድሎች እና የሙያ እድገት ፕሮግራሞች",
+      "om": "Fayyadama barumsaa itti fufaa fi sagantaa guddina hojii"
+    }
+  },
+  {
+    "id": "2",
+    "icon": "Users",
+    "title": {
+      "en": "Great Culture",
+      "am": "ምርጥ ባህል",
+      "om": "Aadaa Gaarii"
+    },
+    "description": {
+      "en": "Collaborative, inclusive, and supportive work environment",
+      "am": "ተባባሪ፣ አካታች እና ደጋፊ የስራ አካባቢ",
+      "om": "Walii wajjin hojii, hunda harkisaa fi naannoo hojii deggersa qabu"
+    }
+  },
+  {
+    "id": "3",
+    "icon": "Award",
+    "title": {
+      "en": "Great Benefits",
+      "am": "ምርጥ ጥቅሞች",
+      "om": "Bu'aa Gaarii"
+    },
+    "description": {
+      "en": "Competitive compensation, health benefits, and work-life balance",
+      "am": "ተወዳዳሪ ካሳ፣ የጤና ጥቅሞች እና የስራ-ህይወት ሚዛን",
+      "om": "Mindaasaa dorgomii, bu'aa fayyaa fi madaalessa hojii-jireenyaa"
+    }
+  },
+  {
+    "id": "4",
+    "icon": "Target",
+    "title": {
+      "en": "Impactful Work",
+      "am": "ተጽኖ ያለው ስራ",
+      "om": "Hojii Dhiibbaa Qabu"
+    },
+    "description": {
+      "en": "Work on projects that make a real difference in communities",
+      "am": "በህብረተሰቦች ላይ እውነተኛ ለውጥ በሚያመጡ ፕሮጀክቶች ላይ ይስሩ",
+      "om": "Hawaasota keessatti jijjiirama dhugaa uumu porjeektota irratti hojjedhaa"
+    }
+  }
+]

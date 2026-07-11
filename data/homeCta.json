@@ -1,0 +1,25 @@
+[
+  {
+    "id": "1",
+    "badge": {
+      "en": "Let's Work Together",
+      "am": "አብረን እንስራ",
+      "om": "Waliin Hojjedhaa"
+    },
+    "title": {
+      "en": "Ready to Build Something Great?",
+      "am": "ታላቅ ነገር ለመገንባት ዝግጁ ነዎት?",
+      "om": "Waan guddaa ijaaruuf qophoo?"
+    },
+    "description": {
+      "en": "Contact us today to discuss your project and let our team of experts bring your vision to life.",
+      "am": "ዛሬ ያግኙን ስለ ፕሮጀክትዎ ለመወያየት እና የባለሙያዎች ቡድናችን ራዕይዎን ወደ እውነት ያመጣል።",
+      "om": "Har'a nu qunnamaa porjeektii keessan irratti mari'achuuf fi gurmuun ogummaa keenyaa mul'ata keessan jiraachisuuf."
+    },
+    "button": {
+      "en": "Contact Us Today",
+      "am": "ዛሬ አግኙን",
+      "om": "Har'a Quunnamaa"
+    }
+  }
+]
