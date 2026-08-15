@@ -27,7 +27,41 @@
       "om": "Waggaa 5+"
     },
     "posted": "2024-01-15",
-    "isActive": true
+    "isActive": true,
+    "description": {
+      "en": "We are seeking an experienced Senior Civil Engineer to lead our engineering team in Addis Ababa. You will be responsible for overseeing major infrastructure projects, ensuring quality standards, and mentoring junior engineers. This role requires strong technical expertise and project management skills.",
+      "am": "አዲስ አበባ ውስጥ የምህንድስና ቡድናችንን የሚመሩ ልምድ ያላቸው ከፍተኛ የሲቪል ምህንድስና ባለሙያ እየፈለግን ነው። ዋና ዋና የመሠረተ ልማት ፕሮጀክቶችን የመቆጣጠር፣ የጥራት ደረጃዎችን የማረጋገጥ እና ጀማሪ መሐንዲሶችን የማሰልጠን ሃላፊነት ይኖርዎታል። ይህ ሚና ጠንካራ የቴክኒክ እውቀት እና የፕሮጀክት አስተዳደር ክህሎቶችን ይጠይቃል።",
+      "om": "Nu injineerii Sivilii angafaa muuxannoo qabu kan garee injineerii keenyaa Addis Ababaa keessatti geggeessu barbaanna. Ati porjeektota bu'uuraa ijoo to'achuu, sadarkaa qulqullinaa mirkaneessuu fi injineerota haaraa leenjisuu irratti itti gaafatamaa taata. Hojiin kun ogummaa teekinikaa cimaa fi dandeettii bulchiinsa porjeektii barbaada."
+    },
+    "requirements": {
+      "en": [
+        "Bachelor's degree in Civil Engineering or related field",
+        "5+ years of experience in civil engineering",
+        "Proficiency in engineering software (AutoCAD, Civil 3D, Revit)",
+        "Strong analytical and problem-solving skills",
+        "Excellent communication and teamwork abilities",
+        "Professional engineering license preferred",
+        "Experience with large-scale infrastructure projects"
+      ],
+      "am": [
+        "በሲቪል ምህንድስና ወይም ተዛማጅ መስክ የባችለር ዲግሪ",
+        "በሲቪል ምህንድስና 5+ ዓመታት ልምድ",
+        "በምህንድስና ሶፍትዌሮች (AutoCAD, Civil 3D, Revit) ላይ ብቃት",
+        "ጠንካራ የመተንተን እና የችግር አፈታት ክህሎቶች",
+        "እጅግ በጣም ጥሩ የመግባቢያ እና የቡድን ስራ ክህሎቶች",
+        "የሙያ ምህንድስና ፈቃድ ተመራጭ",
+        "ትልልቅ የመሠረተ ልማት ፕሮጀክቶች ላይ ልምድ"
+      ],
+      "om": [
+        "Digirii Baashiloorii Injineerii Sivilii ykn danaa wal qabatee",
+        "Waggaa 5+ injineerii sivilii keessatti muuxannoo",
+        "Sofitweerii injineerii (AutoCAD, Civil 3D, Revit) beekuu",
+        "Dandeettii xiinxalessaa fi rakkoo furuu cimaa",
+        "Dandeettii qunnamtii fi hojii garee caalaa",
+        "Layisinsi injineerii ogeessaa filatamaa",
+        "Muuxannoo porjeektota bu'uuraa ijoo waliin"
+      ]
+    }
   },
   {
     "id": "2",
@@ -57,7 +91,44 @@
       "om": "Waggaa 7+"
     },
     "posted": "2024-01-12",
-    "isActive": true
+    "isActive": true,
+    "description": {
+      "en": "We are looking for an experienced Project Manager to lead our operations in Nairobi. You will oversee multiple construction projects, coordinate with stakeholders, and ensure timely delivery within budget. This role requires strong leadership and strategic planning skills.",
+      "am": "ናይሮቢ ውስጥ ስራዎቻችንን የሚመሩ ልምድ ያላቸው የፕሮጀክት አስተዳዳሪ እየፈለግን ነው። በርካታ የግንባታ ፕሮጀክቶችን ይቆጣጠራሉ፣ ከባለድርሻ አካላት ጋር ያስተባብራሉ እና በጊዜ እና በበጀት ውስጥ መድረስን ያረጋግጣሉ። ይህ ሚና ጠንካራ የአመራር እና የስትራቴጂክ እቅድ አውጪ ክህሎቶችን ይጠይቃል።",
+      "om": "Nu bulchii porjeektii muuxannoo qabu kan hojiirraa keenyaa Nayiroobii keessatti geggeessu barbaanna. Ati porjeektota ijaarsaa hedduu to'achuu, qooda fudhattoota waliin walqabsiisuu fi yeroo fi baajetii keessatti dhiheessuu mirkaneessuu ni qabda. Hojiin kun hoogganaa cimaa fi karoora tarsiimaa kan barbaaduudha."
+    },
+    "requirements": {
+      "en": [
+        "Bachelor's degree in Business Administration, Construction Management, or related field",
+        "7+ years of experience in project management",
+        "PMP or similar certification preferred",
+        "Strong leadership and organizational skills",
+        "Excellent communication and negotiation abilities",
+        "Experience with project management software (MS Project, Primavera)",
+        "Proven track record of successful project delivery",
+        "Knowledge of construction industry standards and regulations"
+      ],
+      "am": [
+        "በቢዝነስ አስተዳደር፣ በግንባታ አስተዳደር ወይም ተዛማጅ መስክ የባችለር ዲግሪ",
+        "በፕሮጀክት አስተዳደር 7+ ዓመታት ልምድ",
+        "PMP ወይም ተመሳሳይ የምስክር ወረቀት ተመራጭ",
+        "ጠንካራ የአመራር እና የድርጅት ክህሎቶች",
+        "እጅግ በጣም ጥሩ የመግባቢያ እና የመደራደር ክህሎቶች",
+        "በፕሮጀክት አስተዳደር ሶፍትዌሮች (MS Project, Primavera) ልምድ",
+        "የተሳካ የፕሮጀክት አቅርቦት ሪከርድ",
+        "ስለ ግንባታ ኢንዱስትሪ ደረጃዎች እና ደንቦች እውቀት"
+      ],
+      "om": [
+        "Digirii Baashiloorii Bulchiinsa Daldalaa, Bulchiinsa Ijaarsaa ykn danaa wal qabatee",
+        "Waggaa 7+ bulchiinsa porjeektii keessatti muuxannoo",
+        "Sertifikeetii PMP ykn kan fakkaatu filatamaa",
+        "Dandeettii hoogganuu fi qindeessuu cimaa",
+        "Dandeettii qunnamtii fi marii caalaa",
+        "Muuxannoo sofitweerii bulchiinsa porjeektii (MS Project, Primavera) waliin",
+        "Galma bu'aa porjeektii walduraa duubaa",
+        "Beekumsa sadarkaa fi seera warshada ijaarsaa"
+      ]
+    }
   },
   {
     "id": "3",
@@ -87,7 +158,41 @@
       "om": "Waggaa 3+"
     },
     "posted": "2024-01-10",
-    "isActive": true
+    "isActive": true,
+    "description": {
+      "en": "We are seeking a dedicated Site Supervisor to manage our construction projects in Dar es Salaam. You will be responsible for overseeing daily site operations, ensuring safety compliance, and coordinating with contractors and workers. This is an excellent opportunity for someone with strong leadership skills.",
+      "am": "ዳር ኤስ ሰላም ውስጥ የግንባታ ፕሮጀክቶቻችንን የሚያስተዳድር ታማኝ የጣቢያ ተቆጣጣሪ እየፈለግን ነው። የዕለት ተዕለት የጣቢያ ስራዎችን የመቆጣጠር፣ የደህንነት ደንቦችን የማረጋገጥ እና ከተቋራጮች እና ሰራተኞች ጋር የማስተባበር ሃላፊነት ይኖርዎታል። ይህ ጠንካራ የአመራር ክህሎት ላለው ሰው በጣም ጥሩ እድል ነው።",
+      "om": "Nu to'ataa iddoo of qopheessaa kan porjeektota ijaarsaa keenyaa Daar es Salaam keessatti bulchu barbaanna. Ati hojiilee iddoo guyyuu to'achuu, eegumsa nageenyaa mirkaneessuu fi waraantota fi hojjattoota waliin walqabsiisuu irratti itti gaafatamaa taata. Kun carraa gaarii ta'ee kan nama dandeettii hoogganuu cimaa qabuuf."
+    },
+    "requirements": {
+      "en": [
+        "Diploma or Bachelor's degree in Construction Management or related field",
+        "3+ years of experience in construction supervision",
+        "Knowledge of construction safety regulations and standards",
+        "Strong attention to detail and quality control",
+        "Excellent team management and communication skills",
+        "First aid and safety certification preferred",
+        "Ability to read and interpret construction drawings"
+      ],
+      "am": [
+        "በግንባታ አስተዳደር ወይም ተዛማጅ መስክ ዲፕሎማ ወይም የባችለር ዲግሪ",
+        "በግንባታ ቁጥጥር 3+ ዓመታት ልምድ",
+        "ስለ ግንባታ ደህንነት ደንቦች እና ደረጃዎች እውቀት",
+        "ለዝርዝር እና ለጥራት ቁጥጥር ጠንካራ ትኩረት",
+        "እጅግ በጣም ጥሩ የቡድን አስተዳደር እና የመግባቢያ ክህሎቶች",
+        "የመጀመሪያ እርዳታ እና የደህንነት የምስክር ወረቀት ተመራጭ",
+        "የግንባታ ስዕሎችን የማንበብ እና የመተርጎም ችሎታ"
+      ],
+      "om": [
+        "Diiplomaa ykn Digirii Baashiloorii Bulchiinsa Ijaarsaa ykn danaa wal qabatee",
+        "Waggaa 3+ to'ataa ijaarsaa keessatti muuxannoo",
+        "Beekumsa seerota fi sadarkaa nageenyaa ijaarsaa",
+        "Xiyyeeffannaa cimaa waan xixiqqaafi to'ataa qulqullinaatiif",
+        "Dandeettii bulchiinsa garee fi qunnamtii caalaa",
+        "Sertifikeetii gargaarsa jalqabaa fi nageenyaa filatamaa",
+        "Dandeettii suuraawwan ijaarsaa dubbisuu fi hiikuu"
+      ]
+    }
   },
   {
     "id": "4",
@@ -117,6 +222,40 @@
       "om": "Waggaa 4+"
     },
     "posted": "2024-01-08",
-    "isActive": true
+    "isActive": true,
+    "description": {
+      "en": "We are looking for a talented Structural Engineer to join our team in Kampala. You will be responsible for designing and analyzing structural systems for various construction projects. This role requires strong technical skills and attention to detail.",
+      "am": "ካምፓላ ውስጥ ቡድናችንን የሚቀላቀሉ ተሰጥኦ ያላቸው መዋቅራዊ ምህንድስና ባለሙያ እየፈለግን ነው። ለተለያዩ የግንባታ ፕሮጀክቶች መዋቅራዊ ስርዓቶችን የመንደፍ እና የመተንተን ሃላፊነት ይኖርዎታል። ይህ ሚና ጠንካራ የቴክኒክ ክህሎቶች እና ለዝርዝር ትኩረት ይጠይቃል።",
+      "om": "Nu injineerii caasaa dandeettii qabu kan garee keenyaa Kaampaalaa keessatti seenu barbaanna. Ati caasaa sirnaa porjeektota ijaarsaa adda addaatiif saamuunii fi xiinxaluu irratti itti gaafatamaa taata. Hojiin kun dandeettii teekinikaa cimaa fi waan xixiqqaatti xiyyeeffachuu barbaada."
+    },
+    "requirements": {
+      "en": [
+        "Bachelor's degree in Civil/Structural Engineering",
+        "4+ years of experience in structural engineering",
+        "Proficiency in structural analysis software (STAAD Pro, ETABS)",
+        "Strong knowledge of building codes and standards",
+        "Excellent analytical and problem-solving abilities",
+        "Good communication and report writing skills",
+        "Professional engineering license preferred"
+      ],
+      "am": [
+        "በሲቪል/መዋቅራዊ ምህንድስና የባችለር ዲግሪ",
+        "በመዋቅራዊ ምህንድስና 4+ ዓመታት ልምድ",
+        "በመዋቅራዊ ትንተና ሶፍትዌሮች (STAAD Pro, ETABS) ላይ ብቃት",
+        "ስለ ግንባታ ኮዶች እና ደረጃዎች ጠንካራ እውቀት",
+        "እጅግ በጣም ጥሩ የመተንተን እና የችግር አፈታት ክህሎቶች",
+        "ጥሩ የመግባቢያ እና የሪፖርት አጻጻፍ ክህሎቶች",
+        "የሙያ ምህንድስና ፈቃድ ተመራጭ"
+      ],
+      "om": [
+        "Digirii Baashiloorii Injineerii Sivilii/Caasaa",
+        "Waggaa 4+ injineerii caasaa keessatti muuxannoo",
+        "Sofitweerii xiinxala caasaa (STAAD Pro, ETABS) beekuu",
+        "Beekumsa cimaa koodii fi sadarkaa ijaarsaa",
+        "Dandeettii xiinxalessaa fi rakkoo furuu caalaa",
+        "Dandeettii qunnamtii fi barreessaa gabaasa gaarii",
+        "Layisinsi injineerii ogeessaa filatamaa"
+      ]
+    }
   }
 ]
