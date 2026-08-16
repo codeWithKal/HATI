@@ -49,7 +49,7 @@ export default function About() {
         om: "Mul'ata Keenyaa",
       },
       content: {
-        en: "To be the leading construction company in East Africa, recognized for innovation, quality, and integrity, setting new standards in the industry.",
+        en: "To be the leading construction company in Ethiopia, recognized for innovation, quality, and integrity, setting new standards in the industry.",
         am: "በምስራቅ አፍሪካ መሪ የግንባታ ኩባንያ መሆን፣ በፈጠራ፣ በጥራት እና በታማኝነት የሚታወቅ፣ በኢንዱስትሪው ውስጥ አዳዲስ ደረጃዎችን ማውጣት።",
         om: "Gara Bahaa Afriikaa keessatti dhaabbata ijaarsaa fulbaana ta'uu, ogummaa, qulqullina, fi amanamummaadhaan beekamuu, sadarkaa haaraa industirii keessatti ramaddiinsa uumuu.",
       },
@@ -133,7 +133,7 @@ export default function About() {
         om: "Seenaa Keenyaa",
       },
       content: {
-        en: "Founded in 2010, HATI Construction has grown to become one of the most trusted construction companies in East Africa. With offices in multiple countries and a team of experienced professionals, we have successfully completed over 500 projects ranging from residential to large-scale infrastructure developments. Our commitment to quality, innovation, and client satisfaction has earned us a reputation as a reliable partner in the construction industry.",
+        en: "Founded in 2010, HATI Construction has grown to become one of the most trusted construction companies in Ethiopia. With offices in multiple countries and a team of experienced professionals, we have successfully completed over 500 projects ranging from residential to large-scale infrastructure developments. Our commitment to quality, innovation, and client satisfaction has earned us a reputation as a reliable partner in the construction industry.",
         am: "እ.ኤ.አ. በ2010 የተመሰረተው HATI ግንባታ በምስራቅ አፍሪካ ከሚታመኑ የግንባታ ኩባንያዎች አንዱ ሆኗል። በበርካታ አገሮች ቢሮዎች እና ልምድ ባላቸው ባለሙያዎች ቡድን፣ ከ500 በላይ ፕሮጀክቶችን ከመኖሪያ ቤቶች እስከ መጠነ ሰፊ የመሠረተ ልማት ልማቶች ድረስ በተሳካ ሁኔታ አጠናቀናል። ለጥራት፣ ለፈጠራ እና ለደንበኞች እርካታ ያለን ቁርጠኝነት በግንባታ ኢንዱስትሪ ውስጥ እንደ አስተማማኝ አጋር ስም አትርፈናል።",
         om: "HATI Ijaarsa waggaa 2010 jalqabamee, Gara Bahaa Afriikaa keessatti dhaabbata ijaarsaa amanamaa ta'e keessaa tokko ta'ee guddate. Birootawwan hedduu keessatti waajjirootaa fi ogummaa hojii qabduun, porjeektota 500 caalaa manneen jireenyaa jalqabee hanga ijansaa baay'ina guddaatti hojii xumurran. Qulqullina, uumama, fi gammachuu maamiltootaaf kennuun keenya daldala ijaarsaa keessatti michuu amanamaa akka ta'u kabajama uumee jira.",
       },

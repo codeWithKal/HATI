@@ -2,68 +2,72 @@
   {
     "id": "1",
     "name": {
-      "en": "John Doe",
-      "am": "ጆን ዶ",
-      "om": "John Doe"
+      "en": "Tibebu Girma",
+      "am": "ጥበቡ ግርማ",
+      "om": "Xibabuu Girmaa"
     },
     "position": {
-      "en": "Chief Executive Officer",
-      "am": "ዋና ስራ አስፈፃሚ",
-      "om": "Keessaa Bohodhaa"
+      "en": "Operations Director & Shareholder",
+      "am": "የኦፕሬሽን ዳይሬክተር እና ባለአክሲዮን",
+      "om": "Keenya Hojii fi Qondaala"
     },
     "department": {
-      "en": "Management",
-      "am": "አስተዳደር",
-      "om": "Bulchiinsa"
+      "en": "Executive Management",
+      "am": "ከፍተኛ አስተዳደር",
+      "om": "Bulchiinsa Ol'aanaa"
     },
     "bio": {
-      "en": "With 25+ years of experience in construction management, leading strategic vision and growth.",
-      "am": "በግንባታ አስተዳደር ከ25+ ዓመታት በላይ ልምድ ያለው፣ ስትራቴጂያዊ ራዕይ እና እድገትን ይመራል።",
-      "om": "Muuxannoo waggaa 25+ bulchiinsa ijaarsaa qabu, mul'ata fi guddina qajeelcha."
+      "en": "Overall Operations Director and Shareholder of the company with 25+ years of experience in construction management, leading strategic vision and growth.",
+      "am": "የኩባንያው አጠቃላይ የኦፕሬሽን ዳይሬክተር እና ባለአክሲዮን ከ25+ ዓመታት በላይ ልምድ ያለው፣ ስትራቴጂያዊ ራዕይ እና እድገትን ይመራል።",
+      "om": "Keenya Hojii fi Qondaala Idilaa qabduu fi qondaala qabduu kan waggaa 25+ muuxannoo bulchiinsa ijaarsaa qabu, mul'ata fi guddina qajeelcha."
     },
     "experience": "25+",
     "avatar": "👨‍💼",
-    "email": "john.doe@hati.com",
+    "email": "tibebu.girma@hati.com",
+    "phone": "+251-911-123456",
+    "image": "/images/staff/tibebu.jpg",
     "isActive": true
   },
   {
     "id": "2",
     "name": {
-      "en": "Sarah Smith",
-      "am": "ሳራ ስሚዝ",
-      "om": "Sarah Smith"
+      "en": "Hailu Legesse",
+      "am": "ሃይሉ ለገሰ",
+      "om": "Hayluu Laggasaa"
     },
     "position": {
-      "en": "Chief Technical Officer",
-      "am": "ዋና ቴክኒካል ኦፊሰር",
-      "om": "Keessaa Teekniikaa"
+      "en": "Chief Technical Officer & Shareholder",
+      "am": "ዋና ቴክኒካል ኦፊሰር እና ባለአክሲዮን",
+      "om": "Keessaa Teekniikaa fi Qondaala"
     },
     "department": {
-      "en": "Engineering",
-      "am": "ምህንድስና",
-      "om": "Injineerii"
+      "en": "Engineering & Technical",
+      "am": "ምህንድስና እና ቴክኒካል",
+      "om": "Injineerii fi Teekniika"
     },
     "bio": {
-      "en": "Expert in structural design with 20 years of innovative engineering solutions.",
-      "am": "በመዋቅራዊ ዲዛይን ላይ ባለሙያ ከ20 ዓመታት የፈጠራ ምህንድስና መፍትሄዎች ጋር።",
-      "om": "Ogummaa ijaarsa caasaa waggaa 20 furmaata injineerii uumamaa qabu."
+      "en": "Shareholder and Chief Technical Officer, expert in structural design with 20 years of innovative engineering solutions.",
+      "am": "ባለአክሲዮን እና ዋና ቴክኒካል ኦፊሰር፣ በመዋቅራዊ ዲዛይን ላይ ባለሙያ ከ20 ዓመታት የፈጠራ ምህንድስና መፍትሄዎች ጋር።",
+      "om": "Qondaala fi Keessaa Teekniikaa, ogummaa ijaarsa caasaa waggaa 20 furmaata injineerii uumamaa qabu."
     },
     "experience": "20",
     "avatar": "👩‍💼",
-    "email": "sarah.smith@hati.com",
+    "email": "hailu.legesse@hati.com",
+    "phone": "+251-922-234567",
+    "image": "/images/staff/hailu.jpg",
     "isActive": true
   },
   {
     "id": "3",
     "name": {
-      "en": "Michael Johnson",
-      "am": "ሚካኤል ጆንሰን",
-      "om": "Michael Johnson"
+      "en": "Asnake Legesse",
+      "am": "አስናቀ ለገሰ",
+      "om": "Asnaaqaa Laggasaa"
     },
     "position": {
-      "en": "Project Manager",
-      "am": "ፕሮጀክት አስተዳዳሪ",
-      "om": "Bulchii Porjeektii"
+      "en": "Senior Manager",
+      "am": "ከፍተኛ አስተዳዳሪ",
+      "om": "Bulchii Ol'aanaa"
     },
     "department": {
       "en": "Operations",
@@ -71,94 +75,15 @@
       "om": "Hojiirraa"
     },
     "bio": {
-      "en": "Manages multi-million dollar projects with precision and efficiency.",
-      "am": "በትክክለኛነት እና በብቃት ብዙ ሚሊዮን ዶላር ፕሮጀክቶችን ያስተዳድራል።",
-      "om": "Porjeektota dollarii miliyoona hedduu sirnaan fi qajeelchaniin bulchiisa."
+      "en": "Senior Manager at the company, overseeing multi-million dollar projects with precision and efficiency.",
+      "am": "በኩባንያው ከፍተኛ አስተዳዳሪ፣ በትክክለኛነት እና በብቃት ብዙ ሚሊዮን ዶላር ፕሮጀክቶችን ይቆጣጠራል።",
+      "om": "Bulchii Ol'aanaa kan kampaanichaa, porjeektota dollarii miliyoona hedduu sirnaan fi qajeelchaniin bulchiisa."
     },
     "experience": "15",
     "avatar": "👨‍💻",
-    "email": "michael.johnson@hati.com",
-    "isActive": true
-  },
-  {
-    "id": "4",
-    "name": {
-      "en": "Emily Davis",
-      "am": "ኤሚሊ ዴቪስ",
-      "om": "Emily Davis"
-    },
-    "position": {
-      "en": "Finance Director",
-      "am": "የፋይናንስ ዳይሬክተር",
-      "om": "Akaakaa Maallaqaa"
-    },
-    "department": {
-      "en": "Finance",
-      "am": "ፋይናንስ",
-      "om": "Maallaqaa"
-    },
-    "bio": {
-      "en": "Strategic financial planning and cost optimization expert.",
-      "am": "ስትራቴጂያዊ የፋይናንስ እቅድ እና የወጪ ማመቻቸት ባለሙያ።",
-      "om": "Ogummaa karoora maallaqaa fi baasa fooyyessuu."
-    },
-    "experience": "18",
-    "avatar": "👩‍💼",
-    "email": "emily.davis@hati.com",
-    "isActive": true
-  },
-  {
-    "id": "5",
-    "name": {
-      "en": "David Wilson",
-      "am": "ዴቪድ ዊልሰን",
-      "om": "David Wilson"
-    },
-    "position": {
-      "en": "HR Manager",
-      "am": "የሰው ሀብት አስተዳዳሪ",
-      "om": "Bulchii Hojjattootaa"
-    },
-    "department": {
-      "en": "Human Resources",
-      "am": "የሰው ሀብት",
-      "om": "Qabeenya Hojjattootaa"
-    },
-    "bio": {
-      "en": "Building and nurturing a talented workforce culture.",
-      "am": "ችሎታ ያለው የሰው ሃይል ባህል መገንባት እና ማዳበር።",
-      "om": "Dhaabbata hojjattoota ogummaa qabu ijaaruu fi guddisuu."
-    },
-    "experience": "12",
-    "avatar": "👨‍💼",
-    "email": "david.wilson@hati.com",
-    "isActive": true
-  },
-  {
-    "id": "6",
-    "name": {
-      "en": "Lisa Anderson",
-      "am": "ሊሳ አንደርሰን",
-      "om": "Lisa Anderson"
-    },
-    "position": {
-      "en": "Safety Officer",
-      "am": "የደህንነት ኦፊሰር",
-      "om": "To'ataa Nageenyaa"
-    },
-    "department": {
-      "en": "Safety",
-      "am": "ደህንነት",
-      "om": "Nageenya"
-    },
-    "bio": {
-      "en": "Ensuring highest safety standards across all project sites.",
-      "am": "በሁሉም የፕሮጀክት ጣቢያዎች ከፍተኛ የደህንነት ደረጃዎችን ማረጋገጥ።",
-      "om": "Sadarkaa nageenya olaanaa iddoo porjeektii hunda keessatti mirkaneessuu."
-    },
-    "experience": "10",
-    "avatar": "👩‍💼",
-    "email": "lisa.anderson@hati.com",
+    "email": "asnake.legesse@hati.com",
+    "phone": "+251-933-345678",
+    "image": "/images/staff/asnake.jpg",
     "isActive": true
   }
 ]

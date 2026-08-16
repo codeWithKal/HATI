@@ -53,7 +53,7 @@ export default function Gallery() {
       om: "Ogummaata Frame Hundaa Keessatti Qabachuu",
     },
     description: {
-      en: "Explore our visual portfolio showcasing the quality and craftsmanship of our construction projects across East Africa.",
+      en: "Explore our visual portfolio showcasing the quality and craftsmanship of our construction projects across Ethiopia.",
       am: "በምስራቅ አፍሪካ ያሉ የግንባታ ፕሮጀክቶቻችንን ጥራት እና የእደ ጥበብ ስራ የሚያሳይ ምስላዊ ፖርትፎሊዮችን ያስሱ።",
       om: "Midhaa fi ogummaa porjeektota ijaarsaa keenyaa Gareeffannoo Bahaasaa Ilaalcha keessatti agarsiisu portfolio visual keenya ilaalaa.",
     },

@@ -40,7 +40,7 @@ export default function Projects() {
       om: "Fuuldura ijaarsuu, Porjeektii Tokko Tokkoon",
     },
     description: {
-      en: "Explore our portfolio of successful construction and engineering projects across East Africa, showcasing our commitment to excellence and innovation.",
+      en: "Explore our portfolio of successful construction and engineering projects across Ethiopia, showcasing our commitment to excellence and innovation.",
       am: "በምስራቅ አፍሪካ ያሉ የተሳካላቸው የግንባታ እና የምህንድስና ፕሮጀክቶች ፖርትፎሊዮችን ያስሱ፣ ለምርጥነት እና ለፈጠራ ያለን ቁርጠኝነት የሚያሳዩ።",
       om: "Porjeektota ijaarsaa fi injineerrii milkaaʼina Gareeffannoo Bahaasaa Ilaalcha keessatti argaman ilaalaa, ogummaa fi jijjiiraaf kennuun keenya agarsiisuu.",
     },

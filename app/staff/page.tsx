@@ -6,12 +6,14 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Users,
   Briefcase,
   Building2,
   Mail,
+  Phone,
   ArrowRight,
   Award,
   Clock,
@@ -37,6 +39,8 @@ const departmentIconMap: Record<string, any> = {
   Finance: Shield,
   "Human Resources": Users,
   Safety: Shield,
+  "Executive Management": Briefcase,
+  "Engineering & Technical": Building2,
 };
 
 export default function Staff() {
@@ -58,6 +62,11 @@ export default function Staff() {
       en: "View Profile",
       am: "መገለጫ ይመልከቱ",
       om: "Profile Ilaalaa",
+    },
+    contact: {
+      en: "Contact",
+      am: "አግኙን",
+      om: "Quunnamaa",
     },
     cta: {
       title: {
@@ -97,6 +106,10 @@ export default function Staff() {
       "Human Resources":
         "bg-pink-500/20 text-pink-700 dark:text-pink-400 border-pink-500/30",
       Safety: "bg-red-500/20 text-red-700 dark:text-red-400 border-red-500/30",
+      "Executive Management":
+        "bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30",
+      "Engineering & Technical":
+        "bg-purple-500/20 text-purple-700 dark:text-purple-400 border-purple-500/30",
     };
     return colors[department] || "bg-primary/20 text-primary border-primary/30";
   };
@@ -208,9 +221,22 @@ export default function Staff() {
                     <div className="relative">
                       <div className="aspect-square bg-gradient-to-br from-primary/20 via-secondary/10 to-primary/5 flex items-center justify-center relative overflow-hidden">
                         <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5"></div>
-                        <div className="text-8xl transform group-hover:scale-110 transition-transform duration-500">
-                          {member.avatar}
-                        </div>
+                        {/* Staff Image */}
+                        {member.image ? (
+                          <div className="relative w-full h-full">
+                            <Image
+                              src={member.image}
+                              alt={tValue(member.name)}
+                              fill
+                              className="object-cover"
+                              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            />
+                          </div>
+                        ) : (
+                          <div className="text-8xl transform group-hover:scale-110 transition-transform duration-500">
+                            {member.avatar}
+                          </div>
+                        )}
                         <Badge
                           className={`absolute top-4 right-4 ${deptColor} border`}
                         >
@@ -227,7 +253,7 @@ export default function Staff() {
                         </h3>
                         <div className="flex items-center gap-1 text-xs text-muted-foreground">
                           <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
-                          <span>{member.experience}y</span>
+                          <span>{member.experience}+ years</span>
                         </div>
                       </div>
                       <p className="text-sm font-medium text-primary mb-1">
@@ -242,13 +268,32 @@ export default function Staff() {
                       </p>
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex gap-2">
+                          {/* Email Button */}
                           <Button
                             variant="ghost"
                             size="icon"
                             className="h-8 w-8 rounded-full hover:bg-primary/10"
+                            asChild
                           >
-                            <Mail className="h-4 w-4" />
+                            <a href={`mailto:${member.email}`}>
+                              <Mail className="h-4 w-4" />
+                            </a>
                           </Button>
+                          {/* Phone Button */}
+                          {member.phone && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8 rounded-full hover:bg-primary/10"
+                              asChild
+                            >
+                              <a
+                                href={`tel:${member.phone.replace(/\s/g, "")}`}
+                              >
+                                <Phone className="h-4 w-4" />
+                              </a>
+                            </Button>
+                          )}
                         </div>
                         <Button
                           variant="ghost"

@@ -53,7 +53,7 @@ export function Footer() {
             <h3 className="mb-4 font-bold text-lg">HATI Construction</h3>
             <p className="text-sm text-muted-foreground max-w-xs">
               {language === "en" &&
-                "Premium construction and engineering services across East Africa"}
+                "Premium construction and engineering services across Ethiopia"}
               {language === "am" &&
                 "በምስራቅ አፍሪካ ውስጥ የላቁ የግንባታ እና የምህንድስና አገልግሎቶች"}
               {language === "om" &&

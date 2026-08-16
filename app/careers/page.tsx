@@ -61,7 +61,7 @@ export default function Careers() {
       om: "Fuuldura Keessan Nu Waliin Ijaarsaa",
     },
     description: {
-      en: "Join our team of dedicated professionals and be part of exciting projects that are shaping the future of East Africa.",
+      en: "Join our team of dedicated professionals and be part of exciting projects that are shaping the future of Ethiopia.",
       am: "ቁርጠኛ የሆኑ ባለሙያዎች ቡድናችንን ይቀላቀሉ እና የምስራቅ አፍሪካን የወደፊት ህይወት በሚቀርጹ አስደሳች ፕሮጀክቶች ውስጥ ይሳተፉ።",
       om: "Garee ogummaa of qopheessan nutti seenaa fi porjeektota babaasaan fuuldura Gareeffannoo Bahaasaa Ilaalcha ijaaru keessatti qooda fudhadhaa.",
     },

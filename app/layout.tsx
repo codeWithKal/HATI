@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "HATI Construction",
-  description: "Premium construction and engineering services in East Africa",
+  description: "Premium construction and engineering services in Ethiopia",
   generator: "v0.app",
   icons: {
     icon: [
