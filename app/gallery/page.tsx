@@ -3,24 +3,15 @@
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import {
   Images,
   Building2,
   ArrowRight,
-  ZoomIn,
-  Grid,
-  LayoutGrid,
-  MapPin,
   Calendar,
-  CheckCircle2,
-  Clock,
-  HardHat,
-  Users,
+  LayoutGrid,
 } from "lucide-react";
 import galleryData from "@/data/gallery.json";
 import galleryStatsData from "@/data/galleryStats.json";
@@ -31,15 +22,8 @@ const iconMap: Record<string, any> = {
   LayoutGrid: LayoutGrid,
 };
 
-const categoryIconMap: Record<string, any> = {
-  building: Building2,
-  infrastructure: HardHat,
-  development: Users,
-};
-
 export default function Gallery() {
   const { language } = useLanguage();
-  const [filter, setFilter] = useState("all");
 
   const t = {
     title: {
@@ -56,12 +40,6 @@ export default function Gallery() {
       en: "Explore our visual portfolio showcasing the quality and craftsmanship of our construction projects across Ethiopia.",
       am: "በምስራቅ አፍሪካ ያሉ የግንባታ ፕሮጀክቶቻችንን ጥራት እና የእደ ጥበብ ስራ የሚያሳይ ምስላዊ ፖርትፎሊዮችን ያስሱ።",
       om: "Midhaa fi ogummaa porjeektota ijaarsaa keenyaa Gareeffannoo Bahaasaa Ilaalcha keessatti agarsiisu portfolio visual keenya ilaalaa.",
-    },
-    filters: {
-      all: { en: "All Projects", am: "ሁሉም ፕሮጀክቶች", om: "Porjeektota Hunda" },
-      building: { en: "Buildings", am: "ህንጻዎች", om: "Manneen" },
-      infrastructure: { en: "Infrastructure", am: "መሠረተ ልማት", om: "Midhaa" },
-      development: { en: "Development", am: "ልማት", om: "Ijaarsa" },
     },
     viewProject: {
       en: "View Project",
@@ -94,38 +72,11 @@ export default function Gallery() {
     },
   };
 
-  const tValue = (obj: any) => obj[language] || obj["en"] || "";
+  // Safe translation getter — returns "" if obj is undefined/null
+  const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
-  // Get data from JSON files
   const galleryItems = galleryData;
   const stats = galleryStatsData;
-
-  const filteredItems =
-    filter === "all"
-      ? galleryItems
-      : galleryItems.filter((item: any) => item.category === filter);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30";
-      case "ongoing":
-        return "bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-500/30";
-      default:
-        return "bg-primary/20 text-primary border-primary/30";
-    }
-  };
-
-  // Get active items only
-  const activeItems = galleryItems.filter(
-    (item: any) => item.isActive !== false,
-  );
-
-  // Filter active items
-  const activeFilteredItems =
-    filter === "all"
-      ? activeItems
-      : activeItems.filter((item: any) => item.category === filter);
 
   return (
     <>
@@ -133,7 +84,6 @@ export default function Gallery() {
       <main className="min-h-screen">
         {/* Hero Section */}
         <section className="relative py-24 px-4 overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-          <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5 bg-repeat"></div>
           <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-amber-500/10 to-transparent rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-orange-500/10 to-transparent rounded-full blur-3xl"></div>
           <div className="container mx-auto text-center relative z-10">
@@ -186,7 +136,7 @@ export default function Gallery() {
         {/* Gallery Grid */}
         <section className="py-20 px-4 bg-background">
           <div className="container mx-auto">
-            {/* Filter Bar */}
+            {/* Header */}
             <div className="mb-12 flex flex-col md:flex-row justify-between items-center gap-4">
               <div>
                 <h2 className="text-3xl font-bold">
@@ -196,67 +146,16 @@ export default function Gallery() {
                 </h2>
                 <p className="text-muted-foreground mt-1">
                   {language === "en" &&
-                    `${activeFilteredItems.length} projects displayed`}
-                  {language === "am" &&
-                    `${activeFilteredItems.length} ፕሮጀክቶች ታይተዋል`}
+                    `${galleryItems.length} projects displayed`}
+                  {language === "am" && `${galleryItems.length} ፕሮጀክቶች ታይተዋል`}
                   {language === "om" &&
-                    `${activeFilteredItems.length} porjeektota agarsiifaman`}
+                    `${galleryItems.length} porjeektota agarsiifaman`}
                 </p>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <Badge
-                  variant={filter === "all" ? "default" : "outline"}
-                  className={`px-4 py-2 cursor-pointer transition-all ${
-                    filter === "all"
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-primary/10"
-                  }`}
-                  onClick={() => setFilter("all")}
-                >
-                  <Grid className="h-3 w-3 mr-1" />
-                  {tValue(t.filters.all)}
-                </Badge>
-                <Badge
-                  variant={filter === "building" ? "default" : "outline"}
-                  className={`px-4 py-2 cursor-pointer transition-all ${
-                    filter === "building"
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-primary/10"
-                  }`}
-                  onClick={() => setFilter("building")}
-                >
-                  <Building2 className="h-3 w-3 mr-1" />
-                  {tValue(t.filters.building)}
-                </Badge>
-                <Badge
-                  variant={filter === "infrastructure" ? "default" : "outline"}
-                  className={`px-4 py-2 cursor-pointer transition-all ${
-                    filter === "infrastructure"
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-primary/10"
-                  }`}
-                  onClick={() => setFilter("infrastructure")}
-                >
-                  <HardHat className="h-3 w-3 mr-1" />
-                  {tValue(t.filters.infrastructure)}
-                </Badge>
-                <Badge
-                  variant={filter === "development" ? "default" : "outline"}
-                  className={`px-4 py-2 cursor-pointer transition-all ${
-                    filter === "development"
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-primary/10"
-                  }`}
-                  onClick={() => setFilter("development")}
-                >
-                  <Users className="h-3 w-3 mr-1" />
-                  {tValue(t.filters.development)}
-                </Badge>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {activeFilteredItems.map((item: any) => (
+              {galleryItems.map((item: any) => (
                 <div
                   key={item.id}
                   className="group relative overflow-hidden rounded-xl bg-gradient-to-br from-secondary/5 to-primary/5 border hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
@@ -264,72 +163,19 @@ export default function Gallery() {
                   <div className="aspect-square relative overflow-hidden">
                     <Image
                       src={item.image}
-                      alt={tValue(item.title)}
+                      alt={`Project ${item.id}`}
                       fill
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
 
-                    {/* Overlay Gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    {/* Content - Bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                      <div className="space-y-2">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="text-lg font-bold text-white">
-                              {tValue(item.title)}
-                            </h3>
-                            <p className="text-sm text-gray-200/80">
-                              {tValue(item.categoryLabel)}
-                            </p>
-                          </div>
-                          <Badge className={getStatusColor(item.status)}>
-                            {item.status === "completed" ? (
-                              <CheckCircle2 className="h-3 w-3 mr-1" />
-                            ) : (
-                              <Clock className="h-3 w-3 mr-1" />
-                            )}
-                            {item.status === "completed"
-                              ? language === "en"
-                                ? "Done"
-                                : language === "am"
-                                  ? "ተጠናቀቀ"
-                                  : "Xumuramee"
-                              : language === "en"
-                                ? "Progress"
-                                : language === "am"
-                                  ? "በመቀጠል"
-                                  : "Itti Fufa"}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center gap-3 text-xs text-gray-200/70">
-                          <span className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {tValue(item.location)}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            {item.year || "2024"}
-                          </span>
-                        </div>
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          className="mt-2 gap-1 w-full bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-white/20"
-                        >
-                          <ZoomIn className="h-3 w-3" />
-                          {tValue(t.viewProject)}
-                          <ArrowRight className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
+                    {/* Overlay Gradient only — no text */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </div>
                 </div>
               ))}
             </div>
 
-            {activeFilteredItems.length === 0 && (
+            {galleryItems.length === 0 && (
               <div className="text-center py-12">
                 <div className="text-6xl mb-4">🔍</div>
                 <h3 className="text-xl font-semibold mb-2">
@@ -337,11 +183,6 @@ export default function Gallery() {
                   {language === "am" && "ምንም ፕሮጀክቶች አልተገኙም"}
                   {language === "om" && "Porjeektota hin argamu"}
                 </h3>
-                <p className="text-muted-foreground">
-                  {language === "en" && "Try adjusting your filter selection"}
-                  {language === "am" && "ማጣሪያ ምርጫዎን ለማስተካከል ይሞክሩ"}
-                  {language === "om" && "Filannoo keessan jijjiiruun yaalaa"}
-                </p>
               </div>
             )}
           </div>

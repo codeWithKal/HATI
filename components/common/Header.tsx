@@ -27,6 +27,7 @@ import {
   UserCircle,
   Mail,
   Building2,
+  Award,
 } from "lucide-react";
 
 export function Header() {
@@ -66,30 +67,24 @@ export function Header() {
       label: { en: "Products", am: "ምርቶች", om: "Oomisha" },
       icon: Package,
     },
-    // {
-    //   href: "/services",
-    //   label: { en: "Services", am: "አገልግሎቶች", om: "Tajaajila" },
-    //   icon: Briefcase,
-    // },
-    // {
-    //   href: "/projects",
-    //   label: { en: "Projects", am: "ፕሮጀክቶች", om: "Porjeektota" },
-    //   icon: FolderGit2,
-    // },
     {
       href: "/gallery",
       label: { en: "Gallery", am: "ማሳያ", om: "Albumii" },
       icon: Images,
     },
     {
+      href: "/certifications",
+      label: {
+        en: "Certifications",
+        am: "ማረጋገጫዎች",
+        om: "Ragaa Ragaa",
+      },
+      icon: Award,
+    },
+    {
       href: "/staff",
       label: { en: "Staff", am: "ሰራተኞች", om: "Hojjattoota" },
       icon: Users,
-    },
-    {
-      href: "/news",
-      label: { en: "News", am: "ዜና", om: "Oduu" },
-      icon: Newspaper,
     },
     {
       href: "/careers",

@@ -1,0 +1,167 @@
+[
+  {
+    "id": "1",
+    "title": {
+      "en": "Aleltu Municipal — Project Completion",
+      "am": "አለልቱ ማዘጋጃ ቤት — የፕሮጀክት ማጠናቀቂያ",
+      "om": "Magaalaa Aleeltuu — Xumura Porjeektii"
+    },
+    "issuer": {
+      "en": "Aleltu Municipal Administration",
+      "am": "የአለልቱ ማዘጋጃ ቤት አስተዳደር",
+      "om": "Bulchiinsa Magaalaa Aleeltuu"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Aleltu_Manucipal.jpg"
+  },
+  {
+    "id": "2",
+    "title": {
+      "en": "Aleltu Wereda Peace Council — Recognition",
+      "am": "የአለልቱ ወረዳ የሰላም ምክር ቤት — እውቅና",
+      "om": "Mana Maree Nagaa Aanaa Aleeltuu — Beekamtii"
+    },
+    "issuer": {
+      "en": "Aleltu Wereda Peace Council",
+      "am": "የአለልቱ ወረዳ የሰላም ምክር ቤት",
+      "om": "Mana Maree Nagaa Aanaa Aleeltuu"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Aleltu_wereda_Peace_Councel.jpg"
+  },
+  {
+    "id": "3",
+    "title": {
+      "en": "Aleltu Wereda Revenues — Tax Compliance",
+      "am": "የአለልቱ ወረዳ ገቢዎች — የታክስ ተገዢነት",
+      "om": "Galii Aanaa Aleeltuu — Kabajaa Gibiraa"
+    },
+    "issuer": {
+      "en": "Aleltu Wereda Revenues Office",
+      "am": "የአለልቱ ወረዳ ገቢዎች ጽሕፈት ቤት",
+      "om": "Waajjira Galii Aanaa Aleeltuu"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Aleltu_Wereda_Revenues.jpg"
+  },
+  {
+    "id": "4",
+    "title": {
+      "en": "Commercial Bank of Ethiopia — Client Appreciation",
+      "am": "የኢትዮጵያ ንግድ ባንክ — የደንበኛ እውቅና",
+      "om": "Baankii Daldalaa Itoophiyaa — Beekamtii Maamilaa"
+    },
+    "issuer": {
+      "en": "Commercial Bank of Ethiopia",
+      "am": "የኢትዮጵያ ንግድ ባንክ",
+      "om": "Baankii Daldalaa Itoophiyaa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Commercial_Bank_Of_Ethiopia.jpg"
+  },
+  {
+    "id": "5",
+    "title": {
+      "en": "Ethiopian Defense Force Support — Certificate of Appreciation",
+      "am": "የኢትዮጵያ መከላከያ ሰራዊት ድጋፍ — የአድናቆት ማረጋገጫ",
+      "om": "Deeggarsa Humnaa Ittisaa Itoophiyaa — Ragaa Galateeffannaa"
+    },
+    "issuer": {
+      "en": "Ethiopian National Defense Force",
+      "am": "የኢትዮጵያ ብሔራዊ መከላከያ ሰራዊት",
+      "om": "Humna Ittisaa Biyyaalessaa Itoophiyaa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Ethiopian_Defense_force_support.jpg"
+  },
+  {
+    "id": "6",
+    "title": {
+      "en": "Ethiopian Engineering Corporation — Partnership",
+      "am": "የኢትዮጵያ ኢንጂነሪንግ ኮርፖሬሽን — አጋርነት",
+      "om": "Koorpooreeshinii Injinariingii Itoophiyaa — Hiriyummaa"
+    },
+    "issuer": {
+      "en": "Ethiopian Engineering Corporation",
+      "am": "የኢትዮጵያ ኢንጂነሪንግ ኮርፖሬሽን",
+      "om": "Koorpooreeshinii Injinariingii Itoophiyaa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Ethiopian_engineering_corporation.jpg"
+  },
+  {
+    "id": "7",
+    "title": {
+      "en": "Ethiopian Federal Prison — Road Construction",
+      "am": "የኢትዮጵያ ፌዴራል እስር ቤት — የመንገድ ግንባታ",
+      "om": "Mana Hidhaa Federaalaa Itoophiyaa — Ijaarsa Daandii"
+    },
+    "issuer": {
+      "en": "Ethiopian Federal Prison Administration",
+      "am": "የኢትዮጵያ ፌዴራል እስር ቤት አስተዳደር",
+      "om": "Bulchiinsa Mana Hidhaa Federaalaa Itoophiyaa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/Ethiopian_Federal_Prison_Road.jpg"
+  },
+  {
+    "id": "8",
+    "title": {
+      "en": "North Shoa Mineral Bureau — Compliance",
+      "am": "የሰሜን ሸዋ ማዕድን ቢሮ — ተገዢነት",
+      "om": "Waajjira Albii Shawa Kaabaa — Kabajaa"
+    },
+    "issuer": {
+      "en": "North Shoa Mineral Bureau",
+      "am": "የሰሜን ሸዋ ማዕድን ቢሮ",
+      "om": "Waajjira Albii Shawa Kaabaa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/North_shoa_Mineral_Bureau.jpg"
+  },
+  {
+    "id": "9",
+    "title": {
+      "en": "Sura Kebele — Building Project",
+      "am": "ሱራ ቀበሌ — የህንጻ ፕሮጀክት",
+      "om": "Ganda Suraa — Porjeektii Ijaarsaa"
+    },
+    "issuer": {
+      "en": "Sura Kebele Administration",
+      "am": "የሱራ ቀበሌ አስተዳደር",
+      "om": "Bulchiinsa Ganda Suraa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/sura_kebele_building.jpg"
+  },
+  {
+    "id": "10",
+    "title": {
+      "en": "Sura Kebele — Community Support",
+      "am": "ሱራ ቀበሌ — የማህበረሰብ ድጋፍ",
+      "om": "Ganda Suraa — Deeggarsa Hawaasaa"
+    },
+    "issuer": {
+      "en": "Sura Kebele Administration",
+      "am": "የሱራ ቀበሌ አስተዳደር",
+      "om": "Bulchiinsa Ganda Suraa"
+    },
+    "year": "2024",
+    "image": "/images/certifications/sura_kebele_support.jpg"
+  },
+  {
+    "id": "11",
+    "title": {
+      "en": "Excellence Trophy — Outstanding Achievement",
+      "am": "የልቀት ዋንጫ — የላቀ ስኬት",
+      "om": "Waancaa Olaantummaa — Milkaa'ina Guddaa"
+    },
+    "issuer": {
+      "en": "HATI Construction",
+      "am": "ሀቲ ኮንስትራክሽን",
+      "om": "HATI Construction"
+    },
+    "year": "2024",
+    "image": "/images/certifications/trophy.jpg"
+  }
+]
