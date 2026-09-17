@@ -36,9 +36,9 @@ const t = {
     om: "Sadarkaalee, hayyamoota fi badhaasota kutannoo keenya qulqullina, nageenya fi kabajaaf deeggaran.",
   },
   featured: {
-    en: "Featured Achievement",
-    am: "የተመረጠ ስኬት",
-    om: "Milkaa'ina Filatamaa",
+    en: "Our products say more than words",
+    am: "ምርቶቻችን ከቃላት በላይ ይናገራሉ",
+    om: "Oomishni keenya jechaa caalaa dubbata",
   },
   allCertificates: {
     en: "All Certifications",

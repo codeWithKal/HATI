@@ -19,11 +19,8 @@ import {
   Home,
   Info,
   Package,
-  Briefcase,
-  FolderGit2,
   Images,
   Users,
-  Newspaper,
   UserCircle,
   Mail,
   Building2,
@@ -44,7 +41,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
@@ -77,7 +73,7 @@ export function Header() {
       label: {
         en: "Certifications",
         am: "ማረጋገጫዎች",
-        om: "Ragaa Ragaa",
+        om: "Ragaalee",
       },
       icon: Award,
     },
@@ -141,7 +137,11 @@ export function Header() {
                 }`}
               >
                 <Icon
-                  className={`h-3.5 w-3.5 ${active ? "text-primary" : "text-muted-foreground/70 group-hover:text-foreground"}`}
+                  className={`h-3.5 w-3.5 ${
+                    active
+                      ? "text-primary"
+                      : "text-muted-foreground/70 group-hover:text-foreground"
+                  }`}
                 />
                 {link.label[language]}
                 {active && (
@@ -154,20 +154,23 @@ export function Header() {
 
         {/* Right side controls - Right aligned */}
         <div className="flex items-center space-x-2 flex-shrink-0">
-          {/* Language Selector */}
+          {/* Language Selector — FIXED: render function preserves children */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="hidden sm:flex items-center gap-1.5 min-w-[80px] bg-transparent hover:bg-accent/50"
-              >
-                <span className="text-xs">
-                  {languages.find((l) => l.code === language)?.label}
-                </span>
-                <ChevronDown className="h-3 w-3 opacity-50" />
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={(props) => (
+                <Button
+                  {...props}
+                  variant="outline"
+                  size="sm"
+                  className="hidden sm:flex items-center gap-1.5 min-w-[80px] bg-transparent hover:bg-accent/50"
+                >
+                  <span className="text-xs">
+                    {languages.find((l) => l.code === language)?.label}
+                  </span>
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </Button>
+              )}
+            />
             <DropdownMenuContent align="end" className="min-w-[140px]">
               {languages.map((lang) => (
                 <DropdownMenuItem
@@ -188,21 +191,24 @@ export function Header() {
 
           <ThemeToggle />
 
-          {/* Mobile language selector (simplified) */}
+          {/* Mobile language selector — FIXED: render function preserves children */}
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="sm:hidden min-w-[40px] px-2 bg-transparent hover:bg-accent/50"
-              >
-                <span className="text-xs">
-                  {languages
-                    .find((l) => l.code === language)
-                    ?.label.substring(0, 2)}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
+            <DropdownMenuTrigger
+              render={(props) => (
+                <Button
+                  {...props}
+                  variant="outline"
+                  size="sm"
+                  className="sm:hidden min-w-[40px] px-2 bg-transparent hover:bg-accent/50"
+                >
+                  <span className="text-xs">
+                    {languages
+                      .find((l) => l.code === language)
+                      ?.label.substring(0, 2)}
+                  </span>
+                </Button>
+              )}
+            />
             <DropdownMenuContent align="end" className="min-w-[140px]">
               {languages.map((lang) => (
                 <DropdownMenuItem
@@ -257,7 +263,9 @@ export function Header() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <Icon
-                    className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground/70"}`}
+                    className={`h-4 w-4 ${
+                      active ? "text-primary" : "text-muted-foreground/70"
+                    }`}
                   />
                   <span>{link.label[language]}</span>
                   {active && (

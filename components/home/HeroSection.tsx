@@ -25,8 +25,8 @@ const BACKGROUND_IMAGES = [
   "/images/bg/IMG_20260815_110640_880.jpg",
 ];
 
-const SLIDE_INTERVAL_MS = 5000; // 6 seconds per image
-const TRANSITION_MS = 1500; // crossfade duration
+const SLIDE_INTERVAL_MS = 5000;
+const TRANSITION_MS = 1500;
 
 export function HeroSection() {
   const { language } = useLanguage();
@@ -65,7 +65,6 @@ export function HeroSection() {
       }
     };
 
-    // Pause when tab is hidden
     const onVisibility = () => {
       if (document.hidden) stop();
       else start();
@@ -80,16 +79,18 @@ export function HeroSection() {
     };
   }, [reduceMotion]);
 
-  // Get hero data from JSON
   const hero = homeHero[0];
+
+  // Only render current + next image for a lightweight crossfade
+  const visibleIndices = [index, (index + 1) % BACKGROUND_IMAGES.length];
 
   return (
     <section className="relative min-h-[90vh] w-full flex items-center justify-center overflow-hidden py-20 px-4">
-      {/* Background slideshow */}
+      {/* Background slideshow — only 2 images mounted at a time */}
       <div className="absolute inset-0">
-        {BACKGROUND_IMAGES.map((src, i) => (
+        {visibleIndices.map((i) => (
           <div
-            key={src}
+            key={BACKGROUND_IMAGES[i]}
             className="absolute inset-0"
             style={{
               opacity: i === index ? 1 : 0,
@@ -99,7 +100,7 @@ export function HeroSection() {
             aria-hidden={i !== index}
           >
             <Image
-              src={src}
+              src={BACKGROUND_IMAGES[i]}
               alt=""
               fill
               priority={i === 0}
@@ -112,7 +113,6 @@ export function HeroSection() {
 
       {/* Overlays */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30 z-[1]"></div>
-      <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-10 z-[2]"></div>
 
       {/* Content */}
       <div className="container relative z-10 mx-auto flex flex-col items-center justify-center space-y-8 text-center">
@@ -140,13 +140,15 @@ export function HeroSection() {
               <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
-          <Link href="/projects">
+          {/* Learn More → /products */}
+          <Link href="/products">
             <Button
               size="lg"
               variant="outline"
               className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border-white/20 text-white hover:text-white"
             >
               {tValue(hero.secondaryCta)}
+              <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>

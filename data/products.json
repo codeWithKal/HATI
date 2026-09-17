@@ -12,7 +12,14 @@
       "om": "Qulqullina olaanaa, cacii '00' (fiinoo) ijaarsaa fi itti fayyadama adda addaa biroof mijatu."
     },
     "category": "materials",
-    "image": "/images/products/00.jpg"
+    "image": "/images/products/00/00.jpg",
+    "images": [
+      "/images/products/00/00.jpg",
+      "/images/products/00/bg.jpg",
+      "/images/products/00/IMG_20260815_110626_528.jpg",
+      "/images/products/00/IMG_20260815_110636_592.jpg",
+      "/images/products/00/IMG_20260815_110638_380.jpg"
+    ]
   },
   {
     "id": "2",
@@ -27,7 +34,12 @@
       "om": "Qulqullina olaanaa, cacii 01 ijaarsaa fi itti fayyadama adda addaa biroof mijatu."
     },
     "category": "materials",
-    "image": "/images/products/01.jpg"
+    "image": "/images/products/01/01.jpg",
+    "images": [
+      "/images/products/01/01.jpg",
+      "/images/products/01/IMG_20260815_110622_332.jpg",
+      "/images/products/01/IMG_20260815_110640_880.jpg"
+    ]
   },
   {
     "id": "3",
@@ -42,6 +54,11 @@
       "om": "Qulqullina olaanaa, cacii '02' ijaarsaa fi itti fayyadama adda addaa biroof mijatu."
     },
     "category": "materials",
-    "image": "/images/products/02.jpg"
+    "image": "/images/products/02/02.jpg",
+    "images": [
+      "/images/products/02/02.jpg",
+      "/images/products/02/IMG_20201130_102959.jpg",
+      "/images/products/02/IMG_20260815_110623_648.jpg"
+    ]
   }
 ]
