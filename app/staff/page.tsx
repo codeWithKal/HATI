@@ -87,7 +87,7 @@ export default function Staff() {
     },
   };
 
-  const tValue = (obj: any) => obj[language] || obj["en"] || "";
+  const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
   // Get data from JSON files
   const staffMembers = staffData;
@@ -210,8 +210,10 @@ export default function Staff() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {activeStaff.map((member: any) => {
-                const DepartmentIcon = getDepartmentIcon(member.department.en);
-                const deptColor = getDepartmentColor(member.department.en);
+                // Guard against missing department
+                const deptKey = member.department?.en ?? "";
+                const DepartmentIcon = getDepartmentIcon(deptKey);
+                const deptColor = getDepartmentColor(deptKey);
 
                 return (
                   <Card
@@ -234,7 +236,7 @@ export default function Staff() {
                           </div>
                         ) : (
                           <div className="text-8xl transform group-hover:scale-110 transition-transform duration-500">
-                            {member.avatar}
+                            {member.avatar ?? "👤"}
                           </div>
                         )}
                         <Badge
@@ -268,7 +270,7 @@ export default function Staff() {
                       </p>
                       <div className="mt-4 flex items-center justify-between">
                         <div className="flex gap-2">
-                          {/* Email Button */}
+                          {/* Email Button — asChild with a valid single child */}
                           <Button
                             variant="ghost"
                             size="icon"
@@ -295,6 +297,7 @@ export default function Staff() {
                             </Button>
                           )}
                         </div>
+                        {/* NOTE: no href yet — see notes below */}
                         <Button
                           variant="ghost"
                           size="sm"
@@ -312,7 +315,7 @@ export default function Staff() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section — Button asChild, Link inside */}
         <section className="py-20 px-4 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground">
           <div className="container mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
@@ -329,17 +332,19 @@ export default function Staff() {
             <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
               {tValue(t.cta.description)}
             </p>
-            <Link href="/careers">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
-              >
+
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
+            >
+              <Link href="/careers">
                 <Users className="h-5 w-5" />
                 {tValue(t.cta.button)}
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </section>
       </main>

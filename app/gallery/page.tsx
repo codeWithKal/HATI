@@ -188,7 +188,7 @@ export default function Gallery() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section — Button asChild, Link inside */}
         <section className="py-20 px-4 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground">
           <div className="container mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
@@ -205,17 +205,19 @@ export default function Gallery() {
             <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
               {tValue(t.cta.description)}
             </p>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
-              >
+
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
+            >
+              <Link href="/contact">
                 <Calendar className="h-5 w-5" />
                 {tValue(t.cta.button)}
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </section>
       </main>

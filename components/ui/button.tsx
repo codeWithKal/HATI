@@ -50,8 +50,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     { className, variant = "default", size = "default", asChild, ...props },
     ref,
   ) => {
-    // If asChild is true, we need to handle it differently
-    // to prevent it from being passed to the DOM
+    // asChild: clone the single child element and apply button styles
     if (asChild && React.isValidElement(props.children)) {
       const child = props.children as React.ReactElement;
       const childClassName = cn(
@@ -59,19 +58,18 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         child.props.className,
       );
 
-      // Remove asChild and ref to avoid DOM warnings
       const { children, ...rest } = props;
 
       return React.cloneElement(child, {
         ...child.props,
+        ...rest,
         ref: ref,
         className: childClassName,
         "data-slot": "button",
-        // Don't pass asChild to DOM element
       });
     }
 
-    // Remove asChild from props to prevent DOM warning
+    // Default: render ButtonPrimitive, pass children through
     const { children, ...rest } = props;
 
     return (
@@ -80,7 +78,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         data-slot="button"
         className={cn(buttonVariants({ variant, size, className }))}
         {...rest}
-      />
+      >
+        {children}
+      </ButtonPrimitive>
     );
   },
 );

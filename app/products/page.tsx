@@ -45,6 +45,8 @@ export default function Products() {
     categories: {
       all: { en: "All Products", am: "ሁሉም ምርቶች", om: "Alaa Hunda" },
       materials: { en: "Materials", am: "ቁሳቁሶች", om: "Alaa" },
+      systems: { en: "Systems", am: "ስርዓቶች", om: "Sirna" },
+      equipment: { en: "Equipment", am: "መሳሪያዎች", om: "Meeshaalee" },
     },
     features: {
       quality: { en: "Premium Quality", am: "ከፍተኛ ጥራት", om: "Midhaa Gubbaa" },
@@ -106,6 +108,12 @@ export default function Products() {
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
   const products = productsData;
+
+  // Safe category label lookup — falls back to "materials" only if key truly missing
+  const categoryLabel = (category: string) => {
+    const cat = (t.categories as Record<string, any>)[category];
+    return tValue(cat ?? t.categories.materials);
+  };
 
   const filteredProducts = useMemo(() => {
     if (filter === "all") return products;
@@ -283,10 +291,7 @@ export default function Products() {
                           <Badge
                             className={`absolute top-4 right-4 z-20 ${categoryColor} border backdrop-blur-sm text-[11px] font-medium`}
                           >
-                            {tValue(
-                              t.categories[product.category as "materials"] ??
-                                t.categories.materials,
-                            )}
+                            {categoryLabel(product.category)}
                           </Badge>
                         </div>
                       </div>
@@ -302,26 +307,21 @@ export default function Products() {
                           </p>
                         </div>
 
-                        {/* Extra navigation button */}
-                        <Link
-                          href={`/products/${product.id}`}
-                          className="block"
+                        {/* Extra navigation button — asChild pattern */}
+                        <Button
+                          asChild
+                          size="sm"
+                          className="w-full gap-1.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
                         >
-                          <Button
-                            size="sm"
-                            className="w-full gap-1.5 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-sm"
-                          >
+                          <Link href={`/products/${product.id}`}>
                             {tValue(t.openProduct)}
                             <ArrowRight className="h-3.5 w-3.5" />
-                          </Button>
-                        </Link>
+                          </Link>
+                        </Button>
 
                         <div className="pt-4 border-t border-border/60 flex items-center justify-between">
                           <span className="text-xs uppercase tracking-wider font-medium text-muted-foreground">
-                            {tValue(
-                              t.categories[product.category as "materials"] ??
-                                t.categories.materials,
-                            )}
+                            {categoryLabel(product.category)}
                           </span>
                           <Link
                             href={`/products/${product.id}`}
@@ -354,16 +354,19 @@ export default function Products() {
             <p className="text-base md:text-lg mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
               {tValue(t.cta.description)}
             </p>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 bg-white text-primary hover:bg-white/95 shadow-lg shadow-black/10 rounded-full px-6"
-              >
+
+            {/* asChild: Link must be the single child, no outer Link wrapper */}
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="gap-2 bg-white text-primary hover:bg-white/95 shadow-lg shadow-black/10 rounded-full px-6"
+            >
+              <Link href="/contact">
                 {tValue(t.cta.button)}
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </section>
       </main>

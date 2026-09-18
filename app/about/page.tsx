@@ -14,8 +14,6 @@ import {
   Shield,
   Lightbulb,
   Users,
-  TrendingUp,
-  Clock,
   ArrowRight,
   CheckCircle2,
 } from "lucide-react";
@@ -99,33 +97,6 @@ export default function About() {
         },
       ],
     },
-    // stats: {
-    //   title: {
-    //     en: "Our Impact in Numbers",
-    //     am: "ተጽኖአችን በቁጥሮች",
-    //     om: "Dhiibbaa Keenyaa Lakkoofsaan",
-    //   },
-    //   projects: {
-    //     en: "Projects Completed",
-    //     am: "የተጠናቀቁ ፕሮጀክቶች",
-    //     om: "Porjeektota Xumuuraman",
-    //   },
-    //   clients: {
-    //     en: "Happy Clients",
-    //     am: "ደስተኛ ደንበኞች",
-    //     om: "Maamiltoota Gammachuu",
-    //   },
-    //   countries: {
-    //     en: "Countries Served",
-    //     am: "ያገለገልናቸው አገሮች",
-    //     om: "Birootawwan Tajaajilaman",
-    //   },
-    //   years: {
-    //     en: "Years of Excellence",
-    //     am: "የልቀት ዓመታት",
-    //     om: "Waggaa Ogummaa",
-    //   },
-    // },
     history: {
       title: {
         en: "Our Story",
@@ -318,7 +289,7 @@ export default function About() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* CTA Section — Button asChild, Link inside */}
         <section className="py-20 px-4 bg-gradient-to-r from-primary to-primary/90 text-primary-foreground">
           <div className="container mx-auto max-w-4xl text-center">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
@@ -334,18 +305,20 @@ export default function About() {
               {language === "om" &&
                 "Har'a nu qunnamaa fi akkamitti porjeektii ijaarsaa keessan jiraachisuu akka dandeenye mari'anna."}
             </p>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
-              >
+
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
+            >
+              <Link href="/contact">
                 {language === "en" && "Get in Touch"}
                 {language === "am" && "አግኙን"}
                 {language === "om" && "Quunnamaa"}
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </section>
       </main>

@@ -82,11 +82,11 @@ export function Header() {
       label: { en: "Staff", am: "ሰራተኞች", om: "Hojjattoota" },
       icon: Users,
     },
-    {
-      href: "/careers",
-      label: { en: "Careers", am: "ሥራ", om: "Hojii" },
-      icon: UserCircle,
-    },
+    // {
+    //   href: "/careers",
+    //   label: { en: "Careers", am: "ሥራ", om: "Hojii" },
+    //   icon: UserCircle,
+    // },
     {
       href: "/contact",
       label: { en: "Contact", am: "አግኙን", om: "Quunnama" },
@@ -154,22 +154,21 @@ export function Header() {
 
         {/* Right side controls - Right aligned */}
         <div className="flex items-center space-x-2 flex-shrink-0">
-          {/* Language Selector — FIXED: render function preserves children */}
+          {/* Desktop Language Selector */}
+          {/* Desktop Language Selector */}
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={(props) => (
-                <Button
-                  {...props}
-                  variant="outline"
-                  size="sm"
-                  className="hidden sm:flex items-center gap-1.5 min-w-[80px] bg-transparent hover:bg-accent/50"
+              render={
+                <button
+                  type="button"
+                  className="hidden sm:inline-flex items-center gap-1.5 h-7 px-2.5 rounded-[min(var(--radius-md),12px)] border border-border bg-background text-sm font-medium whitespace-nowrap hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 select-none min-w-[80px]"
                 >
                   <span className="text-xs">
                     {languages.find((l) => l.code === language)?.label}
                   </span>
                   <ChevronDown className="h-3 w-3 opacity-50" />
-                </Button>
-              )}
+                </button>
+              }
             />
             <DropdownMenuContent align="end" className="min-w-[140px]">
               {languages.map((lang) => (
@@ -191,23 +190,21 @@ export function Header() {
 
           <ThemeToggle />
 
-          {/* Mobile language selector — FIXED: render function preserves children */}
+          {/* Mobile language selector */}
           <DropdownMenu>
             <DropdownMenuTrigger
-              render={(props) => (
-                <Button
-                  {...props}
-                  variant="outline"
-                  size="sm"
-                  className="sm:hidden min-w-[40px] px-2 bg-transparent hover:bg-accent/50"
+              render={
+                <button
+                  type="button"
+                  className="sm:hidden inline-flex items-center justify-center h-7 min-w-[40px] px-2 rounded-[min(var(--radius-md),12px)] border border-border bg-background text-sm font-medium hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 select-none"
                 >
                   <span className="text-xs">
                     {languages
                       .find((l) => l.code === language)
                       ?.label.substring(0, 2)}
                   </span>
-                </Button>
-              )}
+                </button>
+              }
             />
             <DropdownMenuContent align="end" className="min-w-[140px]">
               {languages.map((lang) => (

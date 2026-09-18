@@ -33,19 +33,21 @@ export default function ProductDetailPage() {
     [id],
   );
 
+  // Build image list from product.images, falling back to product.image
+  const productImages: string[] = useMemo(() => {
+    const p = product as any;
+    if (!p) return [];
+    if (Array.isArray(p.images) && p.images.length > 0) return p.images;
+    if (p.image) return [p.image];
+    return [];
+  }, [product]);
+
+  // Call notFound() AFTER all hooks so hook order stays consistent
   if (!product) {
     notFound();
   }
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
-
-  // Build image list from product.images, falling back to product.image
-  const productImages: string[] = useMemo(() => {
-    const p = product as any;
-    if (Array.isArray(p.images) && p.images.length > 0) return p.images;
-    if (p.image) return [p.image];
-    return [];
-  }, [product]);
 
   const t = {
     back: {
@@ -104,12 +106,14 @@ export default function ProductDetailPage() {
     ],
   };
 
+  // Safe category label lookup
+  const categoryLabels: Record<string, any> = {
+    materials: { en: "Materials", am: "ቁሳቁሶች", om: "Alaa" },
+    systems: { en: "Systems", am: "ስርዓቶች", om: "Sirnaa" },
+    equipment: { en: "Equipment", am: "መሳሪያዎች", om: "Meeshaa" },
+  };
   const categoryLabel =
-    product.category === "materials"
-      ? { en: "Materials", am: "ቁሳቁሶች", om: "Alaa" }
-      : product.category === "systems"
-        ? { en: "Systems", am: "ስርዓቶች", om: "Sirnaa" }
-        : { en: "Equipment", am: "መሳሪያዎች", om: "Meeshaa" };
+    categoryLabels[product.category] ?? categoryLabels.materials;
 
   return (
     <>
@@ -216,27 +220,30 @@ export default function ProductDetailPage() {
                   </ul>
                 </div>
 
-                {/* CTAs */}
+                {/* CTAs — Button asChild, Link inside */}
                 <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                  <Link href="/contact" className="flex-1">
-                    <Button
-                      size="lg"
-                      className="w-full gap-2 rounded-full shadow-sm"
-                    >
+                  <Button
+                    asChild
+                    size="lg"
+                    className="flex-1 w-full gap-2 rounded-full shadow-sm"
+                  >
+                    <Link href="/contact">
                       <Mail className="h-4 w-4" />
                       {tValue(t.inquire)}
-                    </Button>
-                  </Link>
-                  <Link href="/contact" className="flex-1">
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="w-full gap-2 rounded-full"
-                    >
+                    </Link>
+                  </Button>
+
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="flex-1 w-full gap-2 rounded-full"
+                  >
+                    <Link href="/contact">
                       <Phone className="h-4 w-4" />
                       {tValue(t.contact)}
-                    </Button>
-                  </Link>
+                    </Link>
+                  </Button>
                 </div>
               </div>
             </div>
@@ -274,23 +281,25 @@ export default function ProductDetailPage() {
           </div>
         </section>
 
-        {/* Bottom CTA */}
+        {/* Bottom CTA — Button asChild, Link inside */}
         <section className="relative py-16 md:py-20 px-4 overflow-hidden bg-gradient-to-br from-primary via-primary to-primary/90 text-primary-foreground">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.15),transparent_60%)]" />
           <div className="container mx-auto max-w-3xl text-center relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
               {tValue(t.inquire)}
             </h2>
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="secondary"
-                className="gap-2 bg-white text-primary hover:bg-white/95 shadow-lg shadow-black/10 rounded-full px-6"
-              >
+
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="gap-2 bg-white text-primary hover:bg-white/95 shadow-lg shadow-black/10 rounded-full px-6"
+            >
+              <Link href="/contact">
                 {tValue(t.contact)}
                 <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </div>
         </section>
       </main>

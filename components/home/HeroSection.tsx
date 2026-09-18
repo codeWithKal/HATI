@@ -133,24 +133,30 @@ export function HeroSection() {
         </p>
 
         {/* CTA Buttons */}
+        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 pt-8 justify-center">
-          <Link href="/contact">
-            <Button size="lg" className="gap-2 shadow-lg shadow-primary/20">
+          <Button
+            asChild
+            size="lg"
+            className="gap-2 shadow-lg shadow-primary/20"
+          >
+            <Link href="/contact">
               {tValue(hero.cta)}
               <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          {/* Learn More → /products */}
-          <Link href="/products">
-            <Button
-              size="lg"
-              variant="outline"
-              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border-white/20 text-white hover:text-white"
-            >
+            </Link>
+          </Button>
+
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border-white/20 text-white hover:text-white"
+          >
+            <Link href="/products">
               {tValue(hero.secondaryCta)}
               <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
 
         {/* Inventory Cards - Display below CTAs */}

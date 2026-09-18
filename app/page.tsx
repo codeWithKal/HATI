@@ -103,7 +103,7 @@ export default function Home() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {services.map((service) => {
-                const Icon = Building2;
+                const Icon = iconMap[service.icon] || Building2;
                 return (
                   <Link
                     key={service.id}
@@ -204,16 +204,18 @@ export default function Home() {
             </p>
 
             <div className="flex justify-center">
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="gap-2 shadow-lg shadow-black/20"
-                >
+              {/* Button asChild → Link inside (no <a><button> nesting) */}
+              <Button
+                asChild
+                size="lg"
+                variant="secondary"
+                className="gap-2 shadow-lg shadow-black/20"
+              >
+                <Link href="/contact">
                   {tValue(cta.button)}
                   <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </section>

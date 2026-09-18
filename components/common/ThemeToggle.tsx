@@ -15,7 +15,6 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // Avoid hydration mismatch
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -36,19 +35,17 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={(props) => (
-          <Button
-            {...props}
-            variant="outline"
-            size="icon"
-            className="relative w-10 h-10"
+        render={
+          <button
+            type="button"
             aria-label="Toggle theme"
+            className="relative inline-flex items-center justify-center w-10 h-10 rounded-lg border border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50 outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 select-none"
           >
             <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
-          </Button>
-        )}
+          </button>
+        }
       />
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>

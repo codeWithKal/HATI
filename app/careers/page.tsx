@@ -4,7 +4,14 @@ import { useState } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Card } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
@@ -28,6 +35,7 @@ import {
   CheckCircle,
   Calendar,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 import careersData from "@/data/careers.json";
 import benefitsData from "@/data/benefits.json";
 
@@ -102,11 +110,7 @@ export default function Careers() {
       },
     },
     modal: {
-      details: {
-        en: "Job Details",
-        am: "የስራ ዝርዝር",
-        om: "Gari Hojii",
-      },
+      details: { en: "Job Details", am: "የስራ ዝርዝር", om: "Gari Hojii" },
       apply: {
         en: "Apply for this Position",
         am: "ለዚህ ስራ ያመልክቱ",
@@ -127,11 +131,7 @@ export default function Careers() {
         am: "የስራ አጠቃላይ እይታ",
         om: "Muulexxensa Hojii",
       },
-      fullName: {
-        en: "Full Name",
-        am: "ሙሉ ስም",
-        om: "Maqaa Guutuu",
-      },
+      fullName: { en: "Full Name", am: "ሙሉ ስም", om: "Maqaa Guutuu" },
       email: {
         en: "Email Address",
         am: "ኢሜል አድራሻ",
@@ -167,22 +167,13 @@ export default function Careers() {
         am: "ማመልከቻ በተሳካ ሁኔታ ተልኳል!",
         om: "Galmee Baga Booddeetti Ergame!",
       },
-      close: {
-        en: "Close",
-        am: "ዝጋ",
-        om: "Cufi",
-      },
-      posted: {
-        en: "Posted",
-        am: "ተለጠፈ",
-        om: "Maxxanfame",
-      },
+      close: { en: "Close", am: "ዝጋ", om: "Cufi" },
+      posted: { en: "Posted", am: "ተለጠፈ", om: "Maxxanfame" },
     },
   };
 
-  const tValue = (obj: any) => obj[language] || obj["en"] || "";
+  const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
-  // Get careers data - both are arrays
   const positions = careersData;
   const benefits = benefitsData;
 
@@ -207,10 +198,12 @@ export default function Careers() {
     return icons[department] || Briefcase;
   };
 
-  // Get active positions only
   const activePositions = positions.filter(
     (pos: any) => pos.isActive !== false,
   );
+
+  const dateLocale =
+    language === "am" ? "am-ET" : language === "om" ? "om-ET" : "en-US";
 
   const handleOpenModal = (position: any, view: "details" | "apply") => {
     setSelectedPosition(position);
@@ -248,17 +241,25 @@ export default function Careers() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // Here you would actually send the data to your backend
-    console.log("Application submitted:", {
-      position: selectedPosition,
-      ...formData,
-    });
+    if (process.env.NODE_ENV === "development") {
+      console.log("Application submitted:", {
+        position: selectedPosition,
+        ...formData,
+      });
+    }
 
     setIsSubmitting(false);
     setSubmitSuccess(true);
+  };
+
+  const getLocalizedArray = (value: any): string[] => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (Array.isArray(value[language])) return value[language];
+    if (Array.isArray(value.en)) return value.en;
+    return [];
   };
 
   return (
@@ -291,7 +292,7 @@ export default function Careers() {
           </div>
         </section>
 
-        {/* Why Work With Us - Benefits Section */}
+        {/* Benefits */}
         <section className="py-20 px-4 bg-secondary/5">
           <div className="container mx-auto">
             <div className="text-center mb-16">
@@ -352,55 +353,62 @@ export default function Careers() {
               </Badge>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto items-stretch">
               {activePositions.map((position: any) => {
-                const DepartmentIcon = getDepartmentIcon(
-                  position.department.en,
-                );
-                const deptColor = getDepartmentColor(position.department.en);
+                const deptKey = position.department?.en ?? "";
+                const DepartmentIcon = getDepartmentIcon(deptKey);
+                const deptColor = getDepartmentColor(deptKey);
 
                 return (
                   <Card
                     key={position.id}
-                    className="group p-6 hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border hover:border-primary/20"
+                    className="group h-full hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border hover:border-primary/20"
                   >
-                    <div className="flex items-start justify-between gap-4 mb-3">
-                      <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
-                        {tValue(position.title)}
-                      </h3>
-                      <Badge className={deptColor}>
-                        <DepartmentIcon className="h-3 w-3 mr-1" />
-                        {tValue(position.department)}
-                      </Badge>
-                    </div>
+                    <CardHeader>
+                      <div className="flex items-start justify-between gap-3 w-full">
+                        <CardTitle className="text-lg group-hover:text-primary transition-colors min-w-0 pr-2">
+                          {tValue(position.title)}
+                        </CardTitle>
+                        <CardAction>
+                          <Badge
+                            variant="outline"
+                            className={cn(deptColor, "shrink-0 text-[11px]")}
+                          >
+                            <DepartmentIcon className="h-3 w-3 mr-1" />
+                            {tValue(position.department)}
+                          </Badge>
+                        </CardAction>
+                      </div>
+                    </CardHeader>
 
-                    <div className="space-y-2 mb-4">
+                    <CardContent className="space-y-2">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin className="h-4 w-4 text-primary" />
+                        <MapPin className="h-4 w-4 text-primary shrink-0" />
                         <span>{tValue(position.location)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Briefcase className="h-4 w-4 text-primary" />
+                        <Briefcase className="h-4 w-4 text-primary shrink-0" />
                         <span>{tValue(position.type)}</span>
                       </div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Clock className="h-4 w-4 text-primary" />
+                        <Clock className="h-4 w-4 text-primary shrink-0" />
                         <span>{tValue(position.experience)}</span>
                       </div>
-                    </div>
+                    </CardContent>
 
-                    <div className="flex items-center justify-between pt-4 border-t">
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Calendar className="h-3 w-3" />
-                        <span>
-                          {language === "en" && "Posted: "}
-                          {language === "am" && "ተለጠፈ: "}
-                          {language === "om" && "Maxxanfame: "}
-                          {new Date(position.posted).toLocaleDateString()}
+                    <CardFooter className="mt-auto flex-wrap gap-3">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Calendar className="h-3 w-3 shrink-0" />
+                        <span className="whitespace-nowrap">
+                          {tValue(t.modal.posted)}:{" "}
+                          {new Date(position.posted).toLocaleDateString(
+                            dateLocale,
+                          )}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 ml-auto">
                         <Button
+                          type="button"
                           variant="ghost"
                           size="sm"
                           className="gap-1"
@@ -410,15 +418,16 @@ export default function Careers() {
                           <ArrowRight className="h-3 w-3" />
                         </Button>
                         <Button
+                          type="button"
                           size="sm"
-                          className="gap-1"
+                          className="gap-1 bg-primary text-primary-foreground"
                           onClick={() => handleOpenModal(position, "apply")}
                         >
                           {tValue(t.apply)}
                           <Send className="h-3 w-3" />
                         </Button>
                       </div>
-                    </div>
+                    </CardFooter>
                   </Card>
                 );
               })}
@@ -444,29 +453,31 @@ export default function Careers() {
               {tValue(t.cta.description)}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
-                >
+              <Button
+                asChild
+                size="lg"
+                variant="secondary"
+                className="gap-2 bg-white text-primary hover:bg-white/90 shadow-lg shadow-primary/20"
+              >
+                <Link href="/contact">
                   <FileText className="h-5 w-5" />
                   {tValue(t.cta.button)}
                   <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/contact">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="gap-2 border-white/30 text-white hover:bg-white/10"
-                >
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="gap-2 border-white/30 text-white hover:bg-white/10"
+              >
+                <Link href="/contact">
                   <Mail className="h-5 w-5" />
                   {language === "en" && "Contact HR"}
                   {language === "am" && "የሰው ሃብት ያግኙ"}
                   {language === "om" && "HR Qunnamaa"}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </section>
@@ -482,7 +493,6 @@ export default function Careers() {
             className="bg-background rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 relative animate-in slide-in-from-bottom-4 duration-300"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               onClick={handleCloseModal}
               className="absolute top-4 right-4 p-2 rounded-full hover:bg-secondary transition-colors"
@@ -491,7 +501,6 @@ export default function Careers() {
               <X className="h-5 w-5" />
             </button>
 
-            {/* Modal Header */}
             <div className="mb-6 pr-8">
               <div className="flex items-start justify-between gap-4">
                 <div>
@@ -505,14 +514,15 @@ export default function Careers() {
                   </h3>
                 </div>
                 <Badge
-                  className={getDepartmentColor(selectedPosition.department.en)}
+                  className={getDepartmentColor(
+                    selectedPosition.department?.en ?? "",
+                  )}
                 >
                   {tValue(selectedPosition.department)}
                 </Badge>
               </div>
             </div>
 
-            {/* Tab Navigation */}
             <div className="flex gap-2 mb-6 border-b">
               <button
                 onClick={() => setModalView("details")}
@@ -536,10 +546,8 @@ export default function Careers() {
               </button>
             </div>
 
-            {/* Modal Content */}
             {modalView === "details" ? (
               <div className="space-y-6">
-                {/* Job Info */}
                 <div className="grid grid-cols-2 gap-4 p-4 bg-secondary/10 rounded-lg">
                   <div className="flex items-center gap-2 text-sm">
                     <MapPin className="h-4 w-4 text-primary" />
@@ -557,12 +565,13 @@ export default function Careers() {
                     <Calendar className="h-4 w-4 text-primary" />
                     <span>
                       {tValue(t.modal.posted)}:{" "}
-                      {new Date(selectedPosition.posted).toLocaleDateString()}
+                      {new Date(selectedPosition.posted).toLocaleDateString(
+                        dateLocale,
+                      )}
                     </span>
                   </div>
                 </div>
 
-                {/* Description */}
                 {selectedPosition.description && (
                   <div>
                     <h4 className="font-semibold mb-2">
@@ -574,14 +583,13 @@ export default function Careers() {
                   </div>
                 )}
 
-                {/* Requirements */}
                 {selectedPosition.requirements && (
                   <div>
                     <h4 className="font-semibold mb-2">
                       {tValue(t.modal.requirements)}
                     </h4>
                     <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                      {tValue(selectedPosition.requirements).map(
+                      {getLocalizedArray(selectedPosition.requirements).map(
                         (req: string, index: number) => (
                           <li key={index} className="pl-2">
                             {req}
@@ -592,9 +600,9 @@ export default function Careers() {
                   </div>
                 )}
 
-                {/* Apply Button in Details View */}
                 <div className="pt-4 border-t">
                   <Button
+                    type="button"
                     className="w-full gap-2"
                     onClick={() => setModalView("apply")}
                   >
@@ -604,7 +612,6 @@ export default function Careers() {
                 </div>
               </div>
             ) : (
-              /* Application Form */
               <div>
                 {submitSuccess ? (
                   <div className="text-center py-12">
@@ -622,7 +629,7 @@ export default function Careers() {
                       {language === "om" &&
                         "Galmee keessan ilaaltaa fi yeroo dhiyoo deebii isiniif nimanna."}
                     </p>
-                    <Button onClick={handleCloseModal}>
+                    <Button type="button" onClick={handleCloseModal}>
                       {tValue(t.modal.close)}
                     </Button>
                   </div>
@@ -639,7 +646,13 @@ export default function Careers() {
                         value={formData.fullName}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                        placeholder={language === "en" ? "John Doe" : "ጆን ዶ"}
+                        placeholder={
+                          language === "en"
+                            ? "John Doe"
+                            : language === "am"
+                              ? "ጆን ዶ"
+                              : "Fulanaa Fulaan"
+                        }
                       />
                     </div>
 
