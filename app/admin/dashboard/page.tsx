@@ -52,7 +52,6 @@ import { useState, useEffect } from "react";
 import productsData from "@/data/products.json";
 import servicesData from "@/data/services.json";
 import projectsData from "@/data/projects.json";
-import newsData from "@/data/news.json";
 import staffData from "@/data/staff.json";
 import tendersData from "@/data/tenders.json";
 import careersData from "@/data/careers.json";

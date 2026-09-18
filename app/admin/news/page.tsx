@@ -28,8 +28,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import Link from "next/link";
-import newsData from "@/data/news.json";
-import newsStatsData from "@/data/newsStats.json";
 
 export default function AdminNews() {
   const { user } = useAdmin();
