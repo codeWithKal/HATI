@@ -77,9 +77,9 @@ export default function Products() {
       om: "Gari Dhaabi",
     },
     openProduct: {
-      en: "Open Product",
-      am: "ምርቱን ክፈት",
-      om: "Alaa Bani",
+      en: "View Product",
+      am: "ምርቱን ተመልከት",
+      om: "Oomishicha Bani",
     },
     noProducts: {
       en: "No products found in this category.",

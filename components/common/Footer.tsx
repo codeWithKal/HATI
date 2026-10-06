@@ -10,12 +10,11 @@ export function Footer() {
   const t = {
     aboutUs: { en: "About Us", am: "ስለ እኛ", om: "Waa'ee Keenyaa" },
     services: { en: "Products", am: "ምርቶቻችን", om: "Oomishaalee Keenya" },
-    projects: { en: "Projects", am: "ፕሮጀክቶች", om: "Porjeektota" },
     contact: { en: "Contact", am: "አግኙን", om: "Quunnama" },
     quickLinks: {
       en: "Quick Links",
       am: "ፈጣን አገናኞች",
-      om: "Geessituu Jarjaraa",
+      om: "Liinkii saffisaa",
     },
     contactInfo: {
       en: "Contact Info",
@@ -23,21 +22,21 @@ export function Footer() {
       om: "Odeeffannoo Quunnamaa",
     },
     address: {
-      en: "Addis Ababa, Ethiopia",
-      am: "አዲስ አበባ፣ ኢትዮጵያ",
-      om: "Addis Ababaa, Itoophiyaa",
+      en: "Aleltu, Ethiopia",
+      am: "አሌልቱ፣ ኢትዮጵያ",
+      om: "Alaltuu, Itoophiyaa",
     },
     phone: { en: "Phone", am: "ስልክ", om: "Bilbila" },
-    email: { en: "Email", am: "ኢሜይል", om: "Imeliiti" },
+    email: { en: "Email", am: "ኢሜይል", om: "Imelii" },
     copyright: {
       en: "All rights reserved.",
       am: "ሁሉም መብቶች የተጠበቁ ናቸው።",
       om: "Mirga hunda kun eegama.",
     },
     madeBy: {
-      en: "Made with care by HATI Construction",
-      am: "በHATI ግንባታ በፍቅር ተሰራ",
-      om: "HATI Construction keessaan jaalalaan hojjetame",
+      en: "Made with care by BlueNile Bytes",
+      am: "በBlueNile Bytes  የተሰራ",
+      om: "BlueNile Bytesiin hojjetame",
     },
   };
 
@@ -83,14 +82,6 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/projects"
-                  className="hover:text-primary transition-colors"
-                >
-                  {t_val("projects")}
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/contact"
                   className="hover:text-primary transition-colors"
                 >
@@ -105,24 +96,33 @@ export function Footer() {
             <h4 className="mb-4 font-semibold">{t_val("services")}</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  {language === "en" && "Civil Engineering"}
-                  {language === "am" && "ሲቪል ምህንድስና"}
-                  {language === "om" && "Injineerii Sivilii"}
+                <a
+                  href="/products/1"
+                  className="hover:text-primary transition-colors"
+                >
+                  {language === "en" && "00 (fino)"}
+                  {language === "am" && "00 - ፊኖ"}
+                  {language === "om" && "00 (fiinoo)"}
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  {language === "en" && "Building Construction"}
-                  {language === "am" && "ህንጻ ግንባታ"}
-                  {language === "om" && "Ijaarsa Gamoo"}
+                <a
+                  href="/products/2"
+                  className="hover:text-primary transition-colors"
+                >
+                  {language === "en" && "01 sand"}
+                  {language === "am" && "01 ጠጠር"}
+                  {language === "om" && "01 - Cirricha"}
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
-                  {language === "en" && "Project Management"}
-                  {language === "am" && "ፕሮጀክት አስተዳደር"}
-                  {language === "om" && "Bulchiinsa Porjeektii"}
+                <a
+                  href="/products/3"
+                  className="hover:text-primary transition-colors"
+                >
+                  {language === "en" && "02 sand"}
+                  {language === "am" && "02 ጠጠር"}
+                  {language === "om" && "02 cirricha"}
                 </a>
               </li>
             </ul>
@@ -142,7 +142,7 @@ export function Footer() {
                   href="tel:+251911234567"
                   className="hover:text-primary transition-colors"
                 >
-                  +251 91 123 4567
+                  +251 911895201
                 </a>
               </li>
               <li className="flex items-center space-x-2">
@@ -151,7 +151,7 @@ export function Footer() {
                   href="mailto:info@haticonst.com"
                   className="hover:text-primary transition-colors break-all"
                 >
-                  info@haticonst.com
+                  hatimanufacturing@gmail.com
                 </a>
               </li>
             </ul>
