@@ -45,15 +45,15 @@ export default function Contact() {
   const [loading, setLoading] = useState(false);
 
   const t = {
-    title: { en: "Contact Us", am: "ያግኙን", om: "Walitti Qeebeeffannaa" },
+    title: { en: "Contact Us", am: "ያግኙን", om: "Nuqunnamaa" },
     subtitle: {
       en: "We'd Love to Hear From You",
       am: "ከእርስዎ መስማት እንወዳለን",
-      om: "Nuuf Himuu Jaallanna",
+      om: "We'd Love to Hear From You",
     },
     description: {
       en: "Have a project in mind or need more information? Our team is ready to assist you with any inquiries.",
-      am: "በአእምሮዎ ውስጥ ፕሮጀክት አለዎት ወይም ተጨማሪ መረጃ ያስፈልግዎታል? ቡድናችን ለማንኛውም ጥያቄዎች እርዳታ ለመስጠት ዝግጁ ነው።",
+      am: "ተጨማሪ መረጃ ያስፈልግዎታል? ቡድናችን ለማንኛውም ጥያቄዎች እርዳታ ለመስጠት ዝግጁ ነው።",
       om: "Porjeektii yaadduu qabdaa ykn odeeffannoo dabalataa barbaaddaa? Gareen keenya gaaffii hundaaf gargaaruu qophaaʼe.",
     },
     contactInfo: {
@@ -79,17 +79,17 @@ export default function Contact() {
     getInTouch: {
       en: "Get in Touch",
       am: "ያግኙን",
-      om: "Walitti Qeebeeffannaa",
+      om: "Nu Qunnamaa",
     },
     followUs: {
       en: "Follow Us",
       am: "ተከተሉን",
-      om: "Nu Horda",
+      om: "Nu Hordofaa",
     },
     quickResponse: {
       en: "Quick Response",
       am: "ፈጣን ምላሽ",
-      om: "Deebii Dafaa",
+      om: "Deebii saffisaa",
     },
   };
 
@@ -137,7 +137,7 @@ export default function Contact() {
               <span>
                 {language === "en" && "Get in Touch"}
                 {language === "am" && "ያግኙን"}
-                {language === "om" && "Walitti Qeebeeffannaa"}
+                {language === "om" && "Nu qunnamaa"}
               </span>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
@@ -407,39 +407,122 @@ export default function Contact() {
                     </div>
                   </div>
                 </Card>
-
-                <Link href="/projects">
-                  <Button variant="outline" className="w-full gap-2">
-                    <ArrowRight className="h-4 w-4" />
-                    {language === "en" && "View Our Projects"}
-                    {language === "am" && "ፕሮጀክቶቻችንን ይመልከቱ"}
-                    {language === "om" && "Porjeektota Keenyaa Ilaalaa"}
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
         </section>
 
         {/* Map Section */}
+        {/* Map Section */}
         <section className="py-12 px-4 bg-secondary/5">
           <div className="container mx-auto">
-            <div className="rounded-xl overflow-hidden border shadow-lg h-64 md:h-80 bg-gradient-to-br from-primary/10 to-secondary/10 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-primary mx-auto mb-3" />
-                <p className="text-muted-foreground">
-                  {language === "en" && "Find us at Addis Ababa, Ethiopia"}
-                  {language === "am" && "አዲስ አበባ፣ ኢትዮጵያ ያግኙን"}
-                  {language === "om" &&
-                    "Addis Ababa, Itoophiyaa keessatti nu argadhaa"}
-                </p>
-                <Button variant="link" className="text-primary mt-2">
-                  {language === "en" && "View on Google Maps"}
-                  {language === "am" && "በGoogle Maps ላይ ይመልከቱ"}
-                  {language === "om" && "Google Maps irratti ilaalaa"}
-                  <ArrowRight className="h-3 w-3 ml-1" />
-                </Button>
+            {/* Section heading */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-4 border border-primary/20">
+                <MapPin className="h-4 w-4" aria-hidden="true" />
+                <span>
+                  {language === "en" && "Our Location"}
+                  {language === "am" && "የእኛ አድራሻ"}
+                  {language === "om" && "Bakka Keenya"}
+                </span>
               </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-2">
+                {language === "en" && "Visit Us"}
+                {language === "am" && "ይጎብኙን"}
+                {language === "om" && "Nu Daawwadhaa"}
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                {language === "en" &&
+                  "HATI Sandstone and selected materials manufacturing PLC — Addis Ababa, Ethiopia"}
+                {language === "am" &&
+                  "ሃቲ የአሸዋ ድንጋይ እና የተመረጡ ቁሳቁሶች ማምረቻ PLC — አዲስ አበባ፣ ኢትዮጵያ"}
+                {language === "om" &&
+                  "HATI Sandstone and selected materials manufacturing PLC — Finfinnee, Itoophiyaa"}
+              </p>
+            </div>
+
+            {/* Map embed */}
+            <div className="relative rounded-2xl overflow-hidden border shadow-xl group">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3938.8625439886505!2d39.145424!3d9.1668702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164bc7004d2cc17f%3A0xc54078f00a57f6c4!2sHATI%20Sandstone%20and%20selected%20materials%20manufacturing%20PLC!5e0!3m2!1sen!2set!4v1791294880594!5m2!1sen!2set"
+                width="100%"
+                height="450"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="HATI Sandstone Location"
+                className="w-full h-80 md:h-[450px] grayscale-[20%] group-hover:grayscale-0 transition-all duration-500"
+              ></iframe>
+
+              {/* Overlay card with actions */}
+              <div className="absolute bottom-4 left-4 right-4 md:left-6 md:right-auto md:max-w-sm bg-background/95 backdrop-blur-md rounded-xl p-4 shadow-lg border pointer-events-none">
+                <div className="flex items-start gap-3 pointer-events-auto">
+                  <div className="p-2 rounded-lg bg-primary/10 flex-shrink-0">
+                    <Building2
+                      className="h-5 w-5 text-primary"
+                      aria-hidden="true"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-sm mb-1 truncate">
+                      HATI Sandstone & Materials PLC
+                    </h3>
+                    <p className="text-xs text-muted-foreground mb-2 flex items-center gap-1">
+                      <Clock className="h-3 w-3" aria-hidden="true" />
+                      {language === "en" && "Open 24 hours (Sun: Closed)"}
+                      {language === "am" && "24 ሰዓት ክፍት (እሁድ፦ ዝግ)"}
+                      {language === "om" &&
+                        "Saʼaatii 24 banaa (Dilbata: Cufaa)"}
+                    </p>
+                    <Button
+                      asChild
+                      size="sm"
+                      variant="default"
+                      className="w-full gap-1.5"
+                    >
+                      <a
+                        href="https://maps.app.goo.gl/qeM96fXB8j47A9pz7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {language === "en" && "Open in Google Maps"}
+                        {language === "am" && "በGoogle Maps ክፈት"}
+                        {language === "om" && "Google Maps keessatti bani"}
+                        <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                      </a>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick action buttons below map */}
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
+              <Button asChild variant="outline" className="gap-2">
+                <a
+                  href="https://maps.app.goo.gl/qeM96fXB8j47A9pz7"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MapPin className="h-4 w-4" aria-hidden="true" />
+                  {language === "en" && "Get Directions"}
+                  {language === "am" && "አቅጣጫ ያግኙ"}
+                  {language === "om" && "Qajeelfama Argadhu"}
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="gap-2">
+                <a
+                  href="https://www.google.com/maps/search/?api=1&query=HATI+Sandstone+and+selected+materials+manufacturing+PLC"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Globe className="h-4 w-4" aria-hidden="true" />
+                  {language === "en" && "View Larger Map"}
+                  {language === "am" && "ትልቅ ካርታ ይመልከቱ"}
+                  {language === "om" && "Kaartaa Guddaa Ilaali"}
+                </a>
+              </Button>
             </div>
           </div>
         </section>

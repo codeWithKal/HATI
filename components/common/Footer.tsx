@@ -9,7 +9,7 @@ export function Footer() {
 
   const t = {
     aboutUs: { en: "About Us", am: "ስለ እኛ", om: "Waa'ee Keenyaa" },
-    services: { en: "Products", am: "ምርቶቻችን", om: "Oomishaalee Keenya" },
+    products: { en: "Products", am: "ምርቶቻችን", om: "Oomishaalee Keenya" },
     contact: { en: "Contact", am: "አግኙን", om: "Quunnama" },
     quickLinks: {
       en: "Quick Links",
@@ -74,10 +74,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/services"
+                  href="/products"
                   className="hover:text-primary transition-colors"
                 >
-                  {t_val("services")}
+                  {t_val("products")}
                 </Link>
               </li>
               <li>
@@ -93,7 +93,7 @@ export function Footer() {
 
           {/* Services - Left aligned */}
           <div className="flex flex-col items-start">
-            <h4 className="mb-4 font-semibold">{t_val("services")}</h4>
+            <h4 className="mb-4 font-semibold">{t_val("products")}</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <a

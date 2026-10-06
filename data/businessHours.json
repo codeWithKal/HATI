@@ -12,9 +12,19 @@
   {
     "id": "2",
     "day": {
-      "en": "Saturday - Sunday",
-      "am": "ቅዳሜ - እሁድ",
-      "om": "Sanbata - Dilbata"
+      "en": "Saturday",
+      "am": "ቅዳሜ",
+      "om": "Sanbata"
+    },
+    "hours": "8:00 AM - 5:00 PM",
+    "isOpen": true
+  },
+  {
+    "id": "3",
+    "day": {
+      "en": "Sunday",
+      "am": "እሁድ",
+      "om": "Dilbata"
     },
     "hours": {
       "en": "Closed",
