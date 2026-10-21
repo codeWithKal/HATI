@@ -7,9 +7,9 @@
       "om": "Xibabuu Girmaa"
     },
     "position": {
-      "en": "Operations Director & Shareholder",
-      "am": "የኦፕሬሽን ዳይሬክተር እና ባለአክሲዮን",
-      "om": "Keenya Hojii fi Qondaala"
+      "en": "General Manager & Shareholder",
+      "am": "የስራ አስኪያጅ እና ባለአክሲዮን",
+      "om": "Hoogganaa Ol'aanaa fi Qondaala"
     },
     "department": {
       "en": "Executive Management",
@@ -24,7 +24,7 @@
     "experience": "25+",
     "avatar": "👨‍💼",
     "email": "tibebu.girma@hati.com",
-    "phone": "+251-911-123456",
+    "phone": "+251 91 189 5201",
     "image": "/images/staff/tibebu.jpg",
     "isActive": true
   },
@@ -53,7 +53,7 @@
     "experience": "20",
     "avatar": "👩‍💼",
     "email": "hailu.legesse@hati.com",
-    "phone": "+251-922-234567",
+    "phone": "+251 91 120 9227",
     "image": "/images/staff/hailu.jpg",
     "isActive": true
   },
@@ -82,8 +82,37 @@
     "experience": "15",
     "avatar": "👨‍💻",
     "email": "asnake.legesse@hati.com",
-    "phone": "+251-933-345678",
+    "phone": "+251 979444602",
     "image": "/images/staff/asnake.jpg",
+    "isActive": true
+  },
+  {
+    "id": "4",
+    "name": {
+      "en": "Alazar Tibebu",
+      "am": "አልአዛር ጥበቡ",
+      "om": "Alazaar Xibabuu"
+    },
+    "position": {
+      "en": "Junior Marketing Manager",
+      "am": "ጁኒየር የግብይት ማናጀር",
+      "om": "Hoogganaa Gabaa Xiqqaa"
+    },
+    "department": {
+      "en": "Marketing",
+      "am": "ግብይት",
+      "om": "Gabaa"
+    },
+    "bio": {
+      "en": "Junior Marketing Manager assisting with campaign coordination, social media presence, and market research.",
+      "am": "የዘመቻ አስተባባሪነትን፣ የማህበራዊ ሚዲያ መገኘትን እና የገበያ ጥናትን የሚረዳ ጁኒየር የግብይት ማናጀር።",
+      "om": "Hoogganaa Gabaa Xiqqaa qindaa'ina kampeenii, argama miidiyaa hawaasaa, fi qorannoo gabaa gargaaru."
+    },
+    "experience": "1",
+    "avatar": "👨‍💼",
+    "email": "alazar.tibebu@hati.com",
+    "phone": "+251 979333572",
+    "image": "/images/staff/alazar.jpg",
     "isActive": true
   }
 ]

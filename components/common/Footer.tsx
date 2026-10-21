@@ -144,6 +144,20 @@ export function Footer() {
                 >
                   +251 911895201
                 </a>
+                <Phone className="h-4 w-4 text-primary flex-shrink-0" />
+                <a
+                  href="tel:+251911234567"
+                  className="hover:text-primary transition-colors"
+                >
+                  +251 979333572
+                </a>
+                <Phone className="h-4 w-4 text-primary flex-shrink-0" />
+                <a
+                  href="tel:+251911234567"
+                  className="hover:text-primary transition-colors"
+                >
+                  +251 979444602
+                </a>
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-primary flex-shrink-0" />
