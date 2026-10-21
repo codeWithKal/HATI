@@ -17,6 +17,8 @@ import {
   Globe,
   ArrowRight,
   CheckCircle2,
+  AlertCircle,
+  RotateCcw,
 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -32,6 +34,9 @@ const iconMap: Record<string, any> = {
   Send: Send,
 };
 
+// Formspree endpoint
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvkzezkp";
+
 export default function Contact() {
   const { language } = useLanguage();
   const [formData, setFormData] = useState({
@@ -43,6 +48,7 @@ export default function Contact() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const t = {
     title: { en: "Contact Us", am: "ያግኙን", om: "Nuqunnamaa" },
@@ -73,6 +79,60 @@ export default function Contact() {
         en: "Thank you for your message! We will get back to you within 24 hours.",
         am: "ለመልእክትዎ እናመሰግናለን! በ24 ሰዓታት ውስጥ እንመልስልዎታለን።",
         om: "Ergaa keessaniif galatoomaa! Saʼaatii 24 keessatti deebii isinif kennina.",
+      },
+      error: {
+        en: "Something went wrong. Please try again or contact us directly.",
+        am: "የተሳሳተ ነገር ተከስቷል። እባክዎ እንደገና ይሞክሩ ወይም በቀጥታ ያግኙን።",
+        om: "Wanti tokko dogoggore. Maaloo ammas yaali ykn kallattiin nu qunnami.",
+      },
+    },
+    successScreen: {
+      title: {
+        en: "Message Sent Successfully!",
+        am: "መልእክትዎ በተሳካ ሁኔታ ተልኳል!",
+        om: "Ergaan Milkaaʼinaan Ergameera!",
+      },
+      subtitle: {
+        en: "Your message has been received",
+        am: "መልእክትዎ ደርሶናል",
+        om: "Ergaan keessan nu bira gaʼeera",
+      },
+      description: {
+        en: "Thank you for reaching out to HATI Sandstone. Our team has received your message and will get back to you within 24 hours.",
+        am: "ሃቲ የአሸዋ ድንጋይን ስለጎበኙ እናመሰግናለን። ቡድናችን መልእክትዎን ተቀብሏል እና በ24 ሰዓታት ውስጥ ይመልስልዎታል።",
+        om: "HATI Sandstone qunnamaa keessaniif galatoomaa. Gareen keenya ergaa keessan fudhatee saʼaatii 24 keessatti deebii isinif kenna.",
+      },
+      nextSteps: {
+        en: "What happens next?",
+        am: "ቀጥሎ ምን ይሆናል?",
+        om: "Itti aansuun maal taʼa?",
+      },
+      steps: {
+        en: [
+          "Our team reviews your message",
+          "We prepare a tailored response",
+          "You'll hear from us within 24 hours",
+        ],
+        am: [
+          "ቡድናችን መልእክትዎን ይገመግማል",
+          "ለእርስዎ የተዘጋጀ ምላሽ እናዘጋጃለን",
+          "በ24 ሰዓታት ውስጥ ከእኛ ይሰማሉ",
+        ],
+        om: [
+          "Gareen keenya ergaa keessan gamaaggama",
+          "Deebii isinif qophaa'e qopheessina",
+          "Saʼaatii 24 keessatti nu dhaggeeffattu",
+        ],
+      },
+      sendAnother: {
+        en: "Send Another Message",
+        am: "ሌላ መልእክት ይላኩ",
+        om: "Ergaa Biraa Ergi",
+      },
+      contactDirectly: {
+        en: "Need urgent help? Contact us directly",
+        am: "አስቸኳይ እርዳታ ይፈልጋሉ? በቀጥታ ያግኙን",
+        om: "Gargaarsa ariifachiisaa barbaaddaa? Kallattiin nu qunnamaa",
       },
     },
     hours: { en: "Business Hours", am: "የስራ ሰዓታት", om: "Yeroo Hojii" },
@@ -105,16 +165,52 @@ export default function Contact() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setSubmitted(true);
+    setError(null);
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          subject: formData.subject,
+          message: formData.message,
+          _subject: `New contact form submission: ${formData.subject}`,
+        }),
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        const data = await response.json().catch(() => null);
+        throw new Error(data?.error || "Form submission failed");
+      }
+    } catch (err) {
+      console.error("Formspree submission error:", err);
+      setError(tValue(t.form.error));
+    } finally {
       setLoading(false);
-      setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
-      setTimeout(() => setSubmitted(false), 5000);
-    }, 1500);
+    }
+  };
+
+  const handleReset = () => {
+    setSubmitted(false);
+    setError(null);
   };
 
   // Get active contact info
@@ -160,7 +256,6 @@ export default function Contact() {
                 const Icon = iconMap[item.icon] || MapPin;
                 const BadgeIcon = iconMap[item.badgeIcon] || Globe;
 
-                // Split details into array for display
                 const detailsArray = tValue(item.details).split("\n");
 
                 return (
@@ -203,132 +298,220 @@ export default function Contact() {
         <section className="py-16 px-4 bg-background">
           <div className="container mx-auto max-w-6xl">
             <div className="grid md:grid-cols-3 gap-8">
-              {/* Form */}
+              {/* Form OR Success Screen */}
               <div className="md:col-span-2">
-                <div className="mb-6">
-                  <h2 className="text-3xl font-bold">{tValue(t.getInTouch)}</h2>
-                  <p className="text-muted-foreground mt-1">
-                    {language === "en" &&
-                      "Fill out the form and we'll respond within 24 hours"}
-                    {language === "am" && "ቅጹን ይሙሉ እና በ24 ሰዓታት ውስጥ እንመልስልዎታለን"}
-                    {language === "om" &&
-                      "Formicha guutaa fi saʼaatii 24 keessatti deebii isinif kennina"}
-                  </p>
-                </div>
+                {submitted ? (
+                  /* ===== SUCCESS COMPONENT ===== */
+                  <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-green-500/5 via-background to-primary/5 p-8 md:p-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {/* Decorative blobs */}
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-green-500/10 rounded-full blur-3xl -z-0"></div>
+                    <div className="absolute bottom-0 left-0 w-40 h-40 bg-primary/10 rounded-full blur-3xl -z-0"></div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        {tValue(t.form.name)}{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="John Doe"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        {tValue(t.form.email)}{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="john@example.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      />
-                    </div>
-                  </div>
+                    <div className="relative z-10 flex flex-col items-center text-center">
+                      {/* Animated check icon */}
+                      <div className="relative mb-6">
+                        <div className="absolute inset-0 bg-green-500/20 rounded-full blur-xl animate-pulse"></div>
+                        <div className="relative p-5 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg shadow-green-500/30">
+                          <CheckCircle2
+                            className="h-12 w-12 text-white"
+                            strokeWidth={2.5}
+                          />
+                        </div>
+                      </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        {tValue(t.form.phone)}
-                      </label>
-                      <input
-                        type="tel"
-                        name="phone"
-                        placeholder="+251 91 123 4567"
-                        value={formData.phone}
-                        onChange={handleChange}
-                        className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        {tValue(t.form.subject)}{" "}
-                        <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        name="subject"
-                        placeholder={
-                          language === "en" ? "Project Inquiry" : "የፕሮጀክት ጥያቄ"
-                        }
-                        value={formData.subject}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                      />
-                    </div>
-                  </div>
+                      <h2 className="text-2xl md:text-3xl font-bold mb-2 bg-gradient-to-r from-green-600 to-primary bg-clip-text text-transparent">
+                        {tValue(t.successScreen.title)}
+                      </h2>
+                      <p className="text-sm font-medium text-green-600 dark:text-green-400 mb-4">
+                        {tValue(t.successScreen.subtitle)}
+                      </p>
+                      <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
+                        {tValue(t.successScreen.description)}
+                      </p>
 
-                  <div>
-                    <label className="text-sm font-medium mb-1.5 block">
-                      {tValue(t.form.message)}{" "}
-                      <span className="text-red-500">*</span>
-                    </label>
-                    <textarea
-                      name="message"
-                      placeholder={
-                        language === "en"
-                          ? "Tell us about your project..."
-                          : "ስለ ፕሮጀክትዎ ይንገሩን..."
-                      }
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      rows={5}
-                      className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
-                    />
-                  </div>
+                      {/* Next steps */}
+                      <div className="w-full max-w-md bg-background/60 backdrop-blur-sm border rounded-xl p-5 mb-8 text-left">
+                        <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
+                          <ArrowRight className="h-4 w-4 text-primary" />
+                          {tValue(t.successScreen.nextSteps)}
+                        </h3>
+                        <ul className="space-y-2.5">
+                          {(
+                            t.successScreen.steps[language] ||
+                            t.successScreen.steps.en
+                          ).map((step: string, idx: number) => (
+                            <li
+                              key={idx}
+                              className="flex items-start gap-3 text-sm text-muted-foreground"
+                            >
+                              <span className="flex-shrink-0 h-5 w-5 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center mt-0.5">
+                                {idx + 1}
+                              </span>
+                              <span>{step}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
 
-                  <Button
-                    type="submit"
-                    size="lg"
-                    className="w-full gap-2"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></div>
-                        {tValue(t.form.sending)}
-                      </>
-                    ) : (
-                      <>
-                        <Send className="h-4 w-4" />
-                        {tValue(t.form.submit)}
-                      </>
-                    )}
-                  </Button>
+                      {/* Actions */}
+                      <div className="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+                        <Button
+                          onClick={handleReset}
+                          variant="outline"
+                          className="flex-1 gap-2"
+                        >
+                          <RotateCcw className="h-4 w-4" />
+                          {tValue(t.successScreen.sendAnother)}
+                        </Button>
+                        <Button asChild className="flex-1 gap-2">
+                          <Link href="/">
+                            <ArrowRight className="h-4 w-4" />
+                            {language === "en" && "Back to Home"}
+                            {language === "am" && "ወደ መነሻ ተመለስ"}
+                            {language === "om" && "Gara Manaatti Deebi'i"}
+                          </Link>
+                        </Button>
+                      </div>
 
-                  {submitted && (
-                    <div className="p-4 bg-green-500/10 border border-green-500/20 text-green-700 dark:text-green-400 rounded-lg flex items-start gap-3 transition-all duration-300">
-                      <CheckCircle2 className="h-5 w-5 flex-shrink-0 mt-0.5" />
-                      <p>{tValue(t.form.success)}</p>
+                      <p className="text-xs text-muted-foreground mt-6">
+                        {tValue(t.successScreen.contactDirectly)}
+                      </p>
                     </div>
-                  )}
-                </form>
+                  </Card>
+                ) : (
+                  /* ===== FORM ===== */
+                  <>
+                    <div className="mb-6">
+                      <h2 className="text-3xl font-bold">
+                        {tValue(t.getInTouch)}
+                      </h2>
+                      <p className="text-muted-foreground mt-1">
+                        {language === "en" &&
+                          "Fill out the form and we'll respond within 24 hours"}
+                        {language === "am" &&
+                          "ቅጹን ይሙሉ እና በ24 ሰዓታት ውስጥ እንመልስልዎታለን"}
+                        {language === "om" &&
+                          "Formicha guutaa fi saʼaatii 24 keessatti deebii isinif kennina"}
+                      </p>
+                    </div>
+
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-1.5 block">
+                            {tValue(t.form.name)}{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="name"
+                            placeholder="John Doe"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-1.5 block">
+                            {tValue(t.form.email)}{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            name="email"
+                            placeholder="john@example.com"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="text-sm font-medium mb-1.5 block">
+                            {tValue(t.form.phone)}
+                          </label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder="+251 91 123 4567"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-sm font-medium mb-1.5 block">
+                            {tValue(t.form.subject)}{" "}
+                            <span className="text-red-500">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            name="subject"
+                            placeholder={
+                              language === "en"
+                                ? "Project Inquiry"
+                                : "የፕሮጀክት ጥያቄ"
+                            }
+                            value={formData.subject}
+                            onChange={handleChange}
+                            required
+                            className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="text-sm font-medium mb-1.5 block">
+                          {tValue(t.form.message)}{" "}
+                          <span className="text-red-500">*</span>
+                        </label>
+                        <textarea
+                          name="message"
+                          placeholder={
+                            language === "en"
+                              ? "Tell us about your project..."
+                              : "ስለ ፕሮጀክትዎ ይንገሩን..."
+                          }
+                          value={formData.message}
+                          onChange={handleChange}
+                          required
+                          rows={5}
+                          className="w-full px-4 py-2.5 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                        />
+                      </div>
+
+                      <Button
+                        type="submit"
+                        size="lg"
+                        className="w-full gap-2"
+                        disabled={loading}
+                      >
+                        {loading ? (
+                          <>
+                            <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></div>
+                            {tValue(t.form.sending)}
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4" />
+                            {tValue(t.form.submit)}
+                          </>
+                        )}
+                      </Button>
+
+                      {error && (
+                        <div className="p-4 bg-red-500/10 border border-red-500/20 text-red-700 dark:text-red-400 rounded-lg flex items-start gap-3 transition-all duration-300">
+                          <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                          <p>{error}</p>
+                        </div>
+                      )}
+                    </form>
+                  </>
+                )}
               </div>
 
               {/* Business Hours & Info */}
@@ -412,7 +595,6 @@ export default function Contact() {
           </div>
         </section>
 
-        {/* Map Section */}
         {/* Map Section */}
         <section className="py-12 px-4 bg-secondary/5">
           <div className="container mx-auto">
