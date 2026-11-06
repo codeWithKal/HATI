@@ -21,7 +21,6 @@ import {
   Tag,
 } from "lucide-react";
 import Link from "next/link";
-import servicesData from "@/data/services.json";
 
 export default function AdminServices() {
   const [serviceList, setServiceList] = useState<any[]>([]);
@@ -39,25 +38,12 @@ export default function AdminServices() {
     isActive: true,
   });
 
-  useEffect(() => {
-    loadServicesData();
-  }, []);
-
-  const loadServicesData = () => {
+  const loadServicesData = async () => {
     setLoading(true);
     try {
-      let items = servicesData;
-      if (
-        servicesData &&
-        typeof servicesData === "object" &&
-        !Array.isArray(servicesData)
-      ) {
-        items = (servicesData as any).services || [];
-      }
-      if (!Array.isArray(items)) {
-        items = [];
-      }
-      setServiceList(items);
+      const res = await fetch("/api/services");
+      const items = await res.json();
+      setServiceList(Array.isArray(items) ? items : []);
     } catch (error) {
       console.error("Error loading services:", error);
       setServiceList([]);
@@ -65,6 +51,10 @@ export default function AdminServices() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadServicesData();
+  }, []);
 
   // Filter items
   const filteredItems = serviceList.filter((item) => {
@@ -118,39 +108,59 @@ export default function AdminServices() {
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this service?")) {
-      setServiceList(serviceList.filter((s) => s.id !== id));
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await fetch(`/api/services/${id}`, { method: "DELETE" });
+        loadServicesData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting service:", error);
+      }
     }
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedItems.length === 0) return;
     if (
       confirm(
         `Are you sure you want to delete ${selectedItems.length} services?`,
       )
     ) {
-      setServiceList(serviceList.filter((s) => !selectedItems.includes(s.id)));
-      setSelectedItems([]);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await Promise.all(
+          selectedItems.map((id) =>
+            fetch(`/api/services/${id}`, { method: "DELETE" })
+          )
+        );
+        setSelectedItems([]);
+        loadServicesData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting services:", error);
+      }
     }
   };
 
-  const handleToggleStatus = (id: string) => {
-    setServiceList(
-      serviceList.map((s) =>
-        s.id === id
-          ? { ...s, isActive: s.isActive === false ? true : false }
-          : s,
-      ),
-    );
+  const handleToggleStatus = async (id: string) => {
+    const s = serviceList.find((item) => item.id === id);
+    if (!s) return;
+    const updated = { ...s, isActive: !s.isActive };
+    try {
+      await fetch(`/api/services/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      loadServicesData();
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name.en || !formData.description.en) {
       alert(
         "Please fill in all required fields (Name and Description in English)",
@@ -158,25 +168,36 @@ export default function AdminServices() {
       return;
     }
 
-    const newItem = {
-      id: editingId || Date.now().toString(),
+    const itemData = {
+      id: editingId || undefined,
       name: formData.name,
       description: formData.description,
       isActive: formData.isActive,
     };
 
-    if (editingId) {
-      setServiceList(
-        serviceList.map((s) => (s.id === editingId ? newItem : s)),
-      );
-    } else {
-      setServiceList([...serviceList, newItem]);
-    }
+    try {
+      if (editingId) {
+        await fetch(`/api/services/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+      } else {
+        await fetch("/api/services", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+      }
 
-    setShowForm(false);
-    setEditingId(null);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+      await loadServicesData();
+      setShowForm(false);
+      setEditingId(null);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error saving service:", error);
+    }
   };
 
   if (loading) {
@@ -200,7 +221,7 @@ export default function AdminServices() {
             Services Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage your services from data/services.json
+            Manage your services stored in the database
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -652,7 +673,7 @@ export default function AdminServices() {
       </Card>
 
       <div className="text-center text-xs text-muted-foreground">
-        Data loaded from data/services.json • {serviceList.length} services
+        Data loaded from the database • {serviceList.length} services
         total
       </div>
     </div>

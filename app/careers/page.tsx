@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -36,8 +36,6 @@ import {
   Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import careersData from "@/data/careers.json";
-import benefitsData from "@/data/benefits.json";
 
 const iconMap: Record<string, any> = {
   TrendingUp: TrendingUp,
@@ -55,11 +53,22 @@ export default function Careers() {
     fullName: "",
     email: "",
     phone: "",
+    address: "",
+    portfolioUrl: "",
+    education: "",
+    fieldOfStudy: "",
+    experienceYears: "",
+    previousEmployer: "",
     coverLetter: "",
     resume: null as File | null,
+    supporting: [] as File[],
+    certificates: [] as File[],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [applicationReference, setApplicationReference] = useState("");
+  const [applicationError, setApplicationError] = useState("");
+  const [reviewing, setReviewing] = useState(false);
 
   const t = {
     title: { en: "Careers at HATI", am: "በHATI ስራዎች", om: "Hojii HATI" },
@@ -174,8 +183,21 @@ export default function Careers() {
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
-  const positions = careersData;
-  const benefits = benefitsData;
+  const [positionsList, setPositionsList] = useState<any[]>([]);
+  const [benefitsList, setBenefitsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/careers?public=1", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.careers)) setPositionsList(data.careers);
+        if (Array.isArray(data?.benefits)) setBenefitsList(data.benefits);
+      })
+      .catch(() => {});
+  }, []);
+
+  const positions = positionsList;
+  const benefits = benefitsList;
 
   const getDepartmentColor = (department: string) => {
     const colors: Record<string, string> = {
@@ -214,9 +236,18 @@ export default function Careers() {
       fullName: "",
       email: "",
       phone: "",
+      address: "",
+      portfolioUrl: "",
+      education: "",
+      fieldOfStudy: "",
+      experienceYears: "",
+      previousEmployer: "",
       coverLetter: "",
       resume: null,
+      supporting: [],
+      certificates: [],
     });
+    setApplicationError(""); setApplicationReference(""); setReviewing(false);
   };
 
   const handleCloseModal = () => {
@@ -233,25 +264,33 @@ export default function Careers() {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, resume: e.target.files![0] }));
+      const file = e.target.files[0];
+      if (file.type !== "application/pdf" || file.size > 5 * 1024 * 1024) { setApplicationError("Upload a PDF resume smaller than 5 MB."); e.target.value = ""; return; }
+      setApplicationError("");
+      setFormData((prev) => ({ ...prev, resume: file }));
     }
   };
 
+  const acceptingApplications = (position: any) => position?.isActive && position?.vacancyStatus !== "closed" && (!position?.applicationDeadline || position.applicationDeadline >= new Date().toISOString().slice(0, 10));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!reviewing) { setReviewing(true); return; }
     setIsSubmitting(true);
-
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    if (process.env.NODE_ENV === "development") {
-      console.log("Application submitted:", {
-        position: selectedPosition,
-        ...formData,
-      });
-    }
-
-    setIsSubmitting(false);
-    setSubmitSuccess(true);
+    setApplicationError("");
+    try {
+      const payload = new FormData();
+      payload.set("careerId", String(selectedPosition.id));
+      for (const field of ["fullName", "email", "phone", "address", "portfolioUrl", "education", "fieldOfStudy", "experienceYears", "previousEmployer", "coverLetter"] as const) payload.set(field, formData[field]);
+      if (formData.resume) payload.set("resume", formData.resume);
+      formData.supporting.forEach((file) => payload.append("supporting", file));
+      formData.certificates.forEach((file) => payload.append("certificate", file));
+      const response = await fetch("/api/job-applications", { method: "POST", body: payload });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || "Unable to submit your application.");
+      setApplicationReference(result.referenceNo); setSubmitSuccess(true);
+    } catch (error) { setApplicationError(error instanceof Error ? error.message : "Unable to submit your application."); }
+    finally { setIsSubmitting(false); }
   };
 
   const getLocalizedArray = (value: any): string[] => {
@@ -405,7 +444,9 @@ export default function Careers() {
                             dateLocale,
                           )}
                         </span>
+                        {position.applicationDeadline && <span className="whitespace-nowrap">Deadline: {new Date(`${position.applicationDeadline}T00:00:00`).toLocaleDateString(dateLocale)}</span>}
                       </div>
+                      {position.vacancies && <span className="text-xs text-muted-foreground">{position.vacancies} {language === "am" ? "ክፍት ቦታዎች" : language === "om" ? "Bakka hojii" : "vacancy(s)"}</span>}
                       <div className="flex items-center gap-2 ml-auto">
                         <Button
                           type="button"
@@ -421,6 +462,7 @@ export default function Careers() {
                           type="button"
                           size="sm"
                           className="gap-1 bg-primary text-primary-foreground"
+                          disabled={!acceptingApplications(position)}
                           onClick={() => handleOpenModal(position, "apply")}
                         >
                           {tValue(t.apply)}
@@ -600,10 +642,15 @@ export default function Careers() {
                   </div>
                 )}
 
+                {selectedPosition.responsibilities && tValue(selectedPosition.responsibilities) && <div><h4 className="mb-2 font-semibold">Responsibilities</h4><p className="whitespace-pre-line leading-relaxed text-muted-foreground">{tValue(selectedPosition.responsibilities)}</p></div>}
+                {selectedPosition.qualifications && tValue(selectedPosition.qualifications) && <div><h4 className="mb-2 font-semibold">Qualifications</h4><p className="whitespace-pre-line leading-relaxed text-muted-foreground">{tValue(selectedPosition.qualifications)}</p></div>}
+                {selectedPosition.skills && tValue(selectedPosition.skills) && <div><h4 className="mb-2 font-semibold">Required skills</h4><p className="whitespace-pre-line leading-relaxed text-muted-foreground">{tValue(selectedPosition.skills)}</p></div>}
+
                 <div className="pt-4 border-t">
                   <Button
                     type="button"
                     className="w-full gap-2"
+                    disabled={!acceptingApplications(selectedPosition)}
                     onClick={() => setModalView("apply")}
                   >
                     <Send className="h-4 w-4" />
@@ -629,12 +676,14 @@ export default function Careers() {
                       {language === "om" &&
                         "Galmee keessan ilaaltaa fi yeroo dhiyoo deebii isiniif nimanna."}
                     </p>
+                    <p className="mb-6 rounded-lg border border-green-600/30 bg-green-500/10 p-3 font-mono font-semibold text-green-800 dark:text-green-300">Application reference: {applicationReference}</p>
                     <Button type="button" onClick={handleCloseModal}>
                       {tValue(t.modal.close)}
                     </Button>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
+                    {reviewing && <div className="rounded-lg border border-blue-500/30 bg-blue-500/5 p-4"><h4 className="font-semibold">Review your application</h4><dl className="mt-2 grid gap-1 text-sm text-muted-foreground sm:grid-cols-2"><div><dt className="inline font-medium text-foreground">Position: </dt><dd className="inline">{tValue(selectedPosition.title)}</dd></div><div><dt className="inline font-medium text-foreground">Candidate: </dt><dd className="inline">{formData.fullName}</dd></div><div><dt className="inline font-medium text-foreground">Email: </dt><dd className="inline">{formData.email}</dd></div><div><dt className="inline font-medium text-foreground">Phone: </dt><dd className="inline">{formData.phone}</dd></div><div><dt className="inline font-medium text-foreground">Education: </dt><dd className="inline">{formData.education} · {formData.fieldOfStudy}</dd></div><div><dt className="inline font-medium text-foreground">Resume: </dt><dd className="inline">{formData.resume?.name}</dd></div></dl><Button type="button" variant="outline" size="sm" className="mt-3" onClick={() => setReviewing(false)}>Edit application details</Button></div>}
                     <div>
                       <label className="block text-sm font-medium mb-1">
                         {tValue(t.modal.fullName)} *
@@ -685,6 +734,11 @@ export default function Careers() {
                       />
                     </div>
 
+                    <div><label className="mb-1 block text-sm font-medium">Current address / location *</label><input type="text" name="address" required maxLength={500} value={formData.address} onChange={handleInputChange} className="w-full rounded-md border bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+                    <div><label className="mb-1 block text-sm font-medium">Professional profile or portfolio (optional)</label><input type="url" name="portfolioUrl" value={formData.portfolioUrl} onChange={handleInputChange} placeholder="https://" className="w-full rounded-md border bg-background px-3 py-2 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary" /></div>
+                    <div className="grid gap-3 sm:grid-cols-2"><label className="text-sm font-medium">Education / qualification *<input name="education" required maxLength={255} value={formData.education} onChange={handleInputChange} className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-foreground" /></label><label className="text-sm font-medium">Field of study *<input name="fieldOfStudy" required maxLength={255} value={formData.fieldOfStudy} onChange={handleInputChange} className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-foreground" /></label></div>
+                    <div className="grid gap-3 sm:grid-cols-2"><label className="text-sm font-medium">Years of experience *<input name="experienceYears" required type="number" min="0" max="80" step="0.5" value={formData.experienceYears} onChange={handleInputChange} className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-foreground" /></label><label className="text-sm font-medium">Current or previous employer<input name="previousEmployer" maxLength={255} value={formData.previousEmployer} onChange={handleInputChange} className="mt-1 w-full rounded-md border bg-background px-3 py-2 text-foreground" /></label></div>
+
                     <div>
                       <label className="block text-sm font-medium mb-1">
                         {tValue(t.modal.coverLetter)}
@@ -692,6 +746,8 @@ export default function Careers() {
                       <textarea
                         name="coverLetter"
                         rows={4}
+                        required
+                        maxLength={15000}
                         value={formData.coverLetter}
                         onChange={handleInputChange}
                         className="w-full px-3 py-2 border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary resize-none"
@@ -711,19 +767,24 @@ export default function Careers() {
                         type="file"
                         name="resume"
                         required
-                        accept=".pdf,.doc,.docx"
+                        accept="application/pdf,.pdf"
                         onChange={handleFileChange}
                         className="w-full px-3 py-2 border rounded-md bg-background focus:outline-none focus:ring-2 focus:ring-primary file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                       />
                       <p className="text-xs text-muted-foreground mt-1">
                         {language === "en" &&
-                          "Accepted formats: PDF, DOC, DOCX (Max 5MB)"}
+                          "Accepted format: PDF (Max 5MB)"}
                         {language === "am" &&
-                          "ተቀባይነት ያላቸው ቅርጾች፡ PDF, DOC, DOCX (ከፍተኛው 5MB)"}
+                          "ተቀባይነት ያለው ቅርጽ፡ PDF (ከፍተኛው 5MB)"}
                         {language === "om" &&
-                          "Faayilaalee fudhatama: PDF, DOC, DOCX (Max 5MB)"}
+                          "Faayila fudhatama: PDF (Max 5MB)"}
                       </p>
                     </div>
+
+                    <div><label className="mb-1 block text-sm font-medium">Supporting documents (optional, up to 4)</label><input type="file" multiple accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png" onChange={(event) => { const files = Array.from(event.target.files || []); if (files.some((file) => file.size > 5 * 1024 * 1024)) { setApplicationError("Each supporting document must be smaller than 5 MB."); return; } setFormData((previous) => ({ ...previous, supporting: files.slice(0, 4) })); }} className="w-full rounded-md border bg-background px-3 py-2 text-sm text-foreground file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-primary-foreground" /></div>
+                    <div><label className="mb-1 block text-sm font-medium">Certificates (optional)</label><input type="file" multiple accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png" onChange={(event) => { const files = Array.from(event.target.files || []); if (files.some((file) => file.size > 5 * 1024 * 1024)) { setApplicationError("Each certificate must be smaller than 5 MB."); return; } setFormData((previous) => ({ ...previous, certificates: files.slice(0, 4) })); }} className="w-full rounded-md border bg-background px-3 py-2 text-sm text-foreground file:mr-3 file:rounded-md file:border-0 file:bg-primary file:px-3 file:py-2 file:text-primary-foreground" /></div>
+
+                    {applicationError && <p role="alert" className="rounded-md border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-800 dark:text-red-300">{applicationError}</p>}
 
                     <Button
                       type="submit"
@@ -738,7 +799,7 @@ export default function Careers() {
                       ) : (
                         <>
                           <Send className="h-4 w-4" />
-                          {tValue(t.modal.submit)}
+                      {reviewing ? "Confirm & submit application" : "Review application"}
                         </>
                       )}
                     </Button>

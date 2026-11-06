@@ -2,444 +2,156 @@
 
 import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { AdminFooter } from "@/components/admin/AdminFooter";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import {
-  LogOut,
-  Menu,
-  LayoutDashboard,
-  Package,
-  Wrench,
-  Briefcase,
-  Newspaper,
-  DollarSign,
-  Users,
-  BriefcaseBusiness,
-  Image,
-  Mail,
-  ChevronLeft,
-  ChevronRight,
-  Bell,
-  Sun,
-  Moon,
-  Monitor,
-  ChevronDown,
-  Truck,
+  Briefcase, BriefcaseBusiness, ChevronDown, ChevronLeft, ChevronRight, DollarSign,
+  ClipboardList, Image, LayoutDashboard, LogOut, Mail, Menu, Moon, Monitor, Newspaper, Package,
+  Settings2, ShieldCheck, Sun, Truck, UserCog, Users, Wrench,
 } from "lucide-react";
 import { useTheme } from "@/contexts/ThemeContext";
+
+const contentGroups = [
+  { title: "Workspace", items: [
+    { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
+  ] },
+  { title: "Content", items: [
+    { href: "/admin/products", label: "Products", icon: Package },
+    { href: "/admin/inventory", label: "Inventory", icon: Truck },
+    { href: "/admin/services", label: "Services", icon: Wrench },
+    { href: "/admin/projects", label: "Projects", icon: Briefcase },
+    { href: "/admin/news", label: "News", icon: Newspaper },
+    { href: "/admin/tenders", label: "Tenders", icon: DollarSign },
+  ] },
+  { title: "Organization", items: [
+    { href: "/admin/staff", label: "Staff", icon: Users },
+    { href: "/admin/careers", label: "Careers", icon: BriefcaseBusiness },
+    { href: "/admin/job-applications", label: "Job Applications", icon: ClipboardList },
+    { href: "/admin/gallery", label: "Gallery", icon: Image },
+    { href: "/admin/contacts", label: "Contacts", icon: Mail },
+  ] },
+];
 
 function AdminLayoutContent({ children }: { children: React.ReactNode }) {
   const { user, logout, isAuthenticated, isLoading } = useAdmin();
   const router = useRouter();
   const pathname = usePathname();
-  const { theme, setTheme, resolvedTheme } = useTheme();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-  const [notifications, setNotifications] = useState(3);
+  const { theme, setTheme } = useTheme();
+  const [expanded, setExpanded] = useState(true);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // After mounting, we can safely show the theme toggle
   useEffect(() => {
     setMounted(true);
+    const resize = () => { const isSmall = window.innerWidth < 768; setMobile(isSmall); if (!isSmall) setMobileOpen(false); };
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
   }, []);
 
-  // Check if mobile
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth < 768) {
-        setSidebarOpen(false);
-      }
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated && pathname !== "/admin/login") {
-      router.push("/admin/login");
-    }
+    if (!isLoading && !isAuthenticated && pathname !== "/admin/login") router.replace("/admin/login");
   }, [isAuthenticated, isLoading, pathname, router]);
 
-  if (pathname === "/admin/login" || isLoading) {
-    return <>{children}</>;
-  }
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
-  // Main navigation items
-  const mainMenuItems = [
-    { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/admin/products", label: "Products", icon: Package },
-    { href: "/admin/services", label: "Services", icon: Wrench },
-    { href: "/admin/projects", label: "Projects", icon: Briefcase },
-    { href: "/admin/news", label: "News", icon: Newspaper },
-    { href: "/admin/inventory", label: "Inventory", icon: Truck },
+  const canManageUsers = user && ["super_admin", "admin"].includes(user.role);
+  const moduleForHref = (href: string) => href.split("/").pop()?.replaceAll("-", "_") || "";
+  const groups = useMemo(() => {
+    const visibleContent = user?.role === "editor"
+      ? contentGroups.map((group) => ({ ...group, items: group.items.filter((item) => user.permissions.includes(moduleForHref(item.href))) })).filter((group) => group.items.length)
+      : contentGroups;
+    return [
+    ...visibleContent,
+    { title: "Account", items: [
+      ...(canManageUsers ? [{ href: "/admin/users", label: "User Management", icon: UserCog }] : []),
+      { href: "/admin/account", label: "My Account", icon: Settings2 },
+    ] },
   ];
+  }, [canManageUsers, user]);
 
-  const managementMenuItems = [
-    { href: "/admin/tenders", label: "Tenders", icon: DollarSign },
-    { href: "/admin/staff", label: "Staff", icon: Users },
-    { href: "/admin/careers", label: "Careers", icon: BriefcaseBusiness },
-    { href: "/admin/gallery", label: "Gallery", icon: Image },
-    { href: "/admin/contacts", label: "Contacts", icon: Mail },
-  ];
-
-  const menuGroups = [
-    { title: "Main", items: mainMenuItems },
-    { title: "Management", items: managementMenuItems },
-  ];
-
-  const isActive = (href: string) => {
-    return pathname === href || pathname?.startsWith(href + "/");
+  const activeItem = groups.flatMap((group) => group.items).find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+  const isLogin = pathname === "/admin/login";
+  const routePermissions: Record<string, string> = {
+    products: "products", inventory: "inventory", services: "services", projects: "projects",
+    news: "news", tenders: "tenders", staff: "staff", careers: "careers", gallery: "gallery", contacts: "contacts", "job-applications": "job_applications",
   };
+  const pathParts = pathname.split("/").filter(Boolean);
+  const requestedModule = pathParts[0] === "admin" ? routePermissions[pathParts[1]] : undefined;
+  const editorHasPageAccess = user?.role !== "editor" || pathname === "/admin/account" || Boolean(requestedModule && user.permissions.includes(requestedModule));
+  const fallbackHref = user?.role === "editor"
+    ? contentGroups.flatMap((group) => group.items).find((item) => user.permissions.includes(moduleForHref(item.href)))?.href || "/admin/account"
+    : "/admin/dashboard";
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && !editorHasPageAccess) router.replace(fallbackHref);
+  }, [editorHasPageAccess, fallbackHref, isAuthenticated, isLoading, router]);
+  if (isLogin) return <div className="admin-shell min-h-screen">{children}</div>;
+  if (isLoading) return <div className="admin-shell min-h-screen grid place-items-center" aria-busy="true"><span className="h-8 w-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin" /></div>;
+  if (!isAuthenticated) return null;
+  if (!editorHasPageAccess) return <div className="admin-shell min-h-screen grid place-items-center text-sm text-slate-600">Redirecting to an assigned module…</div>;
 
-  // Theme options for dropdown
-  const themeOptions = [
-    { value: "light", label: "Light", icon: Sun },
-    { value: "dark", label: "Dark", icon: Moon },
-    { value: "system", label: "System", icon: Monitor },
-  ];
-
-  // Get current theme label and icon
-  const currentTheme =
-    themeOptions.find((t) => t.value === theme) || themeOptions[0];
-  const CurrentIcon = currentTheme.icon;
-
-  // Get resolved theme display
-  const getResolvedThemeDisplay = () => {
-    if (theme === "system") {
-      return resolvedTheme === "dark" ? "🌙 Dark" : "☀️ Light";
-    }
-    return resolvedTheme === "dark" ? "🌙 Dark" : "☀️ Light";
-  };
+  const closeMobile = () => { if (mobile) setMobileOpen(false); };
+  const avatar = user?.profileImage;
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
-      {/* Sidebar Overlay (Mobile) */}
-      {isMobile && sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`${
-          sidebarOpen ? "w-64" : "w-[72px]"
-        } border-r bg-card/95 backdrop-blur-sm shadow-lg flex flex-col fixed md:relative z-50 h-full transition-all duration-300 ${
-          isMobile && !sidebarOpen ? "-translate-x-full" : "translate-x-0"
-        }`}
-      >
-        {/* Sidebar Header */}
-        <div className="p-4 border-b bg-gradient-to-r from-primary/5 to-primary/10">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center text-primary-foreground font-bold shadow-lg shadow-primary/20">
-                H
-              </div>
-              {sidebarOpen && (
-                <div>
-                  <h1 className="font-bold text-lg leading-none">HATI Admin</h1>
-                  <p className="text-[10px] text-muted-foreground">
-                    Content Management
-                  </p>
-                </div>
-              )}
-            </div>
-            <button
-              onClick={toggleSidebar}
-              className="p-1.5 hover:bg-accent rounded-lg transition-colors"
-              title={sidebarOpen ? "Collapse" : "Expand"}
-            >
-              {sidebarOpen ? (
-                <ChevronLeft className="h-4 w-4" />
-              ) : (
-                <ChevronRight className="h-4 w-4" />
-              )}
-            </button>
-          </div>
+    <div className="admin-shell relative flex min-h-screen">
+      {mobile && mobileOpen && <button aria-label="Close navigation" onClick={() => setMobileOpen(false)} className="fixed inset-0 z-40 bg-slate-950/60" />}
+      <aside className={`${mobile ? `fixed inset-y-0 left-0 z-50 w-72 ${mobileOpen ? "translate-x-0" : "-translate-x-full"}` : `fixed inset-y-0 left-0 z-40 ${expanded ? "w-64" : "w-[76px]"}`} flex shrink-0 flex-col border-r border-[#30445f] bg-[#14243A] text-slate-100 transition-all duration-200`}>
+        <div className="flex h-[72px] items-center justify-between border-b border-[#30445f] px-4">
+          <Link href="/admin/dashboard" onClick={closeMobile} className="flex min-w-0 items-center gap-3">
+            <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl bg-white"><img src="/hati-logo.png" alt="HATI logo" className="h-full w-full object-contain" /></span>
+            {(expanded || mobile) && <span className="min-w-0"><span className="block truncate text-sm font-semibold text-white">HATI Administration</span><span className="block text-xs text-slate-300">Management workspace</span></span>}
+          </Link>
+          {!mobile && <button onClick={() => setExpanded((value) => !value)} aria-label={expanded ? "Collapse sidebar" : "Expand sidebar"} className="rounded-lg p-2 text-slate-300 hover:bg-[#223a58] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300">{expanded ? <ChevronLeft size={17} /> : <ChevronRight size={17} />}</button>}
+          {mobile && <button onClick={() => setMobileOpen(false)} aria-label="Close navigation" className="rounded-lg p-2 text-slate-300 hover:bg-[#223a58]"><ChevronLeft size={18} /></button>}
         </div>
 
-        {/* Sidebar Navigation */}
-        <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
-          {menuGroups.map((group, idx) => (
-            <div key={idx} className="space-y-1">
-              {sidebarOpen && (
-                <p className="text-[10px] font-medium text-muted-foreground uppercase tracking-wider px-3 mb-2">
-                  {group.title}
-                </p>
-              )}
-              {group.items.map((item) => {
-                const Icon = item.icon;
-                const active = isActive(item.href);
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group ${
-                      active
-                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20"
-                        : "hover:bg-accent text-foreground hover:translate-x-1"
-                    } ${!sidebarOpen && "justify-center"}`}
-                    title={!sidebarOpen ? item.label : ""}
-                  >
-                    <Icon
-                      className={`h-5 w-5 ${active ? "text-primary-foreground" : ""} flex-shrink-0`}
-                    />
-                    {sidebarOpen && (
-                      <span className="text-sm font-medium">{item.label}</span>
-                    )}
-                    {active && sidebarOpen && (
-                      <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-foreground/50" />
-                    )}
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
+        <nav aria-label="Administration" className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
+          {groups.map((group) => <section key={group.title}>
+            {(expanded || mobile) && <h2 className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">{group.title}</h2>}
+            <div className="space-y-1">{group.items.map(({ href, label, icon: Icon }) => {
+              const active = pathname === href || pathname.startsWith(`${href}/`);
+              return <Link key={href} href={href} onClick={closeMobile} aria-current={active ? "page" : undefined} title={!expanded && !mobile ? label : undefined} className={`flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 ${active ? "bg-[#2563EB] text-white" : "text-slate-200 hover:bg-[#223a58] hover:text-white"} ${!expanded && !mobile ? "justify-center" : ""}`}>
+                <Icon size={18} aria-hidden="true" />{(expanded || mobile) && <span>{label}</span>}
+              </Link>;
+            })}</div>
+          </section>)}
         </nav>
 
-        {/* Sidebar Footer */}
-        <div className="p-3 border-t space-y-2">
-          {sidebarOpen && (
-            <div className="px-3 py-2 rounded-lg bg-secondary/50">
-              <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-sm">
-                  {user?.name?.charAt(0) || "A"}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">
-                    {user?.name || "Admin"}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {user?.email || "admin@hati.com"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
+        <div className="border-t border-[#30445f] p-3">
+          <Link href="/admin/account" onClick={closeMobile} className={`mb-3 flex items-center gap-3 rounded-xl bg-[#1b304b] p-3 hover:bg-[#223a58] ${!expanded && !mobile ? "justify-center" : ""}`}>
+            <span className="grid h-9 w-9 shrink-0 overflow-hidden place-items-center rounded-full bg-[#2563EB] text-sm font-semibold text-white">{avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : user?.name?.charAt(0).toUpperCase()}</span>
+            {(expanded || mobile) && <span className="min-w-0 flex-1"><span className="block truncate text-sm font-medium text-white">{user?.name}</span><span className="block truncate text-xs capitalize text-slate-300">{user?.role?.replaceAll("_", " ")}</span></span>}
+          </Link>
           <div className="flex gap-2">
-            {/* Theme Dropdown */}
-            {mounted && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className={`${sidebarOpen ? "flex-1" : "w-full"} gap-2`}
-                  >
-                    <CurrentIcon className="h-4 w-4" />
-                    {sidebarOpen && (
-                      <span className="text-xs flex-1 text-left">
-                        {currentTheme.label}
-                      </span>
-                    )}
-                    {sidebarOpen && (
-                      <ChevronDown className="h-3 w-3 opacity-50" />
-                    )}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="min-w-[160px]">
-                  {themeOptions.map((option) => {
-                    const Icon = option.icon;
-                    const isActiveTheme = theme === option.value;
-                    return (
-                      <DropdownMenuItem
-                        key={option.value}
-                        onClick={() =>
-                          setTheme(option.value as "light" | "dark" | "system")
-                        }
-                        className={`cursor-pointer gap-2 ${
-                          isActiveTheme ? "bg-primary/10 text-primary" : ""
-                        }`}
-                      >
-                        <Icon className="h-4 w-4" />
-                        <span className="text-sm">{option.label}</span>
-                        {isActiveTheme && (
-                          <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
-                        )}
-                      </DropdownMenuItem>
-                    );
-                  })}
-                  {theme === "system" && (
-                    <div className="px-3 py-1.5 text-[10px] text-muted-foreground border-t mt-1 pt-1.5">
-                      System: {getResolvedThemeDisplay()}
-                    </div>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-
-            <Button
-              onClick={() => {
-                logout();
-                router.push("/admin/login");
-              }}
-              variant="outline"
-              size="sm"
-              className={`${sidebarOpen ? "flex-1" : "w-full"} gap-2 text-destructive hover:text-destructive hover:bg-destructive/10`}
-            >
-              <LogOut className="h-4 w-4" />
-              {sidebarOpen && <span className="text-xs">Logout</span>}
-            </Button>
+            {mounted && <DropdownMenu><DropdownMenuTrigger render={<Button variant="outline" size="sm" aria-label="Choose color theme" className="flex-1 border-[#40536c] bg-transparent text-slate-100 hover:bg-[#223a58] hover:text-white">{theme === "dark" ? <Moon /> : theme === "light" ? <Sun /> : <Monitor />} {(expanded || mobile) && <><span className="ml-2">Appearance</span><ChevronDown className="ml-auto" /></>}</Button>} /><DropdownMenuContent align="start">{[{ value: "light", title: "Light", icon: Sun }, { value: "dark", title: "Dark", icon: Moon }, { value: "system", title: "System", icon: Monitor }].map((entry) => <DropdownMenuItem key={entry.value} onClick={() => setTheme(entry.value as "light" | "dark" | "system")}><entry.icon className="mr-2 h-4 w-4" />{entry.title}</DropdownMenuItem>)}</DropdownMenuContent></DropdownMenu>}
+            <Button variant="outline" size="icon" aria-label="Sign out" className="border-[#40536c] bg-transparent text-slate-100 hover:bg-red-900/50 hover:text-white" onClick={async () => { await logout(); router.replace("/admin/login"); }}><LogOut size={16} /></Button>
           </div>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <header className="border-b bg-card/95 backdrop-blur-sm px-4 md:px-6 py-3 flex items-center justify-between sticky top-0 z-30">
+      <div className={`flex min-w-0 flex-1 flex-col ${mobile ? "ml-0" : expanded ? "ml-64" : "ml-[76px]"}`}>
+        <header className="sticky top-0 z-30 flex min-h-[72px] items-center justify-between border-b border-border bg-card px-4 shadow-sm md:px-7">
           <div className="flex items-center gap-3">
-            {isMobile && (
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleSidebar}
-                className="md:hidden"
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-            )}
-            <div>
-              <h2 className="text-lg font-semibold">
-                {menuGroups
-                  .flatMap((g) => g.items)
-                  .find((item) => isActive(item.href))?.label || "Dashboard"}
-              </h2>
-              <p className="text-xs text-muted-foreground hidden sm:block">
-                {pathname?.split("/").filter(Boolean).join(" › ") || "Overview"}
-              </p>
-            </div>
+            {mobile && <Button variant="outline" size="icon" aria-label="Open navigation" onClick={() => setMobileOpen(true)}><Menu size={18} /></Button>}
+            <div><h1 className="text-lg font-semibold text-foreground">{activeItem?.label || "Administration"}</h1><p aria-label="Breadcrumb" className="mt-0.5 text-xs text-muted-foreground">HATI <span className="px-1">/</span>{pathname.split("/").filter(Boolean).join(" / ")}</p></div>
           </div>
-
-          <div className="flex items-center gap-2 md:gap-4">
-            {/* Theme Dropdown (Top Bar) */}
-            {mounted && (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="hidden md:flex items-center gap-1.5 min-w-[80px] bg-transparent hover:bg-accent/50"
-                  >
-                    <CurrentIcon className="h-4 w-4" />
-                    <span className="text-xs">{currentTheme.label}</span>
-                    <ChevronDown className="h-3 w-3 opacity-50" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="min-w-[160px]">
-                  {themeOptions.map((option) => {
-                    const Icon = option.icon;
-                    const isActiveTheme = theme === option.value;
-                    return (
-                      <DropdownMenuItem
-                        key={option.value}
-                        onClick={() =>
-                          setTheme(option.value as "light" | "dark" | "system")
-                        }
-                        className={`cursor-pointer gap-2 ${
-                          isActiveTheme ? "bg-primary/10 text-primary" : ""
-                        }`}
-                      >
-                        <Icon className="h-4 w-4" />
-                        <span className="text-sm">{option.label}</span>
-                        {isActiveTheme && (
-                          <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
-                        )}
-                      </DropdownMenuItem>
-                    );
-                  })}
-                  {theme === "system" && (
-                    <div className="px-3 py-1.5 text-[10px] text-muted-foreground border-t mt-1 pt-1.5">
-                      System: {getResolvedThemeDisplay()}
-                    </div>
-                  )}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-
-            {/* Resolved Theme Indicator */}
-            {mounted && (
-              <div className="hidden lg:flex items-center gap-1.5 text-xs text-muted-foreground">
-                <span
-                  className={`h-2 w-2 rounded-full ${resolvedTheme === "dark" ? "bg-blue-500" : "bg-amber-500"}`}
-                />
-                {resolvedTheme === "dark" ? "Dark" : "Light"}
-              </div>
-            )}
-
-            {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              onClick={() => setNotifications(0)}
-            >
-              <Bell className="h-5 w-5" />
-              {notifications > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 h-4 w-4 rounded-full bg-destructive text-[10px] text-destructive-foreground flex items-center justify-center animate-pulse">
-                  {notifications}
-                </span>
-              )}
-            </Button>
-
-            {/* User Avatar (Desktop) */}
-            <div className="hidden md:flex items-center gap-3">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-sm">
-                {user?.name?.charAt(0) || "A"}
-              </div>
-              <div className="hidden lg:block">
-                <p className="text-sm font-medium leading-none">
-                  {user?.name || "Admin"}
-                </p>
-                <p className="text-xs text-muted-foreground">Administrator</p>
-              </div>
-            </div>
+          <div className="flex items-center gap-3">
+            {canManageUsers && <Link href="/admin/users" aria-label="User management" className="hidden rounded-lg p-2 text-slate-600 hover:bg-slate-100 md:inline-flex"><ShieldCheck size={18} /></Link>}
+            <Link href="/admin/account" className="flex items-center gap-2 rounded-xl p-1.5 pr-2 hover:bg-slate-100 dark:hover:bg-slate-800">
+              <span className="grid h-9 w-9 overflow-hidden place-items-center rounded-full bg-blue-600 text-sm font-semibold text-white">{avatar ? <img src={avatar} alt="" className="h-full w-full object-cover" /> : user?.name?.charAt(0).toUpperCase()}</span>
+              <span className="hidden text-left sm:block"><span className="block max-w-40 truncate text-sm font-medium text-slate-800 dark:text-slate-100">{user?.name}</span><span className="block text-xs capitalize text-slate-500 dark:text-slate-300">{user?.role?.replaceAll("_", " ")}</span></span>
+            </Link>
           </div>
         </header>
-
-        {/* Content */}
-        <main className="flex-1 overflow-y-auto bg-secondary/5">
-          <div className="container mx-auto p-4 md:p-6 max-w-7xl">
-            {children}
-          </div>
-        </main>
-
-        {/* Admin Footer */}
-        {/* <AdminFooter /> */}
+        <main className="bg-background"><div className="mx-auto w-full max-w-[1500px] p-4 sm:p-6 lg:p-8">{children}</div></main>
       </div>
     </div>
   );
 }
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <AdminProvider>
-      <AdminLayoutContent>{children}</AdminLayoutContent>
-    </AdminProvider>
-  );
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return <AdminProvider><AdminLayoutContent>{children}</AdminLayoutContent></AdminProvider>;
 }

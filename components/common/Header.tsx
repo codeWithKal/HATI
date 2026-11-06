@@ -23,7 +23,6 @@ import {
   Users,
   UserCircle,
   Mail,
-  Building2,
   Award,
 } from "lucide-react";
 
@@ -82,11 +81,11 @@ export function Header() {
       label: { en: "Staff", am: "ሰራተኞች", om: "Hojjattoota" },
       icon: Users,
     },
-    // {
-    //   href: "/careers",
-    //   label: { en: "Careers", am: "ሥራ", om: "Hojii" },
-    //   icon: UserCircle,
-    // },
+    {
+      href: "/careers",
+      label: { en: "Careers", am: "ሥራ", om: "Hojii" },
+      icon: UserCircle,
+    },
     {
       href: "/contact",
       label: { en: "Contact", am: "አግኙን", om: "Quunnama" },
@@ -110,8 +109,12 @@ export function Header() {
           href="/"
           className="flex items-center space-x-2 flex-shrink-0 group"
         >
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 text-primary-foreground font-bold shadow-lg shadow-primary/20 transition-transform group-hover:scale-105">
-            <Building2 className="h-5 w-5" />
+          <div className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-lg border border-border bg-white shadow-sm transition-transform group-hover:scale-105">
+            <img
+              src="/hati-logo.png"
+              alt="HATI logo"
+              className="h-full w-full object-contain"
+            />
           </div>
           <div className="hidden sm:block">
             <span className="font-bold text-lg tracking-tight">HATI</span>

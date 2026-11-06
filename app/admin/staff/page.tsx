@@ -27,8 +27,6 @@ import {
   UserPlus,
 } from "lucide-react";
 import Link from "next/link";
-import staffData from "@/data/staff.json";
-import staffStatsData from "@/data/staffStats.json";
 
 export default function AdminStaff() {
   const [staffList, setStaffList] = useState<any[]>([]);
@@ -43,59 +41,39 @@ export default function AdminStaff() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [imageRemoved, setImageRemoved] = useState(false);
+  const [saveError, setSaveError] = useState("");
   const [formData, setFormData] = useState({
     name: { en: "", am: "", om: "" },
     position: { en: "", am: "", om: "" },
     department: { en: "", am: "", om: "" },
     bio: { en: "", am: "", om: "" },
     experience: "",
-    avatar: "👤",
+    avatar: "",
     email: "",
     isActive: true,
   });
 
-  useEffect(() => {
-    loadStaffData();
-  }, []);
-
-  const loadStaffData = () => {
+  const loadStaffData = async () => {
     setLoading(true);
     try {
-      // Load staff
-      let items = staffData;
-      if (
-        staffData &&
-        typeof staffData === "object" &&
-        !Array.isArray(staffData)
-      ) {
-        items = (staffData as any).staff || [];
-      }
-      if (!Array.isArray(items)) {
-        items = [];
-      }
-      setStaffList(items);
-
-      // Load stats
-      let statsData = staffStatsData;
-      if (
-        staffStatsData &&
-        typeof staffStatsData === "object" &&
-        !Array.isArray(staffStatsData)
-      ) {
-        statsData = (staffStatsData as any).stats || [];
-      }
-      if (!Array.isArray(statsData)) {
-        statsData = [];
-      }
-      setStats(statsData);
+      const res = await fetch("/api/staff");
+      const data = await res.json();
+      setStaffList(Array.isArray(data.staff) ? data.staff : []);
+      setStats(Array.isArray(data.stats) ? data.stats : []);
     } catch (error) {
       console.error("Error loading staff:", error);
       setStaffList([]);
-      setStats([]);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadStaffData();
+  }, []);
 
   // Get unique departments
   const departments = [
@@ -152,10 +130,11 @@ export default function AdminStaff() {
       department: { en: "", am: "", om: "" },
       bio: { en: "", am: "", om: "" },
       experience: "",
-      avatar: "👤",
+      avatar: "",
       email: "",
       isActive: true,
     });
+    setImageFile(null); setImagePreview(""); setImageRemoved(false); setSaveError("");
     setShowForm(true);
   };
 
@@ -167,73 +146,118 @@ export default function AdminStaff() {
       department: item.department || { en: "", am: "", om: "" },
       bio: item.bio || { en: "", am: "", om: "" },
       experience: item.experience || "",
-      avatar: item.avatar || "👤",
+      avatar: "",
       email: item.email || "",
       isActive: item.isActive !== false,
     });
+    setImageFile(null); setImagePreview(item.image || ""); setImageRemoved(false); setSaveError("");
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this staff member?")) {
-      setStaffList(staffList.filter((s) => s.id !== id));
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await fetch(`/api/staff/${id}`, { method: "DELETE" });
+        loadStaffData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting staff member:", error);
+      }
     }
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedItems.length === 0) return;
     if (
       confirm(
         `Are you sure you want to delete ${selectedItems.length} staff members?`,
       )
     ) {
-      setStaffList(staffList.filter((s) => !selectedItems.includes(s.id)));
-      setSelectedItems([]);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await Promise.all(
+          selectedItems.map((id) =>
+            fetch(`/api/staff/${id}`, { method: "DELETE" })
+          )
+        );
+        setSelectedItems([]);
+        loadStaffData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting staff members:", error);
+      }
     }
   };
 
-  const handleToggleStatus = (id: string) => {
-    setStaffList(
-      staffList.map((s) =>
-        s.id === id
-          ? { ...s, isActive: s.isActive === false ? true : false }
-          : s,
-      ),
-    );
+  const handleToggleStatus = async (id: string) => {
+    const s = staffList.find((item) => item.id === id);
+    if (!s) return;
+    const updated = { ...s, isActive: !s.isActive };
+    try {
+      await fetch(`/api/staff/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      loadStaffData();
+    } catch (error) {
+      console.error("Error toggling staff status:", error);
+    }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.name.en || !formData.position.en || !formData.department.en) {
       alert("Please fill in all required fields (Name, Position, Department)");
       return;
     }
 
-    const newItem = {
-      id: editingId || Date.now().toString(),
+    setSaveError("");
+    try {
+    let image = imageRemoved ? "" : (staffList.find((entry) => entry.id === editingId)?.image || "");
+    if (imageFile) {
+      const upload = new FormData(); upload.set("imageFile", imageFile);
+      const response = await fetch("/api/admin/images/staff", { method: "POST", body: upload });
+      const result = await response.json(); if (!response.ok) throw new Error(result.error || "Image upload failed."); image = result.image;
+    }
+    const itemData = {
+      id: editingId || undefined,
       name: formData.name,
       position: formData.position,
       department: formData.department,
       bio: formData.bio,
       experience: formData.experience,
       avatar: formData.avatar,
+      image,
       email: formData.email,
       isActive: formData.isActive,
     };
 
-    if (editingId) {
-      setStaffList(staffList.map((s) => (s.id === editingId ? newItem : s)));
-    } else {
-      setStaffList([...staffList, newItem]);
-    }
+      if (editingId) {
+        const response = await fetch(`/api/staff/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+        if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to save staff member."); }
+      } else {
+        const response = await fetch("/api/staff", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+        if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to save staff member."); }
+      }
 
-    setShowForm(false);
-    setEditingId(null);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+      await loadStaffData();
+      setShowForm(false);
+      setEditingId(null);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error saving staff member:", error);
+      setSaveError(error instanceof Error ? error.message : "Unable to save staff member.");
+    }
   };
 
   const getDepartmentColor = (department: string) => {
@@ -286,7 +310,7 @@ export default function AdminStaff() {
             Staff Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage staff members and team information from data/staff.json
+            Manage staff members and team information from MySQL Database
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -638,17 +662,10 @@ export default function AdminStaff() {
               </div>
               <div>
                 <label className="text-sm font-medium mb-1.5 block">
-                  Avatar Emoji
+                  Profile picture
                 </label>
-                <input
-                  type="text"
-                  placeholder="👨‍💼"
-                  value={formData.avatar}
-                  onChange={(e) =>
-                    setFormData({ ...formData, avatar: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                />
+                <input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; if (!['image/jpeg','image/png','image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) { setSaveError("Choose a JPG, PNG, or WebP image smaller than 8 MB."); return; } setSaveError(""); setImageFile(file); setImagePreview(URL.createObjectURL(file)); setImageRemoved(false); }} className="w-full text-sm" />
+                {imagePreview && <div className="mt-2 flex items-center gap-3"><img src={imagePreview} alt="Staff profile preview" className="h-16 w-16 rounded-full object-cover" /><Button type="button" variant="outline" size="sm" onClick={() => { setImageFile(null); setImagePreview(""); setImageRemoved(true); }}>Remove picture</Button></div>}{saveError && <p role="alert" className="mt-2 text-sm text-red-600">{saveError}</p>}
               </div>
               <div>
                 <label className="text-sm font-medium mb-1.5 block">
@@ -816,9 +833,7 @@ export default function AdminStaff() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
-                          <span className="text-2xl">
-                            {item.avatar || "👤"}
-                          </span>
+                          {item.image ? <img src={item.image} alt={`${item.name?.en || 'Staff'} profile`} className="h-11 w-11 rounded-full object-cover" /> : <span className="grid h-11 w-11 place-items-center rounded-full bg-muted"><Users size={18} className="text-muted-foreground" /></span>}
                           <div>
                             <p className="font-medium">
                               {item.name?.en || "Unnamed"}
@@ -942,7 +957,7 @@ export default function AdminStaff() {
       </Card>
 
       <div className="text-center text-xs text-muted-foreground">
-        Data loaded from data/staff.json • {staffList.length} staff members
+        Data loaded from MySQL Database • {staffList.length} staff members
         total
       </div>
     </div>

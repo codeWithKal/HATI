@@ -20,10 +20,8 @@ import {
   AlertCircle,
   RotateCcw,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import contactInfoData from "@/data/contactInfo.json";
-import businessHoursData from "@/data/businessHours.json";
 
 const iconMap: Record<string, any> = {
   MapPin: MapPin,
@@ -155,9 +153,21 @@ export default function Contact() {
 
   const tValue = (obj: any) => obj[language] || obj["en"] || "";
 
-  // Get data from JSON files
-  const contactInfo = contactInfoData;
-  const businessHours = businessHoursData;
+  const [contactsList, setContactsList] = useState<any[]>([]);
+  const [hoursList, setHoursList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/contacts")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.contacts)) setContactsList(data.contacts);
+        if (Array.isArray(data?.businessHours)) setHoursList(data.businessHours);
+      })
+      .catch(() => {});
+  }, []);
+
+  const contactInfo = contactsList;
+  const businessHours = hoursList;
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -534,7 +544,7 @@ export default function Contact() {
                         </span>
                         {item.isOpen ? (
                           <Badge className="bg-green-500/20 text-green-700 dark:text-green-400 border-green-500/30">
-                            {item.hours}
+                            {tValue(item.hours)}
                           </Badge>
                         ) : (
                           <Badge

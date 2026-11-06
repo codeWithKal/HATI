@@ -25,7 +25,10 @@ import {
   Filter,
 } from "lucide-react";
 import Link from "next/link";
-import careersData from "@/data/careers.json";
+
+function LocalizedCareerField({ title, value, onChange }: { title: string; value: { en: string; am: string; om: string }; onChange: (language: "en" | "am" | "om", text: string) => void }) {
+  return <fieldset className="rounded-lg border border-border p-3"><legend className="px-1 text-sm font-medium text-foreground">{title}</legend><div className="grid gap-3 sm:grid-cols-3">{([["en", "English"], ["am", "አማርኛ"], ["om", "Afaan Oromoo"]] as const).map(([language, label]) => <label key={language} className="text-xs text-muted-foreground">{label}<textarea rows={3} value={value[language]} onChange={(event) => onChange(language, event.target.value)} className="mt-1 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm text-foreground" /></label>)}</div></fieldset>;
+}
 
 export default function AdminCareers() {
   const [careersList, setCareersList] = useState<any[]>([]);
@@ -33,41 +36,37 @@ export default function AdminCareers() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterDepartment, setFilterDepartment] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [sortByApplications, setSortByApplications] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [actionError, setActionError] = useState("");
   const [formData, setFormData] = useState({
     title: { en: "", am: "", om: "" },
     location: { en: "", am: "", om: "" },
     type: { en: "", am: "", om: "" },
     department: { en: "", am: "", om: "" },
     experience: { en: "", am: "", om: "" },
+    description: { en: "", am: "", om: "" },
+    responsibilities: { en: "", am: "", om: "" },
+    qualifications: { en: "", am: "", om: "" },
+    skills: { en: "", am: "", om: "" },
     posted: new Date().toISOString().split("T")[0],
+    applicationDeadline: "",
+    vacancies: 1,
+    vacancyStatus: "open",
     isActive: true,
   });
 
-  useEffect(() => {
-    loadCareersData();
-  }, []);
-
-  const loadCareersData = () => {
+  const loadCareersData = async () => {
     setLoading(true);
     try {
-      let items = careersData;
-      if (
-        careersData &&
-        typeof careersData === "object" &&
-        !Array.isArray(careersData)
-      ) {
-        items = (careersData as any).careers || [];
-      }
-      if (!Array.isArray(items)) {
-        items = [];
-      }
-      setCareersList(items);
+      const res = await fetch("/api/careers");
+      const data = await res.json();
+      setCareersList(Array.isArray(data.careers) ? data.careers : []);
     } catch (error) {
       console.error("Error loading careers:", error);
       setCareersList([]);
@@ -75,6 +74,10 @@ export default function AdminCareers() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadCareersData();
+  }, []);
 
   // Get unique departments
   const departments = [
@@ -104,7 +107,8 @@ export default function AdminCareers() {
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredItems.slice(startIndex, endIndex);
+  const sortedItems = [...filteredItems].sort((a, b) => sortByApplications ? Number(b.applicationCount || 0) - Number(a.applicationCount || 0) : Number(a.id) - Number(b.id));
+  const currentItems = sortedItems.slice(startIndex, endIndex);
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -130,7 +134,14 @@ export default function AdminCareers() {
       type: { en: "", am: "", om: "" },
       department: { en: "", am: "", om: "" },
       experience: { en: "", am: "", om: "" },
+      description: { en: "", am: "", om: "" },
+      responsibilities: { en: "", am: "", om: "" },
+      qualifications: { en: "", am: "", om: "" },
+      skills: { en: "", am: "", om: "" },
       posted: new Date().toISOString().split("T")[0],
+      applicationDeadline: "",
+      vacancies: 1,
+      vacancyStatus: "open",
       isActive: true,
     });
     setShowForm(true);
@@ -144,73 +155,128 @@ export default function AdminCareers() {
       type: item.type || { en: "", am: "", om: "" },
       department: item.department || { en: "", am: "", om: "" },
       experience: item.experience || { en: "", am: "", om: "" },
+      description: item.description || { en: "", am: "", om: "" },
+      responsibilities: item.responsibilities || { en: "", am: "", om: "" },
+      qualifications: item.qualifications || { en: "", am: "", om: "" },
+      skills: item.skills || { en: "", am: "", om: "" },
       posted: item.posted || new Date().toISOString().split("T")[0],
+      applicationDeadline: item.applicationDeadline || "",
+      vacancies: Number(item.vacancies) || 1,
+      vacancyStatus: item.vacancyStatus || "open",
       isActive: item.isActive !== false,
     });
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this position?")) {
-      setCareersList(careersList.filter((c) => c.id !== id));
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        const response = await fetch(`/api/careers/${id}`, { method: "DELETE" });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Unable to delete this vacancy.");
+        setActionError("");
+        loadCareersData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        setActionError(error instanceof Error ? error.message : "Unable to delete this vacancy.");
+      }
     }
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedItems.length === 0) return;
     if (
       confirm(
         `Are you sure you want to delete ${selectedItems.length} positions?`,
       )
     ) {
-      setCareersList(careersList.filter((c) => !selectedItems.includes(c.id)));
-      setSelectedItems([]);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        const results = await Promise.all(
+          selectedItems.map((id) =>
+            fetch(`/api/careers/${id}`, { method: "DELETE" })
+          )
+        );
+        const failed = await Promise.all(results.filter((response) => !response.ok).map(async (response) => (await response.json()).error));
+        if (failed.length) throw new Error(failed.join(" "));
+        setActionError("");
+        setSelectedItems([]);
+        loadCareersData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        setActionError(error instanceof Error ? error.message : "Unable to delete selected vacancies.");
+      }
     }
   };
 
-  const handleToggleStatus = (id: string) => {
-    setCareersList(
-      careersList.map((c) =>
-        c.id === id
-          ? { ...c, isActive: c.isActive === false ? true : false }
-          : c,
-      ),
-    );
+  const handleToggleStatus = async (id: string) => {
+    const c = careersList.find((item) => item.id === id);
+    if (!c) return;
+    const updated = { ...c, isActive: !c.isActive };
+    try {
+      const response = await fetch(`/api/careers/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to update vacancy status."); }
+      loadCareersData();
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Unable to update vacancy status.");
+    }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.title.en || !formData.department.en) {
       alert("Please fill in all required fields");
       return;
     }
 
-    const newItem = {
-      id: editingId || Date.now().toString(),
+    const itemData = {
+      id: editingId || undefined,
       title: formData.title,
       location: formData.location,
       type: formData.type,
       department: formData.department,
       experience: formData.experience,
+      description: formData.description,
+      responsibilities: formData.responsibilities,
+      qualifications: formData.qualifications,
+      skills: formData.skills,
       posted: formData.posted,
+      applicationDeadline: formData.applicationDeadline || null,
+      vacancies: formData.vacancies,
+      vacancyStatus: formData.vacancyStatus,
       isActive: formData.isActive,
     };
 
-    if (editingId) {
-      setCareersList(
-        careersList.map((c) => (c.id === editingId ? newItem : c)),
-      );
-    } else {
-      setCareersList([...careersList, newItem]);
-    }
+    try {
+      if (editingId) {
+        const response = await fetch(`/api/careers/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+        if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to update vacancy."); }
+      } else {
+        const response = await fetch("/api/careers", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+        if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to create vacancy."); }
+      }
 
-    setShowForm(false);
-    setEditingId(null);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+      await loadCareersData();
+      setActionError("");
+      setShowForm(false);
+      setEditingId(null);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      setActionError(error instanceof Error ? error.message : "Unable to save vacancy.");
+    }
   };
 
   const getDepartmentColor = (department: string) => {
@@ -252,7 +318,7 @@ export default function AdminCareers() {
             Careers Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage job positions and career opportunities from data/careers.json
+            Manage job positions and career opportunities stored in the database
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -265,6 +331,7 @@ export default function AdminCareers() {
             <RefreshCw className="h-4 w-4" />
             Refresh
           </Button>
+          <Button variant="outline" onClick={() => { setSortByApplications((value) => !value); setCurrentPage(1); }} className="gap-2">{sortByApplications ? "Sort by position" : "Sort by applications"}</Button>
           <Button onClick={handleAddNew} className="gap-2">
             <Plus className="h-4 w-4" />
             Add Position
@@ -279,6 +346,7 @@ export default function AdminCareers() {
           <span>Position saved successfully!</span>
         </div>
       )}
+      {actionError && <div role="alert" className="flex items-center gap-2 rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-800 dark:text-red-300"><span>{actionError}</span><button className="ml-auto" onClick={() => setActionError("")} aria-label="Dismiss error"><X className="h-4 w-4" /></button></div>}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -573,6 +641,18 @@ export default function AdminCareers() {
               </div>
             </div>
 
+            <div className="grid gap-4 sm:grid-cols-3">
+              <label className="text-sm font-medium">Application deadline<input type="date" value={formData.applicationDeadline} onChange={(event) => setFormData({ ...formData, applicationDeadline: event.target.value })} className="mt-1 h-10 w-full rounded-lg border border-input bg-background px-3 text-foreground" /></label>
+              <label className="text-sm font-medium">Number of vacancies<input type="number" min="1" max="999" value={formData.vacancies} onChange={(event) => setFormData({ ...formData, vacancies: Number(event.target.value) })} className="mt-1 h-10 w-full rounded-lg border border-input bg-background px-3 text-foreground" /></label>
+              <label className="text-sm font-medium">Vacancy status<select value={formData.vacancyStatus} onChange={(event) => setFormData({ ...formData, vacancyStatus: event.target.value })} className="mt-1 h-10 w-full rounded-lg border border-input bg-background px-3 text-foreground"><option value="open">Open</option><option value="closed">Closed</option></select></label>
+            </div>
+            <div className="space-y-3">
+              <LocalizedCareerField title="Job description" value={formData.description} onChange={(language, text) => setFormData({ ...formData, description: { ...formData.description, [language]: text } })} />
+              <LocalizedCareerField title="Responsibilities" value={formData.responsibilities} onChange={(language, text) => setFormData({ ...formData, responsibilities: { ...formData.responsibilities, [language]: text } })} />
+              <LocalizedCareerField title="Qualifications" value={formData.qualifications} onChange={(language, text) => setFormData({ ...formData, qualifications: { ...formData.qualifications, [language]: text } })} />
+              <LocalizedCareerField title="Required skills" value={formData.skills} onChange={(language, text) => setFormData({ ...formData, skills: { ...formData.skills, [language]: text } })} />
+            </div>
+
             <div className="flex gap-2 pt-2">
               <Button onClick={handleSave} className="gap-2">
                 <Save className="h-4 w-4" />
@@ -699,6 +779,7 @@ export default function AdminCareers() {
                         <p className="text-sm text-muted-foreground">
                           {item.type?.en || ""}
                         </p>
+                        <Link href={`/admin/job-applications?careerId=${item.id}`} className="mt-1 inline-flex text-xs font-medium text-primary hover:underline">{item.applicationCount || 0} applications · View</Link>
                       </div>
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
@@ -809,7 +890,7 @@ export default function AdminCareers() {
       </Card>
 
       <div className="text-center text-xs text-muted-foreground">
-        Data loaded from data/careers.json • {careersList.length} positions
+        Data loaded from the database • {careersList.length} positions
         total
       </div>
     </div>

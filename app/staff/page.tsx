@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -22,8 +23,6 @@ import {
   UserCheck,
   Star,
 } from "lucide-react";
-import staffData from "@/data/staff.json";
-import staffStatsData from "@/data/staffStats.json";
 
 const iconMap: Record<string, any> = {
   Users: Users,
@@ -90,8 +89,21 @@ export default function Staff() {
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
   // Get data from JSON files
-  const staffMembers = staffData;
-  const stats = staffStatsData;
+  const [staffList, setStaffList] = useState<any[]>([]);
+  const [statsList, setStatsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/staff")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.staff)) setStaffList(data.staff);
+        if (Array.isArray(data?.stats)) setStatsList(data.stats);
+      })
+      .catch(() => {});
+  }, []);
+
+  const staffMembers = staffList;
+  const stats = statsList;
 
   const getDepartmentColor = (department: string) => {
     const colors: Record<string, string> = {

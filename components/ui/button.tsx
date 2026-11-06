@@ -47,39 +47,27 @@ interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant = "default", size = "default", asChild, ...props },
+    {
+      className,
+      variant = "default",
+      size = "default",
+      asChild,
+      children,
+      nativeButton,
+      ...props
+    },
     ref,
   ) => {
-    // asChild: clone the single child element and apply button styles
-    if (asChild && React.isValidElement(props.children)) {
-      const child = props.children as React.ReactElement;
-      const childClassName = cn(
-        buttonVariants({ variant, size, className }),
-        child.props.className,
-      );
-
-      const { children, ...rest } = props;
-
-      return React.cloneElement(child, {
-        ...child.props,
-        ...rest,
-        ref: ref,
-        className: childClassName,
-        "data-slot": "button",
-      });
-    }
-
-    // Default: render ButtonPrimitive, pass children through
-    const { children, ...rest } = props;
-
     return (
       <ButtonPrimitive
         ref={ref}
+        render={asChild ? React.Children.only(children) as React.ReactElement : undefined}
+        nativeButton={asChild ? false : nativeButton}
         data-slot="button"
         className={cn(buttonVariants({ variant, size, className }))}
-        {...rest}
+        {...props}
       >
-        {children}
+        {asChild ? undefined : children}
       </ButtonPrimitive>
     );
   },

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -17,7 +17,6 @@ import {
   Wrench,
   Sparkles,
 } from "lucide-react";
-import productsData from "@/data/products.json";
 
 type Filter = "all" | "materials";
 
@@ -107,7 +106,18 @@ export default function Products() {
   };
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
-  const products = productsData;
+  const [productsList, setProductsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setProductsList(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const products = productsList;
 
   // Safe category label lookup — falls back to "materials" only if key truly missing
   const categoryLabel = (category: string) => {

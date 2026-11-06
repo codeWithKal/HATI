@@ -1,20 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Edit2, Trash2, Plus } from 'lucide-react'
 
 export default function AdminTenders() {
-  const [tenderList, setTenderList] = useState([
-    {
-      id: '1',
-      title: { en: 'Construction of Office Building', am: 'ሥራ ህንጻ ግንባታ', om: 'Ijaarsa Manee Hojii' },
-      budget: 5000000,
-      deadline: '2024-02-28',
-      status: 'open',
-    },
-  ])
+  const [tenderList, setTenderList] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -23,6 +16,24 @@ export default function AdminTenders() {
     deadline: new Date().toISOString().split('T')[0],
     status: 'open',
   })
+
+  const loadTenders = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/tenders')
+      const data = await res.json()
+      setTenderList(Array.isArray(data.tenders) ? data.tenders : [])
+    } catch (err) {
+      console.error('Error loading tenders:', err)
+      setTenderList([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadTenders()
+  }, [])
 
   const handleAddNew = () => {
     setEditingId(null)
@@ -40,38 +51,52 @@ export default function AdminTenders() {
     setFormData({
       title: tender.title,
       budget: tender.budget,
-      deadline: tender.deadline,
+      deadline: tender.deadline || new Date().toISOString().split('T')[0],
       status: tender.status,
     })
     setShowForm(true)
   }
 
-  const handleDelete = (id: string) => {
-    setTenderList(tenderList.filter((t) => t.id !== id))
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this tender?')) {
+      try {
+        await fetch(`/api/tenders/${id}`, { method: 'DELETE' })
+        loadTenders()
+      } catch (err) {
+        console.error('Error deleting tender:', err)
+      }
+    }
   }
 
-  const handleSave = () => {
-    if (editingId) {
-      setTenderList(
-        tenderList.map((t) =>
-          t.id === editingId
-            ? { ...t, title: formData.title, budget: formData.budget, deadline: formData.deadline, status: formData.status }
-            : t
-        )
-      )
-    } else {
-      setTenderList([
-        ...tenderList,
-        {
-          id: Date.now().toString(),
-          title: formData.title,
-          budget: formData.budget,
-          deadline: formData.deadline,
-          status: formData.status,
-        },
-      ])
+  const handleSave = async () => {
+    const payload = {
+      id: editingId || undefined,
+      title: formData.title,
+      budget: formData.budget,
+      deadline: formData.deadline,
+      status: formData.status,
+      isActive: true,
     }
-    setShowForm(false)
+
+    try {
+      if (editingId) {
+        await fetch(`/api/tenders/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+      } else {
+        await fetch('/api/tenders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+      }
+      await loadTenders()
+      setShowForm(false)
+    } catch (err) {
+      console.error('Error saving tender:', err)
+    }
   }
 
   const formatCurrency = (amount: number) => {

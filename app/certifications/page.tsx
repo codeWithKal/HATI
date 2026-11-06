@@ -1,13 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Image from "next/image";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Badge } from "@/components/ui/badge";
 import { Award, Calendar, Building2, X, Download, Trophy } from "lucide-react";
-import certificationsData from "@/data/certifications.json";
 
 type Localized = { en: string; am?: string; om?: string };
 
@@ -79,7 +78,18 @@ export default function CertificationsPage() {
   const l = (language as "en" | "am" | "om") || "en";
   const tv = (obj?: Localized) => obj?.[l] ?? obj?.en ?? "";
 
-  const items = certificationsData as Certification[];
+  const [certsList, setCertsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/certifications")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setCertsList(data);
+      })
+      .catch(() => {});
+  }, []);
+
+  const items = certsList as Certification[];
 
   // Pull out the trophy item as the featured one
   const { featured, rest } = useMemo(() => {

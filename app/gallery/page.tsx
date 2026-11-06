@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -13,8 +14,6 @@ import {
   Calendar,
   LayoutGrid,
 } from "lucide-react";
-import galleryData from "@/data/gallery.json";
-import galleryStatsData from "@/data/galleryStats.json";
 
 const iconMap: Record<string, any> = {
   Images: Images,
@@ -75,8 +74,21 @@ export default function Gallery() {
   // Safe translation getter — returns "" if obj is undefined/null
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
-  const galleryItems = galleryData;
-  const stats = galleryStatsData;
+  const [galleryList, setGalleryList] = useState<any[]>([]);
+  const [statsList, setStatsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/gallery")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.gallery)) setGalleryList(data.gallery);
+        if (Array.isArray(data?.stats)) setStatsList(data.stats);
+      })
+      .catch(() => {});
+  }, []);
+
+  const galleryItems = galleryList;
+  const stats = statsList;
 
   return (
     <>

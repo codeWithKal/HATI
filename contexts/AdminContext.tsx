@@ -1,19 +1,23 @@
 'use client'
 
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'
 
 interface AdminUser {
   id: string
   email: string
   name: string
-  role: 'admin' | 'editor'
+  role: 'super_admin' | 'admin' | 'editor'
+  profileImage: string | null
+  permissions: string[]
+  authVersion: number
 }
 
 interface AdminContextType {
   user: AdminUser | null
   isLoading: boolean
   login: (email: string, password: string) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
+  refresh: () => Promise<void>
   isAuthenticated: boolean
 }
 
@@ -23,41 +27,38 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AdminUser | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    // Check for existing session
-    const stored = localStorage.getItem('admin_user')
-    if (stored) {
-      try {
-        setUser(JSON.parse(stored))
-      } catch (err) {
-        localStorage.removeItem('admin_user')
-      }
-    }
-    setIsLoading(false)
+  const refresh = useCallback(async () => {
+    const response = await fetch('/api/auth/session', { cache: 'no-store' })
+    const data = await response.json()
+    setUser(data.user || null)
   }, [])
+
+  useEffect(() => {
+    refresh().catch(() => setUser(null)).finally(() => setIsLoading(false))
+  }, [refresh])
 
   const login = async (email: string, password: string) => {
     setIsLoading(true)
-    // Simulate API call - in production, this would verify credentials
-    // For demo purposes, allow specific test credentials
-    if (email === 'admin@hati.com' && password === 'demo123') {
-      const adminUser: AdminUser = {
-        id: '1',
-        email,
-        name: 'Admin User',
-        role: 'admin',
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.error || 'Invalid credentials')
       }
+      const adminUser: AdminUser = data.user
       setUser(adminUser)
-      localStorage.setItem('admin_user', JSON.stringify(adminUser))
-    } else {
-      throw new Error('Invalid credentials')
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await fetch('/api/auth/logout', { method: 'POST' })
     setUser(null)
-    localStorage.removeItem('admin_user')
   }
 
   return (
@@ -67,6 +68,7 @@ export function AdminProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         login,
         logout,
+        refresh,
         isAuthenticated: !!user,
       }}
     >

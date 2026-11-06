@@ -25,7 +25,6 @@ import {
   MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
-import contactInfoData from "@/data/contactInfo.json";
 
 export default function AdminContacts() {
   const [contactsList, setContactsList] = useState<any[]>([]);
@@ -48,25 +47,12 @@ export default function AdminContacts() {
     isActive: true,
   });
 
-  useEffect(() => {
-    loadContactsData();
-  }, []);
-
-  const loadContactsData = () => {
+  const loadContactsData = async () => {
     setLoading(true);
     try {
-      let items = contactInfoData;
-      if (
-        contactInfoData &&
-        typeof contactInfoData === "object" &&
-        !Array.isArray(contactInfoData)
-      ) {
-        items = (contactInfoData as any).contacts || [];
-      }
-      if (!Array.isArray(items)) {
-        items = [];
-      }
-      setContactsList(items);
+      const res = await fetch("/api/contacts");
+      const data = await res.json();
+      setContactsList(Array.isArray(data.contacts) ? data.contacts : []);
     } catch (error) {
       console.error("Error loading contacts:", error);
       setContactsList([]);
@@ -74,6 +60,10 @@ export default function AdminContacts() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadContactsData();
+  }, []);
 
   const types = [
     "all",
@@ -140,48 +130,66 @@ export default function AdminContacts() {
     setShowForm(true);
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this contact?")) {
-      setContactsList(contactsList.filter((c) => c.id !== id));
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await fetch(`/api/contacts/${id}`, { method: "DELETE" });
+        loadContactsData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting contact:", error);
+      }
     }
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedItems.length === 0) return;
     if (
       confirm(
         `Are you sure you want to delete ${selectedItems.length} contacts?`,
       )
     ) {
-      setContactsList(
-        contactsList.filter((c) => !selectedItems.includes(c.id)),
-      );
-      setSelectedItems([]);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await Promise.all(
+          selectedItems.map((id) =>
+            fetch(`/api/contacts/${id}`, { method: "DELETE" })
+          )
+        );
+        setSelectedItems([]);
+        loadContactsData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting contacts:", error);
+      }
     }
   };
 
-  const handleToggleStatus = (id: string) => {
-    setContactsList(
-      contactsList.map((c) =>
-        c.id === id
-          ? { ...c, isActive: c.isActive === false ? true : false }
-          : c,
-      ),
-    );
+  const handleToggleStatus = async (id: string) => {
+    const c = contactsList.find((item) => item.id === id);
+    if (!c) return;
+    const updated = { ...c, isActive: !c.isActive };
+    try {
+      await fetch(`/api/contacts/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      loadContactsData();
+    } catch (error) {
+      console.error("Error toggling contact status:", error);
+    }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.title.en || !formData.details.en) {
       alert("Please fill in all required fields");
       return;
     }
 
-    const newItem = {
-      id: editingId || Date.now().toString(),
+    const itemData = {
+      id: editingId || undefined,
       type: formData.type,
       icon: formData.icon,
       title: formData.title,
@@ -191,18 +199,29 @@ export default function AdminContacts() {
       isActive: formData.isActive,
     };
 
-    if (editingId) {
-      setContactsList(
-        contactsList.map((c) => (c.id === editingId ? newItem : c)),
-      );
-    } else {
-      setContactsList([...contactsList, newItem]);
-    }
+    try {
+      if (editingId) {
+        await fetch(`/api/contacts/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+      } else {
+        await fetch("/api/contacts", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(itemData),
+        });
+      }
 
-    setShowForm(false);
-    setEditingId(null);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+      await loadContactsData();
+      setShowForm(false);
+      setEditingId(null);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error saving contact:", error);
+    }
   };
 
   const getTypeIcon = (type: string) => {
@@ -246,7 +265,7 @@ export default function AdminContacts() {
             Contact Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage contact information from data/contactInfo.json
+            Manage contact information stored in the database
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -779,7 +798,7 @@ export default function AdminContacts() {
       </Card>
 
       <div className="text-center text-xs text-muted-foreground">
-        Data loaded from data/contactInfo.json • {contactsList.length} contacts
+        Data loaded from the database • {contactsList.length} contacts
         total
       </div>
     </div>

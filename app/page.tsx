@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -20,11 +21,6 @@ import {
   HardHat,
 } from "lucide-react";
 import { HeroSection } from "@/components/home/HeroSection";
-import homeStats from "@/data/homeStats.json";
-import homeServices from "@/data/products.json";
-import homeWhyChoose from "@/data/homeWhyChoose.json";
-import homeCta from "@/data/homeCta.json";
-import homeLearnMore from "@/data/homeLearnMore.json";
 
 const iconMap: Record<string, any> = {
   Building2: Building2,
@@ -41,14 +37,30 @@ const iconMap: Record<string, any> = {
 
 export default function Home() {
   const { language } = useLanguage();
+  const [homeData, setHomeData] = useState<any>(null);
+  const [productsList, setProductsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/home")
+      .then((r) => r.json())
+      .then((d) => setHomeData(d))
+      .catch(() => {});
+
+    fetch("/api/products")
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d)) setProductsList(d);
+      })
+      .catch(() => {});
+  }, []);
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 
-  const stats = homeStats;
-  const services = homeServices;
-  const whyChoose = homeWhyChoose;
-  const cta = homeCta[0];
-  const learnMore = homeLearnMore[0];
+  const stats = homeData?.stats || [];
+  const services = productsList;
+  const whyChoose = homeData?.whyChoose || [];
+  const cta = homeData?.cta;
+  const learnMore = homeData?.learnMore;
 
   return (
     <>
@@ -61,7 +73,7 @@ export default function Home() {
         <section className="py-12 px-4 border-y bg-secondary/5">
           <div className="container mx-auto max-w-6xl">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-              {stats.map((stat) => (
+              {stats.map((stat: any) => (
                 <div key={stat.id} className="text-center group">
                   <div className="text-3xl md:text-4xl font-bold text-primary mb-1 group-hover:scale-110 transition-transform duration-300">
                     {stat.value}
@@ -123,7 +135,7 @@ export default function Home() {
                         {tValue(service.description)}
                       </p>
                       <div className="mt-4 flex items-center justify-center gap-1 text-sm text-primary">
-                        <span>{tValue(learnMore.text)}</span>
+                        <span>{tValue(learnMore?.text)}</span>
                         <ArrowRight className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" />
                       </div>
                     </Card>
@@ -161,7 +173,7 @@ export default function Home() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {whyChoose.map((item) => {
+              {whyChoose.map((item: any) => {
                 const Icon = iconMap[item.icon] || Award;
                 return (
                   <div
@@ -192,15 +204,15 @@ export default function Home() {
           <div className="container relative z-10 mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Users className="h-4 w-4" />
-              <span>{tValue(cta.badge)}</span>
+              <span>{tValue(cta?.badge)}</span>
             </div>
 
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              {tValue(cta.title)}
+              {tValue(cta?.title)}
             </h2>
 
             <p className="text-lg md:text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              {tValue(cta.description)}
+              {tValue(cta?.description)}
             </p>
 
             <div className="flex justify-center">
@@ -212,7 +224,7 @@ export default function Home() {
                 className="gap-2 shadow-lg shadow-black/20"
               >
                 <Link href="/contact">
-                  {tValue(cta.button)}
+                  {tValue(cta?.button)}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>

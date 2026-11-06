@@ -47,35 +47,28 @@ export default function AdminNews() {
     author: "",
     date: new Date().toISOString().split("T")[0],
     category: "company",
-    image: "📰",
+    image: "",
     readTime: "3 min read",
     isActive: true,
     featured: false,
   });
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState("");
+  const [imageRemoved, setImageRemoved] = useState(false);
 
   // Load news data
   useEffect(() => {
     loadNewsData();
   }, []);
 
-  const loadNewsData = () => {
+  const loadNewsData = async () => {
     setLoading(true);
     try {
-      let articles = newsData;
-      // Handle both array and object formats
-      if (
-        newsData &&
-        typeof newsData === "object" &&
-        !Array.isArray(newsData)
-      ) {
-        articles = (newsData as any).news || (newsData as any).articles || [];
-      }
-      if (!Array.isArray(articles)) {
-        articles = [];
-      }
-      setNewsList(articles);
+      const res = await fetch("/api/news");
+      const articles = await res.json();
+      setNewsList(Array.isArray(articles) ? articles : []);
     } catch (error) {
       console.error("Error loading news:", error);
       setNewsList([]);
@@ -142,11 +135,12 @@ export default function AdminNews() {
       author: "",
       date: new Date().toISOString().split("T")[0],
       category: "company",
-      image: "📰",
+      image: "",
       readTime: "3 min read",
       isActive: true,
       featured: false,
     });
+    setImageFile(null); setImagePreview(""); setImageRemoved(false);
     setSaveError("");
     setShowForm(true);
   };
@@ -160,64 +154,90 @@ export default function AdminNews() {
       author: article.author || "",
       date: article.date || new Date().toISOString().split("T")[0],
       category: article.category || "company",
-      image: article.image || "📰",
+      image: article.image || "",
       readTime: article.readTime || "3 min read",
       isActive: article.isActive !== false,
       featured: article.featured || false,
     });
+    setImageFile(null); setImagePreview(article.image || ""); setImageRemoved(false);
     setSaveError("");
     setShowForm(true);
   };
 
   // Handle delete
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this article?")) {
-      setNewsList(newsList.filter((a) => a.id !== id));
-      // Show success message
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await fetch(`/api/news/${id}`, { method: "DELETE" });
+        loadNewsData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting news article:", error);
+      }
     }
   };
 
   // Handle bulk delete
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedArticles.length === 0) return;
     if (
       confirm(
         `Are you sure you want to delete ${selectedArticles.length} articles?`,
       )
     ) {
-      setNewsList(newsList.filter((a) => !selectedArticles.includes(a.id)));
-      setSelectedArticles([]);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await Promise.all(
+          selectedArticles.map((id) =>
+            fetch(`/api/news/${id}`, { method: "DELETE" })
+          )
+        );
+        setSelectedArticles([]);
+        loadNewsData();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (error) {
+        console.error("Error deleting news articles:", error);
+      }
     }
   };
 
   // Handle toggle status
-  const handleToggleStatus = (id: string) => {
-    setNewsList(
-      newsList.map((a) =>
-        a.id === id
-          ? { ...a, isActive: a.isActive === false ? true : false }
-          : a,
-      ),
-    );
+  const handleToggleStatus = async (id: string) => {
+    const article = newsList.find((a) => a.id === id);
+    if (!article) return;
+    const updated = { ...article, isActive: !article.isActive };
+    try {
+      await fetch(`/api/news/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      loadNewsData();
+    } catch (error) {
+      console.error("Error toggling news status:", error);
+    }
   };
 
   // Handle toggle featured
-  const handleToggleFeatured = (id: string) => {
-    setNewsList(
-      newsList.map((a) =>
-        a.id === id
-          ? { ...a, featured: a.featured === true ? false : true }
-          : a,
-      ),
-    );
+  const handleToggleFeatured = async (id: string) => {
+    const article = newsList.find((a) => a.id === id);
+    if (!article) return;
+    const updated = { ...article, featured: !article.featured };
+    try {
+      await fetch(`/api/news/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updated),
+      });
+      loadNewsData();
+    } catch (error) {
+      console.error("Error toggling featured status:", error);
+    }
   };
 
   // Handle save
-  const handleSave = () => {
+  const handleSave = async () => {
     // Validate required fields
     if (!formData.title.en || !formData.excerpt.en || !formData.author) {
       setSaveError(
@@ -226,29 +246,51 @@ export default function AdminNews() {
       return;
     }
 
-    const newArticle = {
-      id: editingId || Date.now().toString(),
+    try {
+    let image = imageRemoved ? "" : (newsList.find((entry) => entry.id === editingId)?.image || "");
+    if (imageFile) {
+      const upload = new FormData(); upload.set("imageFile", imageFile);
+      const response = await fetch("/api/admin/images/news", { method: "POST", body: upload });
+      const result = await response.json(); if (!response.ok) throw new Error(result.error || "Image upload failed."); image = result.image;
+    }
+    const articleData = {
+      id: editingId || undefined,
       title: formData.title,
       excerpt: formData.excerpt,
       author: formData.author,
       date: formData.date,
       category: formData.category,
-      image: formData.image,
+      image,
       readTime: formData.readTime,
       isActive: formData.isActive,
       featured: formData.featured,
     };
 
-    if (editingId) {
-      setNewsList(newsList.map((a) => (a.id === editingId ? newArticle : a)));
-    } else {
-      setNewsList([...newsList, newArticle]);
-    }
+      if (editingId) {
+        const response = await fetch(`/api/news/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(articleData),
+        });
+        if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to save article."); }
+      } else {
+        const response = await fetch("/api/news", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(articleData),
+        });
+        if (!response.ok) { const result = await response.json(); throw new Error(result.error || "Unable to save article."); }
+      }
 
-    setShowForm(false);
-    setEditingId(null);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+      await loadNewsData();
+      setShowForm(false);
+      setEditingId(null);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (error) {
+      console.error("Error saving news article:", error);
+      setSaveError(error instanceof Error ? error.message : "Unable to save article.");
+    }
   };
 
   // Handle refresh
@@ -298,7 +340,7 @@ export default function AdminNews() {
             News Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage your news articles and announcements from data/news.json
+            Manage your news articles and announcements from MySQL Database
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -572,24 +614,9 @@ export default function AdminNews() {
 
             {/* Image, Read Time, Status */}
             <div className="grid md:grid-cols-3 gap-4">
+              <div className="md:col-span-1"><label className="text-sm font-medium mb-1.5 block">Featured image <span className="font-normal text-muted-foreground">JPG, PNG, or WebP · up to 8 MB</span></label><input type="file" accept="image/jpeg,image/png,image/webp" onChange={(e) => { const file = e.target.files?.[0]; if (!file) return; if (!['image/jpeg','image/png','image/webp'].includes(file.type) || file.size > 8 * 1024 * 1024) { setSaveError("Choose a JPG, PNG, or WebP image smaller than 8 MB."); return; } setSaveError(""); setImageFile(file); setImagePreview(URL.createObjectURL(file)); setImageRemoved(false); }} className="w-full text-sm" />{imagePreview && <div className="relative mt-2 h-32 overflow-hidden rounded-lg"><img src={imagePreview} alt="News image preview" className="h-full w-full object-cover" /><button type="button" aria-label="Remove selected image" onClick={() => { setImageFile(null); setImagePreview(""); setImageRemoved(true); }} className="absolute right-2 top-2 rounded-full bg-background/90 p-2"><X size={15} /></button></div>}</div>
               <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  Image Emoji
-                </label>
-                <input
-                  type="text"
-                  placeholder="📰"
-                  value={formData.image}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-              </div>
-              <div>
-                <label className="text-sm font-medium mb-1.5 block">
-                  Read Time
-                </label>
+                <label className="text-sm font-medium mb-1.5 block">Read Time</label>
                 <input
                   type="text"
                   placeholder="3 min read"
@@ -761,7 +788,9 @@ export default function AdminNews() {
                       />
                     </td>
                     <td className="px-6 py-4">
-                      <div>
+                      <div className="flex items-center gap-3">
+                        <div className="grid h-12 w-16 shrink-0 place-items-center overflow-hidden rounded-md bg-muted">{article.image ? <img src={article.image} alt={`${article.title?.en || 'News'} thumbnail`} className="h-full w-full object-cover" /> : <ImageIcon size={18} className="text-muted-foreground" />}</div>
+                        <div className="min-w-0">
                         <p className="font-medium">
                           {article.title?.en || "Untitled"}
                         </p>
@@ -774,6 +803,7 @@ export default function AdminNews() {
                             Featured
                           </Badge>
                         )}
+                      </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
@@ -908,7 +938,7 @@ export default function AdminNews() {
 
       {/* Data Source Info */}
       <div className="text-center text-xs text-muted-foreground">
-        Data loaded from data/news.json • {newsList.length} articles total
+        Data loaded from MySQL Database • {newsList.length} articles total
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,7 +19,6 @@ import {
   Tag,
   Shield,
 } from "lucide-react";
-import productsData from "@/data/products.json";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -28,10 +27,23 @@ export default function ProductDetailPage() {
 
   const id = params?.id as string;
 
-  const product = useMemo(
-    () => productsData.find((p: any) => String(p.id) === String(id)),
-    [id],
-  );
+  const [productData, setProductData] = useState<any>(null);
+  const [productLoaded, setProductLoaded] = useState(false);
+
+  useEffect(() => {
+    if (!id) return;
+    let cancelled = false;
+    fetch(`/api/products/${id}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => {
+        if (!cancelled && d && !d.error) setProductData(d);
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setProductLoaded(true); });
+    return () => { cancelled = true; };
+  }, [id]);
+
+  const product = productData;
 
   // Build image list from product.images, falling back to product.image
   const productImages: string[] = useMemo(() => {
@@ -43,9 +55,10 @@ export default function ProductDetailPage() {
   }, [product]);
 
   // Call notFound() AFTER all hooks so hook order stays consistent
-  if (!product) {
+  if (!product && productLoaded) {
     notFound();
   }
+  if (!product) return null;
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
 

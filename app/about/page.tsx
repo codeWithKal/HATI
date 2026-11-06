@@ -1,11 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import homeStats from "@/data/homeStats.json";
 import {
   Building2,
   Target,
@@ -112,7 +112,18 @@ export default function About() {
   };
 
   const tValue = (obj: any) => obj[language] || obj["en"] || "";
-  const stats = homeStats;
+  const [statsData, setStatsData] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/home")
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d?.stats)) setStatsData(d.stats);
+      })
+      .catch(() => {});
+  }, []);
+
+  const stats = statsData;
 
   return (
     <>

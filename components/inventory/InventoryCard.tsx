@@ -8,21 +8,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 
 interface InventoryItem {
   id: number;
-  materialName: {
-    en: string;
-    am: string;
-    om: string;
-  };
-  price_in_m3: {
-    en: string;
-    am: string;
-    om: string;
-  };
-  stokeRemaining_in_m3: {
-    en: string;
-    am: string;
-    om: string;
-  };
+  materialName: { en: string; am: string; om: string };
+  price_in_m3: { en: string; am: string; om: string };
+  stokeRemaining_in_m3: { en: string; am: string; om: string };
 }
 
 interface InventoryCardProps {
@@ -38,233 +26,51 @@ interface InventoryCardProps {
 }
 
 export function InventoryCard({
-  item,
-  truckCapacity = 16.74,
-  showTruckEstimate = true,
-  showPrice = true,
-  className = "",
-  transparent = false,
-  onEdit,
-  onDelete,
-  showActions = false,
+  item, truckCapacity = 16.74, showTruckEstimate = true, showPrice = true,
+  className = "", onEdit, onDelete, showActions = false,
 }: InventoryCardProps) {
   const { language } = useLanguage();
-
-  const tValue = (obj: any) => obj[language] || obj["en"] || "";
-
-  // Parse numeric values from formatted strings
-  const getStockValue = (str: string) => {
-    return parseFloat(str.replace(/[^0-9.]/g, ""));
-  };
-
-  const getPriceValue = (str: string) => {
-    return parseFloat(str.replace(/[^0-9.]/g, ""));
-  };
-
-  const stockValue = getStockValue(tValue(item.stokeRemaining_in_m3));
-  const priceValue = getPriceValue(tValue(item.price_in_m3));
-
-  // Calculate estimated trucks (rounded)
-  const estimatedTrucks = Math.round(stockValue / truckCapacity);
-
-  // Calculate total value = truck capacity * price per m³ (estimated payment per vehicle)
-  const totalValue = truckCapacity * priceValue;
-
-  // Format currency for total
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "ETB",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  // Determine stock level status
-  const getStockStatus = () => {
-    if (stockValue > 400)
-      return {
-        label: {
-          en: "High",
-          am: "ከፍተኛ",
-          om: "Ol",
-        },
-        color: "bg-green-500",
-      };
-    if (stockValue > 200)
-      return {
-        label: {
-          en: "Medium",
-          am: "መካከለኛ",
-          om: "Giddugaleessa",
-        },
-        color: "bg-yellow-500",
-      };
-    return {
-      label: {
-        en: "Low",
-        am: "ዝቅተኛ",
-        om: "Gadi",
-      },
-      color: "bg-red-500",
-    };
-  };
-
-  const stockStatus = getStockStatus();
-
-  // Determine color scheme based on transparent mode
-  const isTransparent = transparent;
-
-  // Text color classes - either white or black
-  const textWhite = "text-white";
-  const textPrimary = "text-primary";
+  const value = (localized: { en: string; am: string; om: string }) => localized?.[language] || localized?.en || "";
+  const numberValue = (raw: string) => Number.parseFloat(String(raw ?? "").replace(/[^0-9.]/g, "")) || 0;
+  const stock = numberValue(value(item.stokeRemaining_in_m3));
+  const price = numberValue(value(item.price_in_m3));
+  const trucks = Math.round(stock / truckCapacity);
+  const formatCurrency = (amount: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "ETB", maximumFractionDigits: 0 }).format(amount);
+  const level = stock > 400
+    ? { label: { en: "High", am: "ከፍተኛ", om: "Ol" }, style: "border-green-600/30 bg-green-500/10 text-green-800 dark:text-green-300" }
+    : stock > 200
+      ? { label: { en: "Medium", am: "መካከለኛ", om: "Giddugaleessa" }, style: "border-amber-600/30 bg-amber-500/10 text-amber-800 dark:text-amber-300" }
+      : { label: { en: "Low", am: "ዝቅተኛ", om: "Gadi" }, style: "border-red-600/30 bg-red-500/10 text-red-800 dark:text-red-300" };
 
   return (
-    <Card
-      className={`p-6 transition-all duration-300 ${
-        isTransparent
-          ? "bg-white backdrop-blur-sm border-white/30 hover:bg-white"
-          : "bg-white border-border hover:shadow-lg"
-      } ${className}`}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex-1">
-          <h3 className={`font-semibold text-lg text-white${textWhite}`}>
-            {tValue(item.materialName)}
-          </h3>
-          <div className="flex items-center gap-2 mt-1 flex-wrap">
-            <Badge
-              variant="outline"
-              className={`text-xs ${isTransparent ? "border-gray-300 text-white" : "text-white"}`}
-            >
-              ID: {item.id}
-            </Badge>
-            <div className="flex items-center gap-1.5">
-              <span className={`h-2 w-2 rounded-full ${stockStatus.color}`} />
-              <span className={`text-xs ${textWhite}`}>
-                {tValue(stockStatus.label)}
-              </span>
-            </div>
+    <Card className={`border border-border bg-card p-6 text-card-foreground shadow-sm transition-shadow hover:shadow-md ${className}`}>
+      <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-lg font-semibold text-foreground">{value(item.materialName)}</h3>
+          <div className="mt-2 flex items-center gap-2">
+            <Badge variant="outline" className="border-border text-muted-foreground">ID: {item.id}</Badge>
+            <Badge variant="outline" className={level.style}>{value(level.label)}</Badge>
           </div>
         </div>
-        <Package className={`h-5 w-5 ${textWhite}`} />
+        <Package className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1">
-          <p className={`text-sm ${textWhite}`}>
-            {language === "en" && "Stock Remaining"}
-            {language === "am" && "የቀረ ክምችት"}
-            {language === "om" && "Hafuun Kuusa"}
-          </p>
-          <p className={`text-2xl font-bold ${textWhite}`}>
-            {tValue(item.stokeRemaining_in_m3)}
-          </p>
-        </div>
-
-        {showTruckEstimate && (
-          <div className="space-y-1">
-            <p className={`text-sm ${textWhite}`}>
-              {language === "en" && "Estimated Trucks"}
-              {language === "am" && "የሚገመቱ መኪናዎች"}
-              {language === "om" && "Mootoroowwan Tilmaaman"}
-            </p>
-            <div className="flex items-center gap-2">
-              <Truck className={`h-5 w-5 ${textWhite}`} />
-              <p className={`text-2xl font-bold ${textWhite}`}>
-                {estimatedTrucks}
-                <span className={`text-sm font-normal ml-1 ${textWhite}`}>
-                  {language === "en" &&
-                    `truck${estimatedTrucks !== 1 ? "s" : ""}`}
-                  {language === "am" && "መኪና"}
-                  {language === "om" && "mootoro"}
-                </span>
-              </p>
-            </div>
-          </div>
-        )}
+        <div className="space-y-1"><p className="text-sm text-muted-foreground">{language === "am" ? "የቀረ ክምችት" : language === "om" ? "Hafuun Kuusa" : "Stock Remaining"}</p><p className="text-xl font-bold text-foreground">{value(item.stokeRemaining_in_m3)}</p></div>
+        {showTruckEstimate && <div className="space-y-1"><p className="text-sm text-muted-foreground">{language === "am" ? "የሚገመቱ መኪናዎች" : language === "om" ? "Mootoroowwan Tilmaaman" : "Estimated Trucks"}</p><p className="flex items-center gap-2 text-xl font-bold text-foreground"><Truck className="h-5 w-5 text-primary" />{trucks}</p></div>}
       </div>
 
-      {/* Price Information */}
-      {showPrice && (
-        <div
-          className={`grid grid-cols-2 gap-4 mt-4 pt-4 ${isTransparent ? "border-white" : "border-border"} border-t`}
-        >
-          <div className="space-y-1">
-            <p className={`text-sm ${textWhite}`}>
-              {language === "en" && "Price per m³"}
-              {language === "am" && "ዋጋ በአንድ ኪዩቢክ ሜትር"}
-              {language === "om" && "Gatii m³ tokko"}
-            </p>
-            <div className="flex items-center gap-2">
-              <DollarSign className={`h-4 w-4 ${textWhite}`} />
-              <p className={`text-lg font-semibold ${textWhite}`}>
-                {tValue(item.price_in_m3)}
-              </p>
-            </div>
-          </div>
-          <div className="space-y-1">
-            <p className={`text-sm ${textWhite}`}>
-              {language === "en" && "Per Truck Value"}
-              {language === "am" && "የአንድ መኪና ዋጋ"}
-              {language === "om" && "Gatii Mootoro Tokkoo"}
-            </p>
-            <p className={`text-lg font-bold ${textWhite}`}>
-              {formatCurrency(totalValue)}
-            </p>
-          </div>
-        </div>
-      )}
+      {showPrice && <div className="mt-4 grid grid-cols-2 gap-4 border-t border-border pt-4">
+        <div className="space-y-1"><p className="text-sm text-muted-foreground">{language === "am" ? "ዋጋ በአንድ ኪዩቢክ ሜትር" : language === "om" ? "Gatii m³ tokko" : "Price per m³"}</p><p className="flex items-center gap-1 text-base font-semibold text-foreground"><DollarSign className="h-4 w-4 text-primary" />{value(item.price_in_m3)}</p></div>
+        <div className="space-y-1"><p className="text-sm text-muted-foreground">{language === "am" ? "የአንድ መኪና ዋጋ" : language === "om" ? "Gatii Mootoro Tokkoo" : "Per Truck Value"}</p><p className="text-base font-bold text-foreground">{formatCurrency(truckCapacity * price)}</p></div>
+      </div>}
 
-      {/* Progress bar */}
-      <div className="mt-4">
-        <div
-          className={`w-full h-2 ${isTransparent ? "bg-gray-200" : "bg-secondary"} rounded-full overflow-hidden`}
-        >
-          <div
-            className="h-full bg-primary transition-all duration-500"
-            style={{
-              width: `${Math.min((stockValue / 500) * 100, 100)}%`,
-            }}
-          />
-        </div>
-        <div className={`flex justify-between text-xs mt-1 ${textWhite}`}>
-          <span>0 m³</span>
-          <span>500 m³</span>
-        </div>
-      </div>
+      <div className="mt-4"><div className="h-2 w-full overflow-hidden rounded-full bg-muted"><div className="h-full bg-primary transition-all" style={{ width: `${Math.min((stock / 500) * 100, 100)}%` }} /></div><div className="mt-1 flex justify-between text-xs text-muted-foreground"><span>0 m³</span><span>500 m³</span></div></div>
 
-      {/* Action Buttons */}
-      {showActions && (onEdit || onDelete) && (
-        <div className="flex gap-2 mt-4 pt-4 border-t border-white">
-          {onEdit && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1 gap-2"
-              onClick={() => onEdit(item)}
-            >
-              <Edit2 className="h-4 w-4" />
-              {language === "en" && "Edit"}
-              {language === "am" && "አርትዕ"}
-              {language === "om" && "Jijjiiri"}
-            </Button>
-          )}
-          {onDelete && (
-            <Button
-              variant="destructive"
-              size="sm"
-              className="flex-1 gap-2"
-              onClick={() => onDelete(item.id)}
-            >
-              <Trash2 className="h-4 w-4" />
-              {language === "en" && "Delete"}
-              {language === "am" && "ሰርዝ"}
-              {language === "om" && "Haqi"}
-            </Button>
-          )}
-        </div>
-      )}
+      {showActions && (onEdit || onDelete) && <div className="mt-4 flex gap-2 border-t border-border pt-4">
+        {onEdit && <Button variant="outline" size="sm" className="flex-1 gap-2" onClick={() => onEdit(item)}><Edit2 className="h-4 w-4" />{language === "am" ? "አርትዕ" : language === "om" ? "Jijjiiri" : "Edit"}</Button>}
+        {onDelete && <Button variant="destructive" size="sm" className="flex-1 gap-2" onClick={() => onDelete(item.id)}><Trash2 className="h-4 w-4" />{language === "am" ? "ሰርዝ" : language === "om" ? "Haqi" : "Delete"}</Button>}
+      </div>}
     </Card>
   );
 }

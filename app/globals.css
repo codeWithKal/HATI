@@ -6,8 +6,8 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-geist-sans), "Geist Fallback";
-  --font-mono: var(--font-geist-mono), "Geist Mono Fallback";
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -25,6 +25,9 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-information: var(--information);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -65,6 +68,9 @@
   --accent: oklch(0.42 0.08 270);
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
+  --success: #16a34a;
+  --warning: #d97706;
+  --information: #0284c7;
   --border: oklch(0.9 0.01 0);
   --input: oklch(0.95 0.01 0);
   --ring: oklch(0.42 0.08 270);
@@ -173,3 +179,98 @@
     linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
   background-size: 20px 20px;
 }
+
+.admin-shell {
+  --background: #f5f7fa;
+  --foreground: #1e293b;
+  --card: #ffffff;
+  --card-foreground: #1e293b;
+  --popover: #ffffff;
+  --popover-foreground: #1e293b;
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+  --secondary: #eef2f7;
+  --secondary-foreground: #1e293b;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e7efff;
+  --accent-foreground: #1e293b;
+  --destructive: #dc2626;
+  --border: #e2e8f0;
+  --input: #ffffff;
+  --ring: #2563eb;
+  --success: #16a34a;
+  --warning: #d97706;
+  --information: #0284c7;
+  --sidebar: #14243a;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #2563eb;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #223a58;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #30445f;
+  --sidebar-ring: #93c5fd;
+  color: #1e293b;
+  background: #f5f7fa;
+}
+
+.dark .admin-shell {
+  --background: #0f172a;
+  --foreground: #e2e8f0;
+  --card: #172033;
+  --card-foreground: #e2e8f0;
+  --popover: #172033;
+  --popover-foreground: #e2e8f0;
+  --secondary: #263449;
+  --secondary-foreground: #e2e8f0;
+  --muted: #263449;
+  --muted-foreground: #a8b4c5;
+  --accent: #263a57;
+  --accent-foreground: #f8fafc;
+  --border: #334155;
+  --input: #172033;
+  color: #e2e8f0;
+  background: #0f172a;
+}
+
+.admin-shell input:not([type="checkbox"]):not([type="radio"]),
+.admin-shell textarea,
+.admin-shell select {
+  color: var(--foreground);
+  background-color: var(--input);
+  border-color: var(--border);
+}
+
+.admin-shell input::placeholder,
+.admin-shell textarea::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
+.admin-shell table thead {
+  color: var(--muted-foreground);
+  background: var(--muted);
+}
+
+.admin-shell table tbody tr:hover {
+  background: var(--muted);
+}
+
+.admin-shell .text-blue-500 { color: #1d4ed8; }
+.admin-shell .text-green-500, .admin-shell .text-emerald-500 { color: #15803d; }
+.admin-shell .text-purple-500 { color: #6d28d9; }
+.admin-shell .text-orange-500 { color: #c2410c; }
+.admin-shell .text-pink-500 { color: #be185d; }
+.admin-shell .text-indigo-500 { color: #4338ca; }
+.admin-shell .text-rose-500 { color: #be123c; }
+.admin-shell .text-cyan-500 { color: #0e7490; }
+.admin-shell .text-amber-500 { color: #b45309; }
+.dark .admin-shell .text-blue-500 { color: #93c5fd; }
+.dark .admin-shell .text-green-500, .dark .admin-shell .text-emerald-500 { color: #86efac; }
+.dark .admin-shell .text-purple-500 { color: #c4b5fd; }
+.dark .admin-shell .text-orange-500 { color: #fdba74; }
+.dark .admin-shell .text-pink-500 { color: #f9a8d4; }
+.dark .admin-shell .text-indigo-500 { color: #a5b4fc; }
+.dark .admin-shell .text-rose-500 { color: #fda4af; }
+.dark .admin-shell .text-cyan-500 { color: #67e8f9; }
+.dark .admin-shell .text-amber-500 { color: #fcd34d; }

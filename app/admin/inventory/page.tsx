@@ -27,7 +27,7 @@ import {
   LayoutGrid,
   List,
 } from "lucide-react";
-import inventoryData from "@/data/inventory.json";
+import { useEffect } from "react";
 import { InventoryGrid, InventoryTable } from "@/components/inventory";
 
 export default function AdminInventory() {
@@ -39,12 +39,27 @@ export default function AdminInventory() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
-  const [inventoryList, setInventoryList] = useState(inventoryData);
+  const [inventoryList, setInventoryList] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     materialName: { en: "", am: "", om: "" },
     price_in_m3: { en: "", am: "", om: "" },
     stokeRemaining_in_m3: { en: "", am: "", om: "" },
   });
+
+  const loadInventory = async () => {
+    try {
+      const res = await fetch("/api/inventory");
+      const data = await res.json();
+      setInventoryList(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error loading inventory:", err);
+      setInventoryList([]);
+    }
+  };
+
+  useEffect(() => {
+    loadInventory();
+  }, []);
 
   // Calculate totals
   const getStockValue = (str: string) => {
@@ -125,29 +140,41 @@ export default function AdminInventory() {
     setShowForm(true);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: number) => {
     if (confirm("Are you sure you want to delete this inventory item?")) {
-      setInventoryList(inventoryList.filter((item) => item.id !== id));
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await fetch(`/api/inventory/${id}`, { method: "DELETE" });
+        loadInventory();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (err) {
+        console.error("Error deleting inventory item:", err);
+      }
     }
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedItems.length === 0) return;
     if (
       confirm(`Are you sure you want to delete ${selectedItems.length} items?`)
     ) {
-      setInventoryList(
-        inventoryList.filter((item) => !selectedItems.includes(item.id)),
-      );
-      setSelectedItems([]);
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 3000);
+      try {
+        await Promise.all(
+          selectedItems.map((id) =>
+            fetch(`/api/inventory/${id}`, { method: "DELETE" })
+          )
+        );
+        setSelectedItems([]);
+        loadInventory();
+        setSaveSuccess(true);
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } catch (err) {
+        console.error("Error deleting inventory items:", err);
+      }
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (
       !formData.materialName.en ||
       !formData.price_in_m3.en ||
@@ -157,25 +184,36 @@ export default function AdminInventory() {
       return;
     }
 
-    const newItem = {
-      id: editingId || Date.now(),
+    const payload = {
+      id: editingId || undefined,
       materialName: formData.materialName,
       price_in_m3: formData.price_in_m3,
       stokeRemaining_in_m3: formData.stokeRemaining_in_m3,
     };
 
-    if (editingId) {
-      setInventoryList(
-        inventoryList.map((item) => (item.id === editingId ? newItem : item)),
-      );
-    } else {
-      setInventoryList([...inventoryList, newItem]);
-    }
+    try {
+      if (editingId) {
+        await fetch(`/api/inventory/${editingId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        await fetch("/api/inventory", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
 
-    setShowForm(false);
-    setEditingId(null);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+      await loadInventory();
+      setShowForm(false);
+      setEditingId(null);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err) {
+      console.error("Error saving inventory item:", err);
+    }
   };
 
   return (
@@ -188,7 +226,7 @@ export default function AdminInventory() {
             Inventory Management
           </h1>
           <p className="text-muted-foreground mt-1">
-            Manage materials inventory from data/inventory.json
+            Manage materials inventory stored in the database
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-3">
@@ -212,7 +250,7 @@ export default function AdminInventory() {
               Table
             </Button>
           </div>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button variant="outline" size="sm" className="gap-2" onClick={() => void loadInventory()}>
             <RefreshCw className="h-4 w-4" />
             Refresh
           </Button>
@@ -586,8 +624,8 @@ export default function AdminInventory() {
         </div>
       )}
 
-      <div className="text-center text-xs text-smuted-foreground">
-        Data loaded from data/inventory.json • {inventoryList.length} items
+      <div className="text-center text-xs text-muted-foreground">
+        Data loaded from MySQL Database • {inventoryList.length} items
         total
       </div>
     </div>

@@ -25,8 +25,6 @@ import {
   Calendar,
 } from "lucide-react";
 import Link from "next/link";
-import productsData from "@/data/products.json";
-
 export default function AdminProducts() {
   const { user } = useAdmin();
   const [productList, setProductList] = useState<any[]>([]);
@@ -36,34 +34,25 @@ export default function AdminProducts() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  const [actionError, setActionError] = useState("");
+  const [actionNotice, setActionNotice] = useState("");
 
-  // Load products with proper error handling
-  useEffect(() => {
+  const loadProducts = async () => {
+    setLoading(true);
     try {
-      // Handle both array and object formats
-      let products = productsData;
-      if (
-        productsData &&
-        typeof productsData === "object" &&
-        !Array.isArray(productsData)
-      ) {
-        // If it's an object with a products property
-        products = (productsData as any).products || [];
-      }
-
-      // Ensure we have an array
-      if (!Array.isArray(products)) {
-        console.warn("Products data is not an array:", products);
-        products = [];
-      }
-
-      setProductList(products);
+      const res = await fetch("/api/products");
+      const data = await res.json();
+      setProductList(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error("Error loading products:", error);
       setProductList([]);
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    loadProducts();
   }, []);
 
   // Get unique categories
@@ -110,49 +99,50 @@ export default function AdminProducts() {
   };
 
   // Handle delete
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this product?")) {
-      setProductList(productList.filter((p) => p.id !== id));
+      setActionError(""); setActionNotice("");
+      try {
+        const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "Unable to delete product.");
+        setProductList(productList.filter((p) => p.id !== id));
+        setActionNotice("Product deleted successfully.");
+      } catch (error) {
+        console.error("Error deleting product:", error);
+        setActionError(error instanceof Error ? error.message : "Unable to delete product.");
+      }
     }
   };
 
   // Handle bulk delete
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (selectedProducts.length === 0) return;
     if (
       confirm(
         `Are you sure you want to delete ${selectedProducts.length} products?`,
       )
     ) {
-      setProductList(
-        productList.filter((p) => !selectedProducts.includes(p.id)),
-      );
-      setSelectedProducts([]);
+      setActionError(""); setActionNotice("");
+      try {
+        const responses = await Promise.all(selectedProducts.map((id) => fetch(`/api/products/${id}`, { method: "DELETE" })));
+        const failed = responses.find((response) => !response.ok);
+        if (failed) { const result = await failed.json(); throw new Error(result.error || "Some products could not be deleted."); }
+        setProductList(
+          productList.filter((p) => !selectedProducts.includes(p.id)),
+        );
+        setActionNotice(`${selectedProducts.length} products deleted successfully.`);
+        setSelectedProducts([]);
+      } catch (error) {
+        console.error("Error deleting products:", error);
+        setActionError(error instanceof Error ? error.message : "Unable to delete selected products.");
+      }
     }
   };
 
   // Handle refresh
   const handleRefresh = () => {
-    setLoading(true);
-    // Reload data
-    try {
-      let products = productsData;
-      if (
-        productsData &&
-        typeof productsData === "object" &&
-        !Array.isArray(productsData)
-      ) {
-        products = (productsData as any).products || [];
-      }
-      if (!Array.isArray(products)) {
-        products = [];
-      }
-      setProductList(products);
-    } catch (error) {
-      console.error("Error refreshing products:", error);
-    } finally {
-      setLoading(false);
-    }
+    loadProducts();
   };
 
   if (loading) {
@@ -163,6 +153,7 @@ export default function AdminProducts() {
           <p className="mt-4 text-muted-foreground">Loading products...</p>
         </div>
       </div>
+
     );
   }
 
@@ -197,6 +188,9 @@ export default function AdminProducts() {
           </Link>
         </div>
       </div>
+
+      {actionError && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">{actionError}</p>}
+      {actionNotice && <p role="status" className="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800 dark:border-green-900 dark:bg-green-950/40 dark:text-green-300">{actionNotice}</p>}
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -370,15 +364,7 @@ export default function AdminProducts() {
                       </Badge>
                     </td>
                     <td className="px-6 py-4 hidden md:table-cell">
-                      {product.image ? (
-                        <div className="h-12 w-12 rounded-lg bg-secondary/50 flex items-center justify-center overflow-hidden">
-                          <ImageIcon className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                      ) : (
-                        <div className="h-12 w-12 rounded-lg bg-secondary/20 flex items-center justify-center">
-                          <ImageIcon className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                      )}
+                      <div className="grid h-12 w-12 place-items-center overflow-hidden rounded-lg bg-secondary/50">{product.image ? <img src={product.image} alt={`${product.name?.en || 'Product'} thumbnail`} className="h-full w-full object-cover" /> : <ImageIcon className="h-4 w-4 text-muted-foreground" />}</div>
                     </td>
                     <td className="px-6 py-4 hidden lg:table-cell text-sm text-muted-foreground">
                       <div className="flex items-center gap-1">

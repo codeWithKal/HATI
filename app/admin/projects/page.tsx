@@ -1,20 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Edit2, Trash2, Plus } from 'lucide-react'
 
 export default function AdminProjects() {
-  const [projectList, setProjectList] = useState([
-    {
-      id: '1',
-      title: { en: 'Addis Ababa Business Complex', am: 'አዲስ አበባ ቢዝነስ ውስጃ', om: 'Addis Ababa Daldalaa Walguda' },
-      location: { en: 'Addis Ababa, Ethiopia', am: 'አዲስ አበባ, ኢትዮጵያ', om: 'Addis Ababa, Itoophiyaa' },
-      status: 'ongoing',
-      date: '2022-01-15',
-    },
-  ])
+  const [projectList, setProjectList] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [formData, setFormData] = useState({
@@ -23,6 +16,24 @@ export default function AdminProjects() {
     status: 'ongoing',
     date: new Date().toISOString().split('T')[0],
   })
+
+  const loadProjects = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/projects')
+      const data = await res.json()
+      setProjectList(Array.isArray(data.projects) ? data.projects : [])
+    } catch (err) {
+      console.error('Error loading projects:', err)
+      setProjectList([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadProjects()
+  }, [])
 
   const handleAddNew = () => {
     setEditingId(null)
@@ -41,37 +52,51 @@ export default function AdminProjects() {
       title: project.title,
       location: project.location,
       status: project.status,
-      date: project.date,
+      date: project.startDate || project.date || new Date().toISOString().split('T')[0],
     })
     setShowForm(true)
   }
 
-  const handleDelete = (id: string) => {
-    setProjectList(projectList.filter((p) => p.id !== id))
+  const handleDelete = async (id: string) => {
+    if (confirm('Are you sure you want to delete this project?')) {
+      try {
+        await fetch(`/api/projects/${id}`, { method: 'DELETE' })
+        loadProjects()
+      } catch (err) {
+        console.error('Error deleting project:', err)
+      }
+    }
   }
 
-  const handleSave = () => {
-    if (editingId) {
-      setProjectList(
-        projectList.map((p) =>
-          p.id === editingId
-            ? { ...p, title: formData.title, location: formData.location, status: formData.status, date: formData.date }
-            : p
-        )
-      )
-    } else {
-      setProjectList([
-        ...projectList,
-        {
-          id: Date.now().toString(),
-          title: formData.title,
-          location: formData.location,
-          status: formData.status,
-          date: formData.date,
-        },
-      ])
+  const handleSave = async () => {
+    const payload = {
+      id: editingId || undefined,
+      title: formData.title,
+      location: formData.location,
+      status: formData.status,
+      startDate: formData.date,
+      isActive: true,
     }
-    setShowForm(false)
+
+    try {
+      if (editingId) {
+        await fetch(`/api/projects/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+      } else {
+        await fetch('/api/projects', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+      }
+      await loadProjects()
+      setShowForm(false)
+    } catch (err) {
+      console.error('Error saving project:', err)
+    }
   }
 
   return (

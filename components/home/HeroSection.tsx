@@ -6,9 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, HardHat } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import homeHero from "@/data/homeHero.json";
 import { InventoryCard } from "@/components/inventory/InventoryCard";
-import inventoryData from "@/data/inventory.json";
 
 const BACKGROUND_IMAGES = [
   "/images/bg/IMG_20201130_102959.jpg",
@@ -32,8 +30,26 @@ export function HeroSection() {
   const { language } = useLanguage();
   const [index, setIndex] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [heroData, setHeroData] = useState<any>(null);
+  const [inventoryList, setInventoryList] = useState<any[]>([]);
 
   const tValue = (obj: any) => obj?.[language] ?? obj?.["en"] ?? "";
+
+  useEffect(() => {
+    fetch("/api/home")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.hero) setHeroData(data.hero);
+      })
+      .catch(() => {});
+
+    fetch("/api/inventory")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) setInventoryList(data);
+      })
+      .catch(() => {});
+  }, []);
 
   // Detect prefers-reduced-motion
   useEffect(() => {
@@ -79,7 +95,8 @@ export function HeroSection() {
     };
   }, [reduceMotion]);
 
-  const hero = homeHero[0];
+  const hero = heroData;
+  const items = inventoryList;
 
   // Only render current + next image for a lightweight crossfade
   const visibleIndices = [index, (index + 1) % BACKGROUND_IMAGES.length];
@@ -119,17 +136,17 @@ export function HeroSection() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-white/90 border border-white/20">
           <HardHat className="h-4 w-4" />
-          <span>{tValue(hero.badge)}</span>
+          <span>{tValue(hero?.badge)}</span>
         </div>
 
         {/* Title */}
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight text-balance text-white drop-shadow-lg max-w-4xl mx-auto">
-          {tValue(hero.title)}
+          {tValue(hero?.title)}
         </h1>
 
         {/* Subtitle */}
         <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto text-balance drop-shadow-md">
-          {tValue(hero.subtitle)}
+          {tValue(hero?.subtitle)}
         </p>
 
         {/* CTA Buttons */}
@@ -141,7 +158,7 @@ export function HeroSection() {
             className="gap-2 shadow-lg shadow-primary/20"
           >
             <Link href="/contact">
-              {tValue(hero.cta)}
+              {tValue(hero?.cta)}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -153,7 +170,7 @@ export function HeroSection() {
             className="bg-white/10 backdrop-blur-sm hover:bg-white/20 border-white/20 text-white hover:text-white"
           >
             <Link href="/products">
-              {tValue(hero.secondaryCta)}
+              {tValue(hero?.secondaryCta)}
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -162,7 +179,7 @@ export function HeroSection() {
         {/* Inventory Cards - Display below CTAs */}
         <div className="w-full pt-12 border-t border-white/10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {inventoryData.map((item) => (
+            {items.map((item) => (
               <InventoryCard
                 key={item.id}
                 item={item}

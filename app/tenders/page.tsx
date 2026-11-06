@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -7,8 +8,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, DollarSign } from "lucide-react";
-import tendersData from "@/data/tenders.json";
-import tenderInfoData from "@/data/tenderInfo.json";
 
 export default function Tenders() {
   const { language } = useLanguage();
@@ -29,9 +28,21 @@ export default function Tenders() {
 
   const tValue = (obj: any) => obj[language] || obj["en"] || "";
 
-  // Get data from JSON files
-  const tenders = tendersData;
-  const info = tenderInfoData;
+  const [tendersList, setTendersList] = useState<any[]>([]);
+  const [infoList, setInfoList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/tenders")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.tenders)) setTendersList(data.tenders);
+        if (Array.isArray(data?.tenderInfo)) setInfoList(data.tenderInfo);
+      })
+      .catch(() => {});
+  }, []);
+
+  const tenders = tendersList;
+  const info = infoList;
 
   const getStatusColor = (status: string) => {
     switch (status) {

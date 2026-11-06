@@ -14,9 +14,8 @@ import {
   Shield,
   AlertCircle,
   CheckCircle2,
-  Building2,
+  Clock,
   ArrowRight,
-  Key,
   User,
   Fingerprint,
   LogIn,
@@ -56,8 +55,15 @@ export default function AdminLogin() {
     }
   }, [isLocked, lockTimer]);
 
+  // Redirect authenticated users AFTER mount (fixes Router-during-render warning)
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/admin/dashboard");
+    }
+  }, [isAuthenticated, router]);
+
+  // Pure render-time guard — no side effects, safe to return early
   if (isAuthenticated) {
-    router.push("/admin/dashboard");
     return null;
   }
 
@@ -82,7 +88,7 @@ export default function AdminLogin() {
         localStorage.removeItem("adminEmail");
       }
 
-      router.push("/admin/dashboard");
+      router.replace("/admin/dashboard");
     } catch (err) {
       const newAttempts = attempts + 1;
       setAttempts(newAttempts);
@@ -105,21 +111,15 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/10 px-4 relative overflow-hidden">
+    <div className="admin-shell min-h-screen flex items-center justify-center bg-background px-4 py-8">
       {/* Background Decorations */}
-      <div className="absolute inset-0 bg-[url('/images/grid-pattern.svg')] opacity-5 bg-repeat"></div>
-      <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-purple-500/10 to-transparent rounded-full blur-3xl"></div>
-
-      <Card className="w-full max-w-md p-8 border-0 shadow-2xl bg-gradient-to-b from-card to-secondary/5 relative z-10">
+      <Card className="w-full max-w-md border border-slate-200 p-7 shadow-xl sm:p-8">
         {/* Logo & Header */}
         <div className="mb-8 text-center">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground font-bold shadow-lg shadow-primary/20 mx-auto mb-4">
-            <Building2 className="h-8 w-8" />
+          <div className="mx-auto mb-4 grid h-24 w-24 place-items-center overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <img src="/hati-logo.png" alt="HATI Sand Stone & Selected Materials Manufacturing PLC" className="h-full w-full object-contain" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-primary/80 to-primary/60 bg-clip-text text-transparent">
-            HATI Admin
-          </h1>
+          <h1 className="text-3xl font-bold text-slate-900">HATI Admin</h1>
           <p className="text-sm text-muted-foreground mt-2 flex items-center justify-center gap-1">
             <Shield className="h-3 w-3" />
             Secure Access Portal
@@ -135,7 +135,7 @@ export default function AdminLogin() {
         </div>
 
         {/* Welcome Message */}
-        <div className="mb-6 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg border border-primary/10">
+        <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
           <div className="flex items-start gap-3">
             <Sparkles className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
             <div>
@@ -163,7 +163,7 @@ export default function AdminLogin() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@hati.com"
+                placeholder="you@company.com"
                 required
                 disabled={isLocked}
                 className="w-full px-4 py-3 pl-10 border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all disabled:opacity-50"
@@ -244,28 +244,6 @@ export default function AdminLogin() {
               <span>Account locked. Please wait {lockTimer} seconds.</span>
             </div>
           )}
-
-          {/* Demo Credentials */}
-          <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-            <div className="flex items-center gap-2 mb-2">
-              <Key className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              <p className="text-sm font-semibold text-blue-700 dark:text-blue-400">
-                Demo Credentials
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div className="flex items-center gap-1">
-                <Mail className="h-3 w-3 text-muted-foreground" />
-                <span className="text-muted-foreground">Email:</span>
-                <span className="font-mono">admin@hati.com</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Lock className="h-3 w-3 text-muted-foreground" />
-                <span className="text-muted-foreground">Password:</span>
-                <span className="font-mono">demo123</span>
-              </div>
-            </div>
-          </div>
 
           {/* Submit Button */}
           <Button

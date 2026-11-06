@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,8 +20,6 @@ import {
   Trophy,
   Briefcase,
 } from "lucide-react";
-import projectsData from "@/data/projects.json";
-import projectStatsData from "@/data/projectStats.json";
 
 const iconMap: Record<string, any> = {
   Briefcase: Briefcase,
@@ -76,8 +75,21 @@ export default function Projects() {
   const tValue = (obj: any) => obj[language] || obj["en"] || "";
 
   // Get data from JSON files
-  const projects = projectsData;
-  const stats = projectStatsData;
+  const [projectsList, setProjectsList] = useState<any[]>([]);
+  const [statsList, setStatsList] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/projects")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.projects)) setProjectsList(data.projects);
+        if (Array.isArray(data?.stats)) setStatsList(data.stats);
+      })
+      .catch(() => {});
+  }, []);
+
+  const projects = projectsList;
+  const stats = statsList;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -235,7 +247,7 @@ export default function Projects() {
                           className={`absolute top-4 right-4 ${statusColor} border backdrop-blur-sm`}
                         >
                           <StatusIcon className="h-3 w-3 mr-1" />
-                          {tValue(t.status[project.status])}
+                          {tValue(t.status[project.status as keyof typeof t.status])}
                         </Badge>
                         <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background/80 to-transparent"></div>
                       </div>
